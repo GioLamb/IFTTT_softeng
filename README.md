@@ -7,17 +7,21 @@ Ulteriormente, il problema si complica quando gli utenti vogliono creare catene 
 La sfida principale è fornire un'interfaccia utente intuitiva che permetta agli utenti di definire e modificare questi flussi di lavoro in modo flessibile e senza complicare eccessivamente il processo.
 ## Architettura Software
 Per la realizzazione del nostro software abbiamo deciso di servirci di un pattern MVC (Model-View-Controller) in quanto risulta la scelta più ottimale 
-per la creazione di software che prevedono l'interazione con l'utente tramite una GUI (Graphical User Interface).
+per la creazione di software che prevedono l'interazione con l'utente tramite una GUI (Graphical User Interface) interpretata tramite un FXMLDocument.
+Il ruolo del controllore verrà svolto dalla classe `FXMLDocumentController`.
 
 Per gestire la comunicazione tra utente e sistema, ci siamo avvalsi del pattern Facade (Facciata), ovvero abbiamo implementato una classe `FacadeRule`
-la quale si occuperà di eseguire tutte le chiamate necessarie alla creazione, gestione ed esecuzione di una regola.
-Tra le sottoclassi che abbiamo finora introdotto notiamo:
-1. `Display Message`
+la quale si occuperà di eseguire tutte le chiamate necessarie alla creazione, gestione ed esecuzione di una regola, in particolare gestirà le chiamate per le classi che implementano l'interfaccia `Action` e le classi che implementano l'interfaccia `Trigger`.
+Per la rappresentazione delle sottoclassi abbiamo sfruttato il pattern Composer, utile a fornire una struttura ad albero al nostro programma.
+Tra le foglie dell'albero di `Action` notiamo due classi:
+1. `DisplayMessage`
    Rappresenta la classe che si occuperà di legare alla regola la funzione di visualizzare un messaggio scritto dall'utente allo scoccare di un determinato orario anch'esso selezionato dall'utente.
-2. `Alarm Clock`
+2. `AlarmClock`
     Rappresenta la classe che si occuperà di legare alla regola la funzione di riprodurre un file audio scelto dall'utente allo scoccare di un determinato orario anch'esso selezionato dall'utente.
-
-Di seguito è presente un collegamento ad un file .docx su Google Documents in cui si può visualizzare nel totale l'architettura dell'intero software [Architettura_Software_IFTTT](https://docs.google.com/document/d/1m6LYMVZjep5ySxO0Ugfd-RhB5yGPY-G1rPBpMyIHfxc/edit?usp=sharing)
+Mentra tra le foglie dell'albero `Trigger` notiamo una singola classe:
+1. `TriggerTime`
+   Rappresenta la classe che si occuperà di impostare un orario per l'oggetto regola annesso.
+Di seguito è presente un collegamento ad un file .docx su Google Documents in cui si può visualizzare nel totale l'architettura dell'intero software [Architettura_Software_IFTTT](https://docs.google.com/document/d/1ICIhP03cLgoz6Qr6QUi-3G4HcRFjDhAr982_lNbPVm8/edit#heading=h.yibgaur7hr98)
 ## Definiton of Done (DoD)
 È stato stilato un documento per la Definition of Done dell'intero software ed è consultabile al seguente [link.](https://docs.google.com/document/d/17hKDsjm6unqMskwzPeQu_q7Cmel3s3g-sp2IlAWASrQ/edit?usp=sharing)
 ## Product Backlog
