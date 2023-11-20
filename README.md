@@ -18,6 +18,7 @@ Tra le foglie dell'albero di `Action` notiamo due classi:
    Rappresenta la classe che si occuperà di legare alla regola la funzione di visualizzare un messaggio scritto dall'utente allo scoccare di un determinato orario anch'esso selezionato dall'utente.
 2. `AlarmClock`
     Rappresenta la classe che si occuperà di legare alla regola la funzione di riprodurre un file audio scelto dall'utente allo scoccare di un determinato orario anch'esso selezionato dall'utente.
+
 Mentra tra le foglie dell'albero `Trigger` notiamo una singola classe:
 1. `TriggerTime`
    Rappresenta la classe che si occuperà di impostare un orario per l'oggetto regola annesso.
