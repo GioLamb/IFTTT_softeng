@@ -10,7 +10,7 @@ Per la realizzazione del nostro software abbiamo deciso di servirci di un patter
 per la creazione di software che prevedono l'interazione con l'utente tramite una GUI (Graphical User Interface) interpretata tramite un FXMLDocument.
 Il ruolo del controllore verrà svolto dalla classe `FXMLDocumentController`.
 
-Per gestire la creazione di regole da parte dell'utente, ci siamo avvalsi del pattern FactoryMethod, ovvero abbiamo implementato una classe `FactoryRule` la quale si occuperà di permette all'utente di istanziare nuove regole indipendentemente dall'azione e dal trigger specificati, favorendo l'aggiunta di nuove regole in futuro senza dover modificare il codice esistente. In particolare fornisce un metodo che si occuperà di fare riferimento alle classi che implementano le interfacce `Action` e `Trigger` per gestire rispettivamente la scelta, da parte dell'utente, dell'azione e dell'orario associati.
+Per gestire la creazione di regole da parte dell'utente, ci siamo avvalsi del pattern FactoryMethod, ovvero abbiamo implementato una classe `FactoryRule` la quale si occuperà di permettere all'utente di istanziare nuove regole indipendentemente dall'azione e dal trigger specificati, favorendo l'aggiunta di nuove regole in futuro senza dover modificare il codice esistente. In particolare fornisce un metodo che si occuperà di fare riferimento alle classi che implementano le interfacce `Action` e `Trigger` per gestire rispettivamente la scelta, da parte dell'utente, dell'azione e dell'orario associati.
 Per la rappresentazione delle sottoclassi abbiamo sfruttato il pattern Composite, utile a fornire una struttura ad albero al nostro programma.
 Tra le foglie dell'albero di `Action` notiamo due classi:
 1. `DisplayMessage`
