@@ -1,4 +1,5 @@
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class RuleManager {
     ArrayList<Rule> rules;
