@@ -59,22 +59,28 @@ public class FXMLDocumentController {
     @FXML
     private Button submitButton;
 
+    private RuleManager ruleManager;
+
+    private String content;
+
+    private LocalTime time = LocalTime.of(0,0);
+
     // Questo metodo ci permette di poter cambiare la scena caricando un diverso file FXML
     public void switchRuleMenu(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("ruleselector.fxml")); // carichiamo l'FXML della sezione per creare le regole
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        this.root = FXMLLoader.load(getClass().getResource("ruleselector.fxml")); // carichiamo l'FXML della sezione per creare le regole
+        this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        this.scene = new Scene(this.root);
+        this.stage.setScene(this.scene);
+        this.stage.show();
     }
 
     // Questo metodo ci permette di poter cambiare la scena caricando un diverso file FXML
     public void switchMainPage(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("mainpage.fxml")); // carichiamo l'FXML della mainpage
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        this.root = FXMLLoader.load(getClass().getResource("mainpage.fxml")); // carichiamo l'FXML della mainpage
+        this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        this.scene = new Scene(this.root);
+        this.stage.setScene(this.scene);
+        this.stage.show();
     }
 
     // Metodo che ci permette di scegliere un file audio
@@ -87,32 +93,44 @@ public class FXMLDocumentController {
 
         File file = fileChooser.showOpenDialog(stage);
         if (file!=null){
-            buttonAudio.setText(file.getAbsolutePath()); // cambiamo il testo del bottone con il path del file audio
+            this.buttonAudio.setText(file.getAbsolutePath()); // cambiamo il testo del bottone con il path del file audio
+            this.content = file.getAbsolutePath();
         }
     }
 
     @FXML
     void submit(ActionEvent event) {
-        Integer hours = Integer.parseInt(hourSelector.getCharacters().toString());
-        Integer minutes = Integer.parseInt(minutesSelector.getCharacters().toString());
+        Integer hours = Integer.parseInt(this.hourSelector.getCharacters().toString());
+        Integer minutes = Integer.parseInt(this.minutesSelector.getCharacters().toString());
         if(hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60){ // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti
-            LocalTime time = LocalTime.of(hours, minutes, 0); // creiamo l'oggetto LocalTime da associare alla azione
+            this.time = LocalTime.of(hours, minutes); // creiamo l'oggetto LocalTime da associare alla azione
         }
         else{
-            Alert a = new Alert(Alert.AlertType.ERROR,"L'orario inserito non è corretto. Riprovare");
+            Alert a = new Alert(Alert.AlertType.ERROR,"L'orario inserito non è corretto.\n" +
+                    "Le ore devono essere comprese tra 0 e 23\n" +
+                    "I minuti devono essere compresi tra 0 e 59.\n Riprovare");
             a.show();
+            return;
         }
 
-        if (actionSelector.getSelectionModel().isEmpty()) {
+        if (this.actionSelector.getSelectionModel().isEmpty()) {
             Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserita alcuna azione. Si prega di selezionarne una.");
             a.show();
+            return;
         }
 
-        if (!buttonAudio.isDisable() && buttonAudio.textProperty().getValue().equals("Seleziona file audio")) {
+        if (!this.buttonAudio.isDisable() && this.buttonAudio.textProperty().getValue().equals("Seleziona file audio")) {
             Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserita alcuna traccia audio. Si prega di selezionarne una.");
             a.show();
+            return;
         }
 
+        if(this.buttonAudio.isDisable()){
+            this.content = this.messageField.getText();
+        }
+
+        RuleManager rm = this.ruleManager.getInstance();
+        rm.addRule("Regola # "+ String.valueOf(rm.rules.size()+1), this.actionSelector.toString(), "TriggerTime", this.content, this.time);
     }
 
     // metodo per accedere alla sezione di creazione delle regole
