@@ -19,7 +19,7 @@ public class MainApp extends Application {
         Scene scene1 = new Scene(root);
         stage.setResizable(false);
         stage.setTitle("IFTTT_softeng");
-        stage.getIcons().add(new Image(MainApp.class.getResourceAsStream("icon.png")));
+        stage.getIcons().add(new Image(Objects.requireNonNull(MainApp.class.getResourceAsStream("icon.png"))));
         stage.setScene(scene1);
         stage.show();
     }

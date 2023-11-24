@@ -12,18 +12,15 @@
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLDocumentController">
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="852.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
       <Pane prefHeight="400.0" prefWidth="174.0" style="-fx-background-color: #c3c3c3;">
-         <children>
             <Label alignment="CENTER" prefHeight="65.0" prefWidth="174.0" text="IFTTT_softeng" textAlignment="CENTER" textFill="#40bc21">
                <font>
                   <Font name="FiraCode Nerd Font Mono Reg" size="18.0" />
                </font>
             </Label>
-            <Button fx:id="newRuleButton" layoutX="16.0" layoutY="78.0" mnemonicParsing="false" onAction="#newRule" prefHeight="43.0" prefWidth="142.0" text="Nuova Regola" />
-         </children>
+            <Button layoutX="16.0" layoutY="78.0" mnemonicParsing="false" onAction="#newRule" prefHeight="43.0" prefWidth="142.0" text="Nuova Regola" />
       </Pane>
-      <TableView prefHeight="400.0" prefWidth="678.0" style="-fx-background-color: #1c1c1c;">
+      <TableView fx:id="tableView" prefHeight="400.0" prefWidth="678.0" style="-fx-background-color: #1c1c1c;">
         <columns>
           <TableColumn fx:id="ruleNameView" editable="false" prefWidth="137.60002440214157" text="Nome Regola" />
           <TableColumn fx:id="actionView" editable="false" prefWidth="136.80006408691406" text="Azione" />
@@ -32,6 +29,5 @@
             <TableColumn fx:id="triggerContentView" editable="false" prefWidth="120.79998779296875" text="Contenuto trigger" />
         </columns>
       </TableView>
-   </children>
 </HBox>
 </AnchorPane>
