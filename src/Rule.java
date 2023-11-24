@@ -1,18 +1,25 @@
 import java.time.LocalTime;
 
 public class Rule{
-        private Action action;
-        private Trigger trigger;
+        // Variabili d'istanza private per memorizzare un'azione, un trigger e informazioni sulla regola
+        private FactoryAction action;
+        private FactoryTrigger trigger;
         private String nameRule;
         private String nameTrigger;
         private String nameAction;
 
-        // Costruttore di Rule, che riceve un'istanza di Action e Trigger
+        //Costruttore della classe Rule che accetta il nome della regola, il nome dell'azione,
+        //il nome del trigger, il contenuto dell'azione e l'orario del trigger come parametri
         public Rule(String nameRule, String nameAction, String nameTrigger, String content, LocalTime time) {
+            //Inizializza le variabili d'istanza con i valori forniti
             this.nameRule = nameRule;
             this.nameAction = nameAction;
             this.nameTrigger = nameTrigger;
-            this.action = (Action) new FactoryAction(nameAction, content);
-            this.trigger = (Trigger) new FactoryTrigger(nameTrigger, time);
+
+            //Utilizza la FactoryAction per creare un'istanza dell'azione in base al nome e al contenuto
+            this.action = new FactoryAction(nameAction, content);
+
+            //Utilizza la FactoryTrigger per creare un'istanza del trigger in base al nome e all'orario
+            this.trigger = new FactoryTrigger(nameTrigger, time);
         }
 }
