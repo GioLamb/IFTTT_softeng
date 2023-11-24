@@ -59,8 +59,6 @@ public class FXMLDocumentController {
 
     @FXML
     private TextField minutesSelector;
-
-    private RuleManager ruleManager;
     private String content;
     private LocalTime time = LocalTime.of(0,0);
 
@@ -129,7 +127,7 @@ public class FXMLDocumentController {
             this.content = this.messageField.getText();
         }
 
-        RuleManager rm = this.ruleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
+        RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
         rm.addRule("Regola # "+ (rm.getRules().size() + 1), this.actionSelector.toString(), "TriggerTime", this.content, this.time);
     }
 
@@ -137,7 +135,8 @@ public class FXMLDocumentController {
     @FXML
     void newRule(ActionEvent event) {
         try {
-            if(this.ruleManager.getRules().isEmpty()) { // se non ci sono regole in corso allora possiamo procedere
+            RuleManager rm = RuleManager.getInstance();
+            if(rm.getRules().isEmpty()) { // se non ci sono regole in corso allora possiamo procedere
                 switchRuleMenu(event);
             }
             else {
@@ -210,11 +209,13 @@ public class FXMLDocumentController {
 
     @FXML
     public void initialize(){
+        /*
         this.ruleNameView.setCellValueFactory(new PropertyValueFactory<>("ruleName"));
         this.actionView.setCellValueFactory(new PropertyValueFactory<>("actionView"));
         this.actionContentView.setCellValueFactory(new PropertyValueFactory<>("actionContentView"));
         this.triggerView.setCellValueFactory(new PropertyValueFactory<>("triggerView"));
         this.triggerContentView.setCellValueFactory(new PropertyValueFactory<>("triggerContentView"));
         this.tableView.setItems(ruleManager.getRules());
+         */
     }
 }

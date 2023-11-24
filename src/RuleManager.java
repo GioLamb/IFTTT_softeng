@@ -9,11 +9,13 @@ public class RuleManager {
     private ObservableList<Rule> rules;
     private static RuleManager instance;
 
-    private RuleManager(){}
-    public RuleManager getInstance(){
+    private RuleManager(){
+        rules = FXCollections.observableArrayList();
+    }
+
+    public static RuleManager getInstance(){
         if (instance==null){
             instance = new RuleManager();
-            this.rules = FXCollections.observableArrayList();
         }
         return instance;
     }

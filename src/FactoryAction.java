@@ -9,7 +9,7 @@ public class FactoryAction{
 
     public Action FactoryAction(String actionType, String content) throws IllegalArgumentException{
         if(actionType.equals("Promemoria")){
-            return new displayMessage(content);
+            return new DisplayMessage(content);
         }else if(actionType.equals("Sveglia")){
             return new AlarmClock(content);
         }else{
