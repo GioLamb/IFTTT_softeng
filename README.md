@@ -10,9 +10,8 @@ Per la realizzazione del nostro software abbiamo deciso di servirci di un patter
 per la creazione di software che prevedono l'interazione con l'utente tramite una GUI (Graphical User Interface) interpretata tramite un FXMLDocument.
 Il ruolo del controllore verrà svolto dalla classe `FXMLDocumentController`.
 
-Per gestire la comunicazione tra utente e sistema, ci siamo avvalsi del pattern Facade (Facciata), ovvero abbiamo implementato una classe `FacadeRule`
-la quale si occuperà di eseguire tutte le chiamate necessarie alla creazione, gestione ed esecuzione di una regola, in particolare gestirà le chiamate per le classi che implementano l'interfaccia `Action` e le classi che implementano l'interfaccia `Trigger`.
-Per la rappresentazione delle sottoclassi abbiamo sfruttato il pattern Composer, utile a fornire una struttura ad albero al nostro programma.
+Per gestire la creazione di regole da parte dell'utente, ci siamo avvalsi del pattern FactoryMethod, ovvero abbiamo implementato una classe `FactoryRule` la quale si occuperà di permettere all'utente di istanziare nuove regole indipendentemente dall'azione e dal trigger specificati, favorendo l'aggiunta di nuove regole in futuro senza dover modificare il codice esistente. In particolare fornisce un metodo che si occuperà di fare riferimento alle classi che implementano le interfacce `Action` e `Trigger` per gestire rispettivamente la scelta, da parte dell'utente, dell'azione e dell'orario associati.
+Per la rappresentazione delle sottoclassi abbiamo sfruttato il pattern Composite, utile a fornire una struttura ad albero al nostro programma.
 Tra le foglie dell'albero di `Action` notiamo due classi:
 1. `DisplayMessage`
    Rappresenta la classe che si occuperà di legare alla regola la funzione di visualizzare un messaggio scritto dall'utente allo scoccare di un determinato orario anch'esso selezionato dall'utente.
@@ -22,6 +21,7 @@ Tra le foglie dell'albero di `Action` notiamo due classi:
 Mentra tra le foglie dell'albero `Trigger` notiamo una singola classe:
 1. `TriggerTime`
    Rappresenta la classe che si occuperà di impostare un orario per l'oggetto regola annesso.
+
 Di seguito è presente un collegamento ad un file .docx su Google Documents in cui si può visualizzare nel totale l'architettura dell'intero software [Architettura_Software_IFTTT](https://docs.google.com/document/d/1ICIhP03cLgoz6Qr6QUi-3G4HcRFjDhAr982_lNbPVm8/edit#heading=h.yibgaur7hr98)
 ## Definiton of Done (DoD)
 È stato stilato un documento per la Definition of Done dell'intero software ed è consultabile al seguente [link.](https://docs.google.com/document/d/17hKDsjm6unqMskwzPeQu_q7Cmel3s3g-sp2IlAWASrQ/edit?usp=sharing)

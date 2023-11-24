@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.geometry.Point3D?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #1c1c1c;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLDocumentController">
+<HBox maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #1c1c1c;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane prefHeight="400.0" prefWidth="174.0">
          <children>
@@ -24,8 +20,9 @@
             </Label>
             <Label layoutX="44.0" layoutY="125.0" text="Seleziona Orario" textFill="WHITE" />
             <Label layoutX="41.0" layoutY="183.0" text="Seleziona Azione" textFill="WHITE" />
-            <Label fx:id="audioLabel" layoutX="34.0" layoutY="253.0" text="Seleziona file audio:" textFill="WHITE" visible="false" />
-            <Label fx:id="messageLabel" layoutX="56.0" layoutY="279.0" text="Messaggio:" visible="false" />
+            <Label fx:id="audioLabel" layoutX="34.0" layoutY="225.0" text="Seleziona file audio:" textFill="WHITE" />
+            <Label fx:id="messageLabel" layoutX="60.0" layoutY="274.0" text="Messaggio:" textFill="WHITE" />
+            <Button fx:id="cancel" layoutX="62.0" layoutY="336.0" mnemonicParsing="false" onAction="#cancel" text="Annulla" />
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0">
@@ -48,45 +45,49 @@
                   </HBox>
                   <HBox prefHeight="56.0" prefWidth="78.0">
                      <children>
-                        <TextField fx:id="hourSelector" prefHeight="26.0" prefWidth="213.0" text="00">
+                        <TextField fx:id="hourSelector" onKeyTyped="#checkHours" prefHeight="26.0" prefWidth="213.0" text="00">
                            <HBox.margin>
                               <Insets right="15.0" />
                            </HBox.margin>
                         </TextField>
                         <Label text=":" textFill="WHITE" />
-                        <TextField fx:id="minutesSelector" prefHeight="26.0" prefWidth="210.0" text="00">
+                        <TextField fx:id="minutesSelector" onKeyTyped="#checkMinutes" prefHeight="26.0" prefWidth="210.0" text="00">
                            <HBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </HBox.margin>
                         </TextField>
                      </children>
                   </HBox>
-                  <MenuButton fx:id="actionSelector" mnemonicParsing="false" prefHeight="26.0" prefWidth="150.0" text="Azioni disponibili">
-                    <items>
-                      <MenuItem fx:id="displayMessage" mnemonicParsing="false" text="Display Message" />
-                      <MenuItem fx:id="alarmClock" mnemonicParsing="false" text="Alarm Clock" />
-                    </items>
+                  <ComboBox fx:id="actionSelector" onAction="#changeContentAction" prefWidth="150.0" promptText="Seleziona un'azione">
+                     <items>
+                        <FXCollections fx:factory="observableArrayList">
+                           <String fx:value="Promemoria" />
+                           <String fx:value="Sveglia" />
+                        </FXCollections>
+                     </items>
+                  </ComboBox>
+                  <Button fx:id="buttonAudio" disable="true" mnemonicParsing="false" onAction="#selectAudio" prefHeight="26.0" prefWidth="195.0" text="Seleziona file audio">
                      <VBox.margin>
-                        <Insets bottom="50.0" />
-                     </VBox.margin>
-                  </MenuButton>
-                  <Button fx:id="buttonAudio" mnemonicParsing="false" onAction="#selectAudio" prefHeight="26.0" prefWidth="195.0" text="Seleziona file audio" visible="false">
-                     <VBox.margin>
-                        <Insets />
+                        <Insets top="20.0" />
                      </VBox.margin>
                      <rotationAxis>
                         <Point3D />
                      </rotationAxis>
                   </Button>
-                  <TextField fx:id="messageField" visible="false" />
+                  <TextField fx:id="messageField" disable="true" prefHeight="26.0" prefWidth="185.0">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </TextField>
                </children>
             </VBox>
          </children>
       </Pane>
-      <Button fx:id="submitButton" disable="true" mnemonicParsing="false" onAction="#submit" prefHeight="42.0" prefWidth="122.0" text="Conferma">
+      <Button fx:id="submitButton" mnemonicParsing="false" onAction="#submit" prefHeight="42.0" prefWidth="122.0" text="Conferma">
          <HBox.margin>
             <Insets left="80.0" top="330.0" />
          </HBox.margin>
       </Button>
    </children>
 </HBox>
+</AnchorPane>
