@@ -4,13 +4,14 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 
-public class AlarmClock implements Action{
+public class AlarmClock extends FactoryAction implements Action{
     private String audioFilePath;
     private Stage dialogStage;
     private Clip clip;
 
     public AlarmClock(String audioFilePath) {
-        this.audioFilePath = audioFilePath;
+        super("Sveglia", audioFilePath);
+
     }
 
     @Override

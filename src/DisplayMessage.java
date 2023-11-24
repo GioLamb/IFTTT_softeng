@@ -1,15 +1,16 @@
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
+import javax.xml.namespace.QName;
 import java.util.Optional;
 
-public class DisplayMessage implements Action {
+public class DisplayMessage extends FactoryAction implements Action {
     private String message;
 
     private Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
     public DisplayMessage(String message) {
-        this.message = message;
+        super("Promemoria", message);
     }
 
     @Override
