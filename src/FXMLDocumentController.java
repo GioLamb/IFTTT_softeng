@@ -79,7 +79,7 @@ public class FXMLDocumentController {
     void selectAudio(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         // impostiamo al FileChooser dei filtri in modo tale da essere sicuri di scegliere un file corretto.
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Audio files (*.mp3, wav)","*.mp3", "*.wav");
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Audio files (*.wav)", "*.wav");
         fileChooser.getExtensionFilters().add(filter);
 
         File file = fileChooser.showOpenDialog(stage);
