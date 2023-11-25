@@ -207,9 +207,9 @@ public class FXMLDocumentController {
     public void initialize(){
         ruleNameView.setCellValueFactory(new PropertyValueFactory<>("nameRule"));
         actionView.setCellValueFactory(new PropertyValueFactory<>("nameAction"));
-        actionContentView.setCellValueFactory(new PropertyValueFactory<>("action"));
+        actionContentView.setCellValueFactory(new PropertyValueFactory<>("contentAction"));
         triggerView.setCellValueFactory(new PropertyValueFactory<>("nameTrigger"));
-        triggerContentView.setCellValueFactory(new PropertyValueFactory<>("trigger"));
+        triggerContentView.setCellValueFactory(new PropertyValueFactory<>("contentTrigger"));
         tableView.getColumns().addAll(ruleNameView,actionView,actionContentView,triggerView,triggerContentView);
         tableView.setItems(rm.getRules());
     }
