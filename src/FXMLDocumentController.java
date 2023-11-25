@@ -1,4 +1,6 @@
-import javafx.collections.FXCollections;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,27 +19,19 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 public class FXMLDocumentController {
+    public TableColumn<Rule, String> ruleNameView = new TableColumn<>("Nome Regola");
+    public TableColumn<Rule, String> actionView = new TableColumn<>("Nome Azione");
+    public TableColumn<Rule, String> actionContentView = new TableColumn<>("Contenuto Azione");
+    public TableColumn<Rule, String> triggerView = new TableColumn<>("Nome Trigger");
+    public TableColumn<Rule, String> triggerContentView = new TableColumn<>("Contenuto Trigger");
     private Stage stage;
     private Scene scene;
     private Parent root;
 
     @FXML
-    private TableView<Rule> tableView;
-
-    @FXML
-    private TableColumn<Rule, String> ruleNameView;
-
-    @FXML
-    private TableColumn<Rule, String> triggerContentView;
-
-    @FXML
-    private TableColumn<Rule, String> triggerView;
-
-    @FXML
-    private TableColumn<Rule, String> actionContentView;
-
-    @FXML
-    private TableColumn<Rule, String> actionView;
+    private TableView<Rule> tableView = new TableView<>();
+    private ObservableList<Rule> data;
+    private Property<ObservableList<Rule>> dataProperty;
 
     @FXML
     private ComboBox actionSelector;
@@ -61,6 +55,8 @@ public class FXMLDocumentController {
     private TextField minutesSelector;
     private String content;
     private LocalTime time = LocalTime.of(0,0);
+
+    private RuleManager rm = RuleManager.getInstance();
 
     // Questo metodo ci permette di poter cambiare la scena caricando un diverso file FXML
     public void switchRuleMenu(ActionEvent event) throws IOException {
@@ -123,12 +119,13 @@ public class FXMLDocumentController {
             return;
         }
 
-        if(this.actionSelector.toString().equals("Promemoria")){ // verifichiamo che sia selezionato il promemoria
+        if(this.actionSelector.getValue().toString().equals("Promemoria")){ // verifichiamo che sia selezionato il promemoria
             this.content = this.messageField.getText();
         }
-
         RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
-        rm.addRule("Regola # "+ (rm.getRules().size() + 1), this.actionSelector.toString(), "TriggerTime", this.content, this.time);
+        rm.addRule("Regola #"+ (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time);
+        tableView.refresh();
+        cancel(event);
     }
 
     // metodo per accedere alla sezione di creazione delle regole
@@ -209,13 +206,12 @@ public class FXMLDocumentController {
 
     @FXML
     public void initialize(){
-        /*
-        this.ruleNameView.setCellValueFactory(new PropertyValueFactory<>("ruleName"));
-        this.actionView.setCellValueFactory(new PropertyValueFactory<>("actionView"));
-        this.actionContentView.setCellValueFactory(new PropertyValueFactory<>("actionContentView"));
-        this.triggerView.setCellValueFactory(new PropertyValueFactory<>("triggerView"));
-        this.triggerContentView.setCellValueFactory(new PropertyValueFactory<>("triggerContentView"));
-        this.tableView.setItems(ruleManager.getRules());
-         */
+        ruleNameView.setCellValueFactory(new PropertyValueFactory<>("nameRule"));
+        actionView.setCellValueFactory(new PropertyValueFactory<>("nameAction"));
+        actionContentView.setCellValueFactory(new PropertyValueFactory<>("action"));
+        triggerView.setCellValueFactory(new PropertyValueFactory<>("nameTrigger"));
+        triggerContentView.setCellValueFactory(new PropertyValueFactory<>("trigger"));
+        tableView.getColumns().addAll(ruleNameView,actionView,actionContentView,triggerView,triggerContentView);
+        tableView.setItems(rm.getRules());
     }
 }

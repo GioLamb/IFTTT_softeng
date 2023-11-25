@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class RuleManager {
-    private ObservableList<Rule> rules;
+    private final ObservableList<Rule> rules;
     private static RuleManager instance;
 
     private RuleManager(){

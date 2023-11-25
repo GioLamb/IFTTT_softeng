@@ -22,4 +22,30 @@ public class Rule{
             //Utilizza la FactoryTrigger per creare un'istanza del trigger in base al nome e all'orario
             this.trigger = new FactoryTrigger(nameTrigger, time);
         }
+
+    public String getAction() {
+        return action.getContentAction();
+    }
+
+    public String getTrigger() {
+        return trigger.getContentTrigger();
+    }
+
+    public String getNameTrigger() {
+        return nameTrigger;
+    }
+
+    public String getNameRule() {
+        return nameRule;
+    }
+
+    public String getNameAction() {
+        return nameAction;
+    }
+
+    @Override
+    public String toString(){
+            return ""+getNameRule()+","+getNameAction()+","+getAction()+
+                    ","+getNameTrigger()+","+getTrigger();
+    }
 }

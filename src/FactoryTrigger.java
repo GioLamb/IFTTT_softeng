@@ -25,4 +25,7 @@ public class FactoryTrigger {
         }
     }
 
+    public String getContentTrigger(){
+        return time.toString();
+    }
 }

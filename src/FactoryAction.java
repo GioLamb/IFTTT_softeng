@@ -23,4 +23,8 @@ public class FactoryAction {
             throw new IllegalArgumentException("Azione non valida: " + nameAction);
         }
     }
+
+    public String getContentAction(){
+        return content.toString();
+    }
 }

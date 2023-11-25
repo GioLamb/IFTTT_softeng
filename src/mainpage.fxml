@@ -21,13 +21,6 @@
             <Button layoutX="16.0" layoutY="78.0" mnemonicParsing="false" onAction="#newRule" prefHeight="43.0" prefWidth="142.0" text="Nuova Regola" />
       </Pane>
       <TableView fx:id="tableView" prefHeight="400.0" prefWidth="678.0" style="-fx-background-color: #1c1c1c;">
-        <columns>
-          <TableColumn fx:id="ruleNameView" editable="false" prefWidth="137.60002440214157" text="Nome Regola" />
-          <TableColumn fx:id="actionView" editable="false" prefWidth="136.80006408691406" text="Azione" />
-            <TableColumn fx:id="actionContentView" editable="false" prefWidth="154.39993286132812" text="Contenuto azione" />
-            <TableColumn fx:id="triggerView" editable="false" prefWidth="120.79998779296875" text="Trigger" />
-            <TableColumn fx:id="triggerContentView" editable="false" prefWidth="120.79998779296875" text="Contenuto trigger" />
-        </columns>
       </TableView>
 </HBox>
 </AnchorPane>
