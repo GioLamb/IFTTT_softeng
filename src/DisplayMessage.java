@@ -7,10 +7,20 @@ import java.util.Optional;
 public class DisplayMessage extends FactoryAction implements Action {
     private String message;
 
-    private final Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
     public DisplayMessage(String message) {
-        super("Promemoria", message);
+        this.message=message;
+    }
+
+    @Override
+    public String getName() {
+        return "Promemoria";
+    }
+
+    @Override
+    public String getContent() {
+        return message;
     }
 
     @Override
@@ -29,7 +39,7 @@ public class DisplayMessage extends FactoryAction implements Action {
         //chiusura alert con il clic del bottone OK dell'alert
         //o con il click del bottone di chiusura dell'alert
         Optional<ButtonType> result = Optional.ofNullable(alert.getResult());
-        if (result.isEmpty() || result.get() == ButtonType.OK || result.get().getButtonData().isCancelButton()) {
+        if (!result.isPresent() || result.get() == ButtonType.OK || result.get().getButtonData().isCancelButton()) {
             alert.close();
         }
     }

@@ -124,6 +124,7 @@ public class FXMLDocumentController {
         rm.addRule("Regola #"+ (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time);
         tableView.refresh();
         cancel(event);
+        rm.check();
     }
 
     // metodo per accedere alla sezione di creazione delle regole
@@ -207,9 +208,9 @@ public class FXMLDocumentController {
     public void initialize(){
         ruleNameView.setCellValueFactory(new PropertyValueFactory<>("nameRule"));
         actionView.setCellValueFactory(new PropertyValueFactory<>("nameAction"));
-        actionContentView.setCellValueFactory(new PropertyValueFactory<>("contentAction"));
+        actionContentView.setCellValueFactory(new PropertyValueFactory<>("actionContent"));
         triggerView.setCellValueFactory(new PropertyValueFactory<>("nameTrigger"));
-        triggerContentView.setCellValueFactory(new PropertyValueFactory<>("contentTrigger"));
+        triggerContentView.setCellValueFactory(new PropertyValueFactory<>("triggerContent"));
         tableView.getColumns().addAll(ruleNameView,actionView,actionContentView,triggerView,triggerContentView);
         tableView.setItems(rm.getRules());
     }

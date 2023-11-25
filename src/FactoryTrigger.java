@@ -2,18 +2,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.time.LocalTime;
 
-public class FactoryTrigger {
+public class FactoryTrigger{
     //Variabili d'istanza private per memorizzare il nome del trigger e l'orario
-    private final String nameTrigger;
-    private final LocalTime time;
 
     //Costruttore della classe FactoryTrigger che accetta il nome del trigger e l'orario come parametri
-    public FactoryTrigger(String nameTrigger, LocalTime time) {
-        //Inizializza le variabili d'istanza con i valori forniti
-        this.nameTrigger = nameTrigger;
-        this.time = time;
-        createConcreteTrigger(nameTrigger, time);
-    }
+    public FactoryTrigger(){};
     //Metodo per creare un'istanza di una classe che implementa l'interfaccia Trigger
     //in base al nome del trigger fornito come parametro
     public Trigger createConcreteTrigger(String nameTrigger, LocalTime time){
@@ -26,9 +19,4 @@ public class FactoryTrigger {
         }
     }
 
-    public void execute(){};
-
-    public String getContentTrigger(){
-        return time.toString();
-    }
 }

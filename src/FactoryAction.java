@@ -1,16 +1,7 @@
 public class FactoryAction {
     // Variabili di istanza private per memorizzare il nome dell'azione e il suo contenuto
-    private final String nameAction;
-    private final String content;
- 
     // Costruttore della classe che accetta il nome dell'azione e il contenuto come parametri
-    public FactoryAction(String nameAction, String content) {
-        // Inizializza le variabili di istanza con i valori forniti
-        this.nameAction = nameAction;
-        this.content = content;
-        createConcreteAction(nameAction, content);
-    }
- 
+    public FactoryAction(){};
     // Metodo per creare un'istanza di una classe che implementa l'interfaccia Action
     // in base al nome dell'azione fornito come parametro
     public Action createConcreteAction(String nameAction, String content) throws IllegalArgumentException {
@@ -23,10 +14,5 @@ public class FactoryAction {
             // Se il nome dell'azione non corrisponde a nessuno dei casi precedenti, lancia un'eccezione
             throw new IllegalArgumentException("Azione non valida: " + nameAction);
         }
-    }
-
-    public void execute(){};
-    public String getContentAction(){
-        return content;
     }
 }

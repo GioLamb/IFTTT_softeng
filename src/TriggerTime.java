@@ -10,7 +10,7 @@ public class TriggerTime extends FactoryTrigger implements Trigger {
     //Costruttore della classe TriggerTime che accetta un orario come parametro
     public TriggerTime(LocalTime time) {
         //Chiama il costruttore della classe madre (FactoryTrigger) con il nome del trigger e l'orario
-        super("Triggertime", time);
+        triggerTime = time;
         //Inizializza la variabile d'istanza isTriggered a false
         this.isTriggered = false;
     }
@@ -48,4 +48,5 @@ public class TriggerTime extends FactoryTrigger implements Trigger {
             }
         }
     }
+
 }

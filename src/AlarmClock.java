@@ -10,8 +10,18 @@ public class AlarmClock extends FactoryAction implements Action{
     private Clip clip;
 
     public AlarmClock(String audioFilePath) {
-        super("Sveglia", audioFilePath);
+        this.audioFilePath=audioFilePath;
 
+    }
+
+    @Override
+    public String getName() {
+        return "Sveglia";
+    }
+
+    @Override
+    public String getContent() {
+        return audioFilePath;
     }
 
     @Override

@@ -2,11 +2,13 @@ import java.time.LocalTime;
 
 public class Rule{
         // Variabili d'istanza private per memorizzare un'azione, un trigger e informazioni sulla regola
-        private FactoryAction action;
-        private FactoryTrigger trigger;
+        private Action action;
+        private Trigger trigger;
         private String nameRule;
         private String nameTrigger;
         private String nameAction;
+        private String actionContent;
+        private String triggerContent;
 
         //Costruttore della classe Rule che accetta il nome della regola, il nome dell'azione,
         //il nome del trigger, il contenuto dell'azione e l'orario del trigger come parametri
@@ -15,21 +17,20 @@ public class Rule{
             this.nameRule = nameRule;
             this.nameAction = nameAction;
             this.nameTrigger = nameTrigger;
-
+            actionContent = content;
+            triggerContent=time.toString();
             //Utilizza la FactoryAction per creare un'istanza dell'azione in base al nome e al contenuto
-            this.action = new FactoryAction(nameAction, content);
-
+            this.action = new FactoryAction().createConcreteAction(nameAction, content);
             //Utilizza la FactoryTrigger per creare un'istanza del trigger in base al nome e all'orario
-            this.trigger = new FactoryTrigger(nameTrigger, time);
+            this.trigger = new FactoryTrigger().createConcreteTrigger(nameTrigger, time);
         }
 
-    public String getContentAction() {return action.getContentAction();}
+    public Action getAction() {
+        return action;
+    }
 
-    public FactoryTrigger getTrigger(){return trigger;};
-    public FactoryAction getAction(){return action;}
-
-    public String getContentTrigger() {
-        return trigger.getContentTrigger();
+    public Trigger getTrigger() {
+        return trigger;
     }
 
     public String getNameTrigger() {
@@ -46,7 +47,14 @@ public class Rule{
 
     @Override
     public String toString(){
-            return ""+getNameRule()+","+getNameAction()+","+getContentAction()+
-                    ","+getNameTrigger()+","+getContentTrigger();
+            return ""+getNameRule()+","+getNameAction()+","+getAction()+","+getNameTrigger()+","+getTrigger();
+    }
+
+    public String getTriggerContent() {
+        return triggerContent;
+    }
+
+    public String getActionContent() {
+        return actionContent;
     }
 }
