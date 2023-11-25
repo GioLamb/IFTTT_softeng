@@ -12,6 +12,7 @@ public class FactoryTrigger {
         //Inizializza le variabili d'istanza con i valori forniti
         this.nameTrigger = nameTrigger;
         this.time = time;
+        createConcreteTrigger(nameTrigger, time);
     }
     //Metodo per creare un'istanza di una classe che implementa l'interfaccia Trigger
     //in base al nome del trigger fornito come parametro
@@ -24,6 +25,8 @@ public class FactoryTrigger {
             throw new IllegalArgumentException("Trigger non valido: " + nameTrigger);
         }
     }
+
+    public void execute(){};
 
     public String getContentTrigger(){
         return time.toString();

@@ -48,5 +48,4 @@ public class TriggerTime extends FactoryTrigger implements Trigger {
             }
         }
     }
-
 }

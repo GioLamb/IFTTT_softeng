@@ -8,6 +8,7 @@ public class FactoryAction {
         // Inizializza le variabili di istanza con i valori forniti
         this.nameAction = nameAction;
         this.content = content;
+        createConcreteAction(nameAction, content);
     }
  
     // Metodo per creare un'istanza di una classe che implementa l'interfaccia Action
@@ -24,6 +25,7 @@ public class FactoryAction {
         }
     }
 
+    public void execute(){};
     public String getContentAction(){
         return content;
     }
