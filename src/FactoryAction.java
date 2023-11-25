@@ -1,7 +1,7 @@
 public class FactoryAction {
     // Variabili di istanza private per memorizzare il nome dell'azione e il suo contenuto
-    private String nameAction;
-    private String content;
+    private final String nameAction;
+    private final String content;
  
     // Costruttore della classe che accetta il nome dell'azione e il contenuto come parametri
     public FactoryAction(String nameAction, String content) {
@@ -25,6 +25,6 @@ public class FactoryAction {
     }
 
     public String getContentAction(){
-        return content.toString();
+        return content;
     }
 }

@@ -30,8 +30,6 @@ public class FXMLDocumentController {
 
     @FXML
     private TableView<Rule> tableView = new TableView<>();
-    private ObservableList<Rule> data;
-    private Property<ObservableList<Rule>> dataProperty;
 
     @FXML
     private ComboBox actionSelector;
@@ -56,7 +54,7 @@ public class FXMLDocumentController {
     private String content;
     private LocalTime time = LocalTime.of(0,0);
 
-    private RuleManager rm = RuleManager.getInstance();
+    private final RuleManager rm = RuleManager.getInstance();
 
     // Questo metodo ci permette di poter cambiare la scena caricando un diverso file FXML
     public void switchRuleMenu(ActionEvent event) throws IOException {
@@ -136,12 +134,9 @@ public class FXMLDocumentController {
             if(rm.getRules().isEmpty()) { // se non ci sono regole in corso allora possiamo procedere
                 switchRuleMenu(event);
             }
-            else {
-                Alert a = new Alert(Alert.AlertType.ERROR, "Al momento non è possibile creare più di una regola.");
-                a.show();
-            }
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert a = new Alert(Alert.AlertType.ERROR, "Al momento non è possibile creare più di una regola.");
+            a.show();
         }
     }
 
@@ -151,7 +146,8 @@ public class FXMLDocumentController {
         try {
             switchMainPage(event);
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
+            a.show();
         }
     }
 
@@ -164,7 +160,8 @@ public class FXMLDocumentController {
                 hourSelector.deleteNextChar(); // cancelliamo il carattere di input inserito precedentemente
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
+            a.show();
         }
     }
 
@@ -177,7 +174,8 @@ public class FXMLDocumentController {
                 minutesSelector.deleteNextChar(); // cancelliamo il carattere di input inserito precedentemente
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
+            a.show();
         }
     }
 
@@ -200,7 +198,8 @@ public class FXMLDocumentController {
                     break;
             }
         } catch (Exception e){
-            e.printStackTrace();
+            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
+            a.show();
         }
     }
 

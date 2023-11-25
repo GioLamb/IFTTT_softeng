@@ -23,11 +23,12 @@ public class Rule{
             this.trigger = new FactoryTrigger(nameTrigger, time);
         }
 
-    public String getAction() {
-        return action.getContentAction();
-    }
+    public String getContentAction() {return action.getContentAction();}
 
-    public String getTrigger() {
+    public FactoryTrigger getTrigger(){return trigger;};
+    public FactoryAction getAction(){return action;}
+
+    public String getContentTrigger() {
         return trigger.getContentTrigger();
     }
 
@@ -45,7 +46,7 @@ public class Rule{
 
     @Override
     public String toString(){
-            return ""+getNameRule()+","+getNameAction()+","+getAction()+
-                    ","+getNameTrigger()+","+getTrigger();
+            return ""+getNameRule()+","+getNameAction()+","+getContentAction()+
+                    ","+getNameTrigger()+","+getContentTrigger();
     }
 }
