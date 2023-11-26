@@ -25,16 +25,6 @@ public class AlarmClock extends FactoryAction implements Action{
     }
 
     @Override
-    public String getName() {
-        return "Sveglia";
-    }
-
-    @Override
-    public String getContent() {
-        return audioFilePath;
-    }
-
-    @Override
     public void execute() {
         dialogStage.show();
         //Avvia la riproduzione continua dell'audio
@@ -55,5 +45,13 @@ public class AlarmClock extends FactoryAction implements Action{
             dialogStage.close();
         }
     }
+    @Override
+    public String getName() {
+        return "Sveglia";
+    }
 
+    @Override
+    public String getContent() {
+        return audioFilePath;
+    }
 }

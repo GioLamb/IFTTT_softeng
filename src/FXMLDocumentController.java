@@ -1,4 +1,7 @@
-import javafx.application.Application;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -16,8 +18,7 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.util.Objects;
 
-
-public class FXMLDocumentController extends Application {
+public class FXMLDocumentController {
     public TableColumn<Rule, String> ruleNameView = new TableColumn<>("Nome Regola");
     public TableColumn<Rule, String> actionView = new TableColumn<>("Nome Azione");
     public TableColumn<Rule, String> actionContentView = new TableColumn<>("Contenuto Azione");
@@ -55,39 +56,6 @@ public class FXMLDocumentController extends Application {
 
     private final RuleManager rm = RuleManager.getInstance();
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @FXML
-    public void initialize(){ // durante l'inizializzazione del controller creiamo la tableview per visualizzare i dati
-        ruleNameView.setCellValueFactory(new PropertyValueFactory<>("nameRule"));
-        actionView.setCellValueFactory(new PropertyValueFactory<>("nameAction"));
-        actionContentView.setCellValueFactory(new PropertyValueFactory<>("actionContent"));
-        triggerView.setCellValueFactory(new PropertyValueFactory<>("nameTrigger"));
-        triggerContentView.setCellValueFactory(new PropertyValueFactory<>("triggerContent"));
-        tableView.getColumns().addAll(ruleNameView,actionView,actionContentView,triggerView,triggerContentView);
-        tableView.setItems(rm.getRules());
-    }
-
-    @Override // metodo per l'avvio del programma
-    public void start(Stage stage) throws Exception {
-        // carichiamo il documento FXML da cui iniziare e impostiamo la scena
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("mainpage.fxml")));
-        Scene scene1 = new Scene(root);
-        stage.setResizable(false);
-        stage.setTitle("IFTTT_softeng");
-        stage.getIcons().add(new Image(Objects.requireNonNull(FXMLDocumentController.class.getResourceAsStream("icon.png"))));
-        stage.setScene(scene1);
-        stage.show();
-    }
-
-    @Override
-    public void stop() throws Exception { // metodo per fermare il thread per il controllo alla chiusura del programma
-        rm.getCheck().stopThread();
-        super.stop();
-    }
-
     // Questo metodo ci permette di poter cambiare la scena caricando un diverso file FXML
     public void switchRuleMenu(ActionEvent event) throws IOException {
         this.root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ruleselector.fxml"))); // carichiamo l'FXML della sezione per creare le regole
@@ -108,10 +76,10 @@ public class FXMLDocumentController extends Application {
 
     // Metodo che ci permette di scegliere un file audio
     @FXML
-    void selectAudio() {
+    void selectAudio(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         // impostiamo al FileChooser dei filtri in modo tale da essere sicuri di scegliere un file corretto.
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Audio files (*.mp3, wav)","*.mp3", "*.wav");
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Audio files (*.wav)", "*.wav");
         fileChooser.getExtensionFilters().add(filter);
 
         File file = fileChooser.showOpenDialog(stage);
@@ -156,6 +124,7 @@ public class FXMLDocumentController extends Application {
         rm.addRule("Regola #"+ (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time);
         tableView.refresh();
         cancel(event);
+        rm.check();
     }
 
     // metodo per accedere alla sezione di creazione delle regole
@@ -166,12 +135,9 @@ public class FXMLDocumentController extends Application {
             if(rm.getRules().isEmpty()) { // se non ci sono regole in corso allora possiamo procedere
                 switchRuleMenu(event);
             }
-            else{
-                Alert a = new Alert(Alert.AlertType.ERROR, "Al momento non è possibile creare più di una regola.");
-                a.show();
-            }
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert a = new Alert(Alert.AlertType.ERROR, "Al momento non è possibile creare più di una regola.");
+            a.show();
         }
     }
 
@@ -215,7 +181,7 @@ public class FXMLDocumentController extends Application {
     }
 
     // metodo per cambiare dinamicamente i campi in base alla azione selezionata
-    public void changeContentAction() {
+    public void changeContentAction(ActionEvent actionEvent) {
         try{
             switch (actionSelector.getValue().toString()){
                 case "Sveglia":
@@ -238,4 +204,14 @@ public class FXMLDocumentController extends Application {
         }
     }
 
+    @FXML
+    public void initialize(){
+        ruleNameView.setCellValueFactory(new PropertyValueFactory<>("nameRule"));
+        actionView.setCellValueFactory(new PropertyValueFactory<>("nameAction"));
+        actionContentView.setCellValueFactory(new PropertyValueFactory<>("actionContent"));
+        triggerView.setCellValueFactory(new PropertyValueFactory<>("nameTrigger"));
+        triggerContentView.setCellValueFactory(new PropertyValueFactory<>("triggerContent"));
+        tableView.getColumns().addAll(ruleNameView,actionView,actionContentView,triggerView,triggerContentView);
+        tableView.setItems(rm.getRules());
+    }
 }
