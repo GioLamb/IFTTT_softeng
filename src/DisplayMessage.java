@@ -1,16 +1,34 @@
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
-import javax.xml.namespace.QName;
-import java.util.Optional;
-
 public class DisplayMessage extends FactoryAction implements Action {
-    private String message;
 
-    private Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    Alert alert;
+    private String message;
 
     public DisplayMessage(String message) {
         this.message=message;
+        this.alert = new Alert(Alert.AlertType.INFORMATION);
+        this.alert.setHeaderText(null);
+        this.alert.setContentText(message);
+    }
+
+    @Override
+    public void execute() {
+        //mostra l'alert fin quando l'utente non interagisce con esso
+        alert.show();
+        onActionClose();
+    }
+
+    @Override
+    public void onActionClose() {
+        //chiusura alert con il clic del bottone OK dell'alert
+        //o con il click del bottone di chiusura dell'alert
+        alert.setOnCloseRequest(event -> {
+            if (alert.getResult() == ButtonType.CLOSE || alert.getResult() == ButtonType.OK) {
+                alert.close();
+            }
+        });
     }
 
     @Override
@@ -22,26 +40,4 @@ public class DisplayMessage extends FactoryAction implements Action {
     public String getContent() {
         return message;
     }
-
-    @Override
-    public void execute() {
-        //crea la finestra di dialogo in cui viene mostrato il messaggio di promemoria
-        alert.setTitle("Promemoria");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        //mostra l'alert fin quando l'utente non interagisce con esso
-        alert.showAndWait();
-        onActionClose();
-    }
-
-    @Override
-    public void onActionClose() {
-        //chiusura alert con il clic del bottone OK dell'alert
-        //o con il click del bottone di chiusura dell'alert
-        Optional<ButtonType> result = Optional.ofNullable(alert.getResult());
-        if (!result.isPresent() || result.get() == ButtonType.OK || result.get().getButtonData().isCancelButton()) {
-            alert.close();
-        }
-    }
 }
-

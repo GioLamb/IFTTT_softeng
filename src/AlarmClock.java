@@ -5,12 +5,22 @@ import java.io.File;
 import java.io.IOException;
 
 public class AlarmClock extends FactoryAction implements Action{
-    private String audioFilePath;
     private Stage dialogStage;
     private Clip clip;
-
+    private String audioFilePath;
     public AlarmClock(String audioFilePath) {
         this.audioFilePath=audioFilePath;
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(audioFilePath));
+            //clip per riprodurre audioInputStream
+            clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            dialogStage = new Stage();
+            dialogStage.setTitle("Riproduzione Audio");
+
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -26,24 +36,13 @@ public class AlarmClock extends FactoryAction implements Action{
 
     @Override
     public void execute() {
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(audioFilePath));
-            //Creo un oggetto clip per riprodurre audioInputStream
-            clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            //Avvia la riproduzione continua dell'audio
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        dialogStage.show();
+        //Avvia la riproduzione continua dell'audio
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
 
-            dialogStage = new Stage();
-            dialogStage.setTitle("Riproduzione Audio");
-            //Riproduzione dell'audio interrotta dalla chiusura
-            //della finestra di dialogo da parte dell'utente
-            dialogStage.setOnCloseRequest(event -> onActionClose());
-            dialogStage.showAndWait();
-
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-        }
+        //Riproduzione dell'audio interrotta dalla chiusura
+        //della finestra di dialogo da parte dell'utente
+        dialogStage.setOnCloseRequest(event -> onActionClose());
     }
 
     @Override

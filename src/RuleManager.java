@@ -1,16 +1,15 @@
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-
 public class RuleManager{
     private final ObservableList<Rule> rules;
     private static RuleManager instance;
+    private final Check checkRule = new Check();
 
     private RuleManager(){
         rules = FXCollections.observableArrayList();
+        check(); // creata la classe RuleManager avviamo il thread per il controllo delle regole
     }
 
     public static RuleManager getInstance(){
@@ -25,18 +24,13 @@ public class RuleManager{
         this.rules.add(new Rule(nameRule, nameAction, nameTrigger, content, time));
     }
 
+    public ObservableList<Rule> getRules(){ return this.rules;}
+
     public void check(){
-            while (!rules.isEmpty()) {
-                for (Rule rule : rules) {
-                    if (rule.getTrigger() instanceof TriggerTime) {
-                        if ((((TriggerTime) rule.getTrigger()).isTimeToTrigger(LocalTime.now()))) {
-                            rule.getAction().execute();
-                            rules.remove(0);
-                        }
-                    }
-                }
-            }
+        checkRule.start(); // eseguiamo il trigger
     }
 
-    public ObservableList<Rule> getRules(){ return this.rules;}
+    public Check getCheck(){
+        return checkRule;
+    }
 }
