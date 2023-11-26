@@ -51,22 +51,24 @@ public class FXMLDocumentController extends Application {
     @FXML
     private TextField minutesSelector;
     private String content;
-    private LocalTime time = LocalTime.of(0,0);
+    private LocalTime time = LocalTime.of(0, 0);
 
     private final RuleManager rm = RuleManager.getInstance();
+
 
     public static void main(String[] args) {
         launch(args);
     }
 
+
     @FXML
-    public void initialize(){ // durante l'inizializzazione del controller creiamo la tableview per visualizzare i dati
+    public void initialize() { // durante l'inizializzazione del controller creiamo la tableview per visualizzare i dati
         ruleNameView.setCellValueFactory(new PropertyValueFactory<>("nameRule"));
         actionView.setCellValueFactory(new PropertyValueFactory<>("nameAction"));
         actionContentView.setCellValueFactory(new PropertyValueFactory<>("actionContent"));
         triggerView.setCellValueFactory(new PropertyValueFactory<>("nameTrigger"));
         triggerContentView.setCellValueFactory(new PropertyValueFactory<>("triggerContent"));
-        tableView.getColumns().addAll(ruleNameView,actionView,actionContentView,triggerView,triggerContentView);
+        tableView.getColumns().addAll(ruleNameView, actionView, actionContentView, triggerView, triggerContentView);
         tableView.setItems(rm.getRules());
     }
 
@@ -111,11 +113,11 @@ public class FXMLDocumentController extends Application {
     void selectAudio() {
         FileChooser fileChooser = new FileChooser();
         // impostiamo al FileChooser dei filtri in modo tale da essere sicuri di scegliere un file corretto.
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Audio files (*.mp3, wav)","*.mp3", "*.wav");
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Audio files (*.mp3, wav)", "*.mp3", "*.wav");
         fileChooser.getExtensionFilters().add(filter);
 
         File file = fileChooser.showOpenDialog(stage);
-        if (file!=null){
+        if (file != null) {
             this.buttonAudio.setText(file.getAbsolutePath()); // cambiamo il testo del bottone con il path del file audio
             this.content = file.getAbsolutePath();
         }
@@ -126,11 +128,10 @@ public class FXMLDocumentController extends Application {
     void submit(ActionEvent event) {
         int hours = Integer.parseInt(this.hourSelector.getCharacters().toString()); // convertiamo i valori in interi
         int minutes = Integer.parseInt(this.minutesSelector.getCharacters().toString());
-        if(hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60){ // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti
+        if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60) { // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti
             this.time = LocalTime.of(hours, minutes); // creiamo l'oggetto LocalTime da associare alla azione
-        }
-        else{
-            Alert a = new Alert(Alert.AlertType.ERROR,"L'orario inserito non è corretto.\n" + // inviamo un alert di errore
+        } else {
+            Alert a = new Alert(Alert.AlertType.ERROR, "L'orario inserito non è corretto.\n" + // inviamo un alert di errore
                     "Le ore devono essere comprese tra 0 e 23\n" +
                     "I minuti devono essere compresi tra 0 e 59.\n Riprovare");
             a.show();
@@ -149,11 +150,11 @@ public class FXMLDocumentController extends Application {
             return;
         }
 
-        if(this.actionSelector.getValue().toString().equals("Promemoria")){ // verifichiamo che sia selezionato il promemoria
+        if (this.actionSelector.getValue().toString().equals("Promemoria")) { // verifichiamo che sia selezionato il promemoria
             this.content = this.messageField.getText();
         }
         RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
-        rm.addRule("Regola #"+ (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time);
+        rm.addRule("Regola #" + (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time);
         tableView.refresh();
         cancel(event);
     }
@@ -163,10 +164,9 @@ public class FXMLDocumentController extends Application {
     void newRule(ActionEvent event) {
         try {
             RuleManager rm = RuleManager.getInstance();
-            if(rm.getRules().isEmpty()) { // se non ci sono regole in corso allora possiamo procedere
+            if (rm.getRules().isEmpty()) { // se non ci sono regole in corso allora possiamo procedere
                 switchRuleMenu(event);
-            }
-            else{
+            } else {
                 Alert a = new Alert(Alert.AlertType.ERROR, "Al momento non è possibile creare più di una regola.");
                 a.show();
             }
@@ -216,8 +216,8 @@ public class FXMLDocumentController extends Application {
 
     // metodo per cambiare dinamicamente i campi in base alla azione selezionata
     public void changeContentAction() {
-        try{
-            switch (actionSelector.getValue().toString()){
+        try {
+            switch (actionSelector.getValue().toString()) {
                 case "Sveglia":
                     messageField.setDisable(true); // disattiviamo il messageField per la scrittura del messsaggio
                     messageLabel.setDisable(true); // disattiviamo il messageLabel
@@ -232,10 +232,37 @@ public class FXMLDocumentController extends Application {
                     buttonAudio.setDisable(true); // disattiviamo il buttonAudio per la selezione del file audio
                     break;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
             a.show();
         }
     }
 
+    public Scene getScene() {
+        return scene;
+    }
+
+    public TableView<Rule> getTableView() {
+        return tableView;
+    }
+
+    public ComboBox getActionSelector() {
+        return actionSelector;
+    }
+
+    public TextField getHourSelector() {
+        return hourSelector;
+    }
+
+    public TextField getMinutesSelector() {
+        return minutesSelector;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
 }
