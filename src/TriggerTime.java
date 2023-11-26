@@ -1,5 +1,4 @@
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 //Definizione della classe TriggerTime che estende FactoryTrigger e implementa Trigger
@@ -20,15 +19,11 @@ public class TriggerTime extends FactoryTrigger implements Trigger {
     // Confronta l'orario corrente con l'orario del trigger
     // Restituisce true se è il momento di attivare il trigger
     public boolean isTimeToTrigger(LocalTime currentTime) {
-        if(triggerTime.compareTo(currentTime)<0){
-            if (triggerTime.getHour()==currentTime.getHour()){
-                if (triggerTime.getMinute() == currentTime.getMinute()){
-                    return true;
-                }
-            }
-        }
-        return false;
+        // Restituisce true se l'orario corrente è dopo l'orario di trigger
+        // OPPURE se l'orario corrente è uguale all'orario di trigger.
+        return currentTime.isAfter(triggerTime) || currentTime.equals(triggerTime);
     }
+
 
     // Implementazione del metodo execute dell'interfaccia Trigger
     @Override
@@ -51,10 +46,13 @@ public class TriggerTime extends FactoryTrigger implements Trigger {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                // Gestisce l'eccezione di interruzione del thread
+                // Gestisce l'eccezione d'interruzione del thread
                 e.printStackTrace();
             }
         }
     }
 
+    public LocalTime getTime() {
+        return triggerTime;
+    }
 }
