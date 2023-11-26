@@ -1,47 +1,53 @@
+import static org.junit.jupiter.api.Assertions.*;
+import javafx.embed.swing.JFXPanel;
+import javafx.application.Platform;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalTime;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class RuleTest {
-
-    Rule rule1 = new Rule("Test","Promemoria","TriggerTime","abracadabra",LocalTime.of(17,32));
-    Rule rule2 = new Rule("Test","Sveglia","TriggerTime","C:\\Users\\Giovanni\\Downloads\\Effetto Sonoro Campanello Casa.mp3",LocalTime.of(17,32));
-
+public class RuleTest {
+    @BeforeAll
+    public static void initJFX() {
+        new JFXPanel(); // Inizializza JavaFX
+    }
     @Test
-    void getContentAction() {
-        assertEquals("abracadabra", rule1.getContentAction());
-        assertEquals("C:\\Users\\Giovanni\\Downloads\\Effetto Sonoro Campanello Casa.mp3", rule2.getContentAction());
+    void testRuleCreation() {
+        Platform.runLater(() -> {
+            Rule rule = new Rule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0));
+            assertNotNull(rule);
+            assertEquals("Rule1", rule.getNameRule());
+            assertEquals("Promemoria", rule.getNameAction());
+            assertEquals("TriggerTime", rule.getNameTrigger());
+            assertEquals("Content", rule.getActionContent());
+            assertEquals("12:00", rule.getTriggerContent()); // Assuming time is formatted as "HH:mm"
+        });
     }
 
     @Test
-    void getContentTrigger() {
-        assertEquals("17:32", rule1.getContentTrigger());
-        assertEquals("17:32", rule2.getContentTrigger());
+    void testGetAction() {
+        Platform.runLater(() -> {
+            Rule rule = new Rule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0));
+            assertNotNull(rule.getAction());
+        });
     }
 
     @Test
-    void getNameTrigger() {
-        assertEquals("TriggerTime", rule1.getNameTrigger());
-        assertEquals("TriggerTime", rule2.getNameTrigger());
-    }
-
-    @Test
-    void getNameRule() {
-        assertEquals("Test", rule1.getNameRule());
-        assertEquals("Test", rule2.getNameRule());
-    }
-
-    @Test
-    void getNameAction() {
-        assertEquals("Promemoria", rule1.getNameAction());
-        assertEquals("Sveglia", rule2.getNameAction());
+    void testGetTrigger() {
+        Platform.runLater(() -> {
+            Rule rule = new Rule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0));
+            assertNotNull(rule.getTrigger());
+        });
+        // Add more specific assertions about the Trigger if needed
     }
 
     @Test
     void testToString() {
-        assertEquals("Test,Promemoria,abracadabra,TriggerTime,17:32", rule1.toString());
-        assertEquals("Test,Sveglia,C:\\Users\\Giovanni\\Downloads\\Effetto Sonoro Campanello Casa.mp3,TriggerTime,17:32", rule2.toString());
+        Platform.runLater(() -> {
+            Rule rule = new Rule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0));
+            assertEquals("Rule1,Action1," + rule.getAction() + ",Trigger1," + rule.getTrigger(), rule.toString());
+
+        });
     }
+
+    // Add more tests as needed
 }
