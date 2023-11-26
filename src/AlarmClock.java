@@ -54,4 +54,8 @@ public class AlarmClock extends FactoryAction implements Action{
     public String getContent() {
         return audioFilePath;
     }
+
+    public Stage getDialogStage(){
+        return dialogStage;
+    }
 }

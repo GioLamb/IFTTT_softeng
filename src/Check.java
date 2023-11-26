@@ -39,4 +39,6 @@ public class Check extends Thread {
     public void stopThread(){
         isRunning = false;
     }
+
+    public Boolean getStatus(){return isRunning;}
 }
