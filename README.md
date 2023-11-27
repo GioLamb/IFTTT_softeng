@@ -32,4 +32,4 @@ Per la realizzazione del Product Backlog abbiamo utilizzato un foglio di calcolo
 Abbiamo diviso le diverse User Story secondo il numero dell'User Epic corrispondente, per ognuna di esse abbiamo tracciato delle Acceptance Criteria (criteri di accettazione).
 ## Sprint Backlog n°1
 Per la Sprint Backlog abbiamo realizzato un foglio di calcolo su Google Sheets, consultabile a questo [link.](https://docs.google.com/spreadsheets/d/1Jg-jbu-lqLK0X6i5f5sSLkYn4Eur-_I_bi0ZIpJWjm4/edit?usp=sharing)
-Abbiamo selezionato le User Story a priorità maggiore e abbiamo assegnato ad ognuna di esse un peso valutato in Story Points (per il costo degli Story Points abbiamo fatto riferimentop ai valori della sequenza di Fibonacci).
+Abbiamo selezionato le User Story a priorità maggiore e abbiamo assegnato ad ognuna di esse un peso valutato in Story Points (per il costo degli Story Points abbiamo fatto riferimento ai valori della sequenza di Fibonacci).
