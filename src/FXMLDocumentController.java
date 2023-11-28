@@ -23,6 +23,8 @@ public class FXMLDocumentController extends Application {
     public TableColumn<Rule, String> actionContentView = new TableColumn<>("Contenuto Azione");
     public TableColumn<Rule, String> triggerView = new TableColumn<>("Nome Trigger");
     public TableColumn<Rule, String> triggerContentView = new TableColumn<>("Contenuto Trigger");
+    public TableColumn<Rule, Boolean> stateView = new TableColumn<>("Attiva");
+    ContextMenu contextMenu = new ContextMenu();
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -68,8 +70,32 @@ public class FXMLDocumentController extends Application {
         actionContentView.setCellValueFactory(new PropertyValueFactory<>("actionContent"));
         triggerView.setCellValueFactory(new PropertyValueFactory<>("nameTrigger"));
         triggerContentView.setCellValueFactory(new PropertyValueFactory<>("triggerContent"));
-        tableView.getColumns().addAll(ruleNameView, actionView, actionContentView, triggerView, triggerContentView);
+        stateView.setCellValueFactory(new PropertyValueFactory<>("state"));
+        tableView.getColumns().addAll(ruleNameView, actionView, actionContentView, triggerView, triggerContentView, stateView);
+        MenuItem active = new MenuItem("Attiva");
+        MenuItem deactive = new MenuItem("Disattiva");
+        active.setOnAction(event -> {
+            Rule selectedData = tableView.getSelectionModel().getSelectedItem();
+            selectedData.setState(true);
+            tableView.refresh();
+        });
+
+        deactive.setOnAction(event -> {
+            Rule selectedData = tableView.getSelectionModel().getSelectedItem();
+            selectedData.setState(false);
+            tableView.refresh();
+        });
+        contextMenu.getItems().addAll(active,deactive);
         tableView.setItems(rm.getRules());
+        tableView.setRowFactory(tv -> {
+            TableRow<Rule> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (!row.isEmpty() && event.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
+                    contextMenu.show(tableView, event.getScreenX(), event.getScreenY());
+                }
+            });
+            return row;
+        });
     }
 
     @Override // metodo per l'avvio del programma
@@ -126,6 +152,11 @@ public class FXMLDocumentController extends Application {
     // metodo per inviare tutti i dati raccolti in input al RuleManager
     @FXML
     void submit(ActionEvent event) {
+        if(hourSelector.getCharacters().isEmpty() || minutesSelector.getCharacters().isEmpty()){
+            Alert a = new Alert(Alert.AlertType.ERROR, "Attenzione si è verificato un errore, controlla di aver riempito tutti campi necessari");
+            a.show();
+            return;
+        }
         int hours = Integer.parseInt(this.hourSelector.getCharacters().toString()); // convertiamo i valori in interi
         int minutes = Integer.parseInt(this.minutesSelector.getCharacters().toString());
         if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60) { // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti

@@ -49,5 +49,13 @@ public class RuleTest {
         });
     }
 
-    // Add more tests as needed
+    @Test
+    void state(){
+        Platform.runLater(()->{
+            Rule rule = new Rule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0));
+            assertEquals(true, rule.getState());
+            rule.setState(false);
+            assertEquals(false, rule.getState());
+        });
+    }
 }

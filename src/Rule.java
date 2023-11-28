@@ -9,6 +9,7 @@ public class Rule{
         private String nameAction;
         private String actionContent;
         private String triggerContent;
+        private Boolean state=true;
 
         //Costruttore della classe Rule che accetta il nome della regola, il nome dell'azione,
         //il nome del trigger, il contenuto dell'azione e l'orario del trigger come parametri
@@ -56,5 +57,13 @@ public class Rule{
 
     public String getActionContent() {
         return actionContent;
+    }
+
+    public Boolean getState() {
+        return state;
+    }
+
+    public Boolean setState(Boolean state) {
+        return this.state=state;
     }
 }

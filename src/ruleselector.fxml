@@ -45,13 +45,13 @@
                   </HBox>
                   <HBox prefHeight="56.0" prefWidth="78.0">
                      <children>
-                        <TextField fx:id="hourSelector" onKeyTyped="#checkHours" prefHeight="26.0" prefWidth="213.0" text="00">
+                        <TextField fx:id="hourSelector" onKeyTyped="#checkHours" prefHeight="26.0" prefWidth="213.0" text="">
                            <HBox.margin>
                               <Insets right="15.0" />
                            </HBox.margin>
                         </TextField>
                         <Label text=":" textFill="WHITE" />
-                        <TextField fx:id="minutesSelector" onKeyTyped="#checkMinutes" prefHeight="26.0" prefWidth="210.0" text="00">
+                        <TextField fx:id="minutesSelector" onKeyTyped="#checkMinutes" prefHeight="26.0" prefWidth="210.0" text="">
                            <HBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </HBox.margin>
