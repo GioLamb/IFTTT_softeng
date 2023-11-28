@@ -10,7 +10,9 @@ Per la realizzazione del nostro software abbiamo deciso di servirci di un patter
 per la creazione di software che prevedono l'interazione con l'utente tramite una GUI (Graphical User Interface) interpretata tramite un FXMLDocument.
 Il ruolo del controllore verrà svolto dalla classe `FXMLDocumentController`.
 
-Per gestire la creazione di regole da parte dell'utente, ci siamo avvalsi del pattern FactoryMethod, ovvero abbiamo implementato una classe `FactoryRule` la quale si occuperà di permettere all'utente di istanziare nuove regole indipendentemente dall'azione e dal trigger specificati, favorendo l'aggiunta di nuove regole in futuro senza dover modificare il codice esistente. In particolare fornisce un metodo che si occuperà di fare riferimento alle classi che implementano le interfacce `Action` e `Trigger` per gestire rispettivamente la scelta, da parte dell'utente, dell'azione e dell'orario associati.
+Per gestire la creazione di regole da parte dell'utente, ci siamo avvalsi del pattern FactoryMethod, ovvero abbiamo implementato una classe `Rule` la quale si occuperà di permettere all'utente di istanziare nuove regole indipendentemente dall'azione e dal trigger specificati, favorendo l'aggiunta di nuove regole in futuro senza dover modificare il codice esistente. In particolare fornisce un metodo che si occuperà di fare riferimento alle classi che implementano le interfacce `Action` e `Trigger` per gestire rispettivamente la scelta, da parte dell'utente, dell'azione e dell'orario associati.
+La classe `Rule` viene invocata da `RuleManager`, il cui obiettivo è quello di gestire un insieme di regole, non solo raccogliendo la creazione di queste ultime da interfaccia grafica, ma anche permettendo l'aggiunta di nuove regole all'intero sistema. Per questa classe abbiamo utilizzato il pattern Singleton, in modo tale da poter avere sempre una sola istanza di `RuleManager`. 
+La classe `Check` estende la classe `Thread` e gestisce l'attivazione del trigger, permettendo l'esecuzione dell'azione associata, e quindi dell'intera regola.
 Per la rappresentazione delle sottoclassi abbiamo sfruttato il pattern Composite, utile a fornire una struttura ad albero al nostro programma.
 Tra le foglie dell'albero di `Action` notiamo due classi:
 1. `DisplayMessage`
@@ -30,4 +32,4 @@ Per la realizzazione del Product Backlog abbiamo utilizzato un foglio di calcolo
 Abbiamo diviso le diverse User Story secondo il numero dell'User Epic corrispondente, per ognuna di esse abbiamo tracciato delle Acceptance Criteria (criteri di accettazione).
 ## Sprint Backlog n°1
 Per la Sprint Backlog abbiamo realizzato un foglio di calcolo su Google Sheets, consultabile a questo [link.](https://docs.google.com/spreadsheets/d/1Jg-jbu-lqLK0X6i5f5sSLkYn4Eur-_I_bi0ZIpJWjm4/edit?usp=sharing)
-Abbiamo selezionato le User Story a priorità maggiore e abbiamo assegnato ad ognuna di esse un peso valutato in Story Points (per il costo degli Story Points abbiamo fatto riferimentop ai valori della sequenza di Fibonacci).
+Abbiamo selezionato le User Story a priorità maggiore e abbiamo assegnato ad ognuna di esse un peso valutato in Story Points (per il costo degli Story Points abbiamo fatto riferimento ai valori della sequenza di Fibonacci).
