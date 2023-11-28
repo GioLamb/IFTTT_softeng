@@ -24,6 +24,7 @@ public class FXMLDocumentController extends Application {
     public TableColumn<Rule, String> triggerView = new TableColumn<>("Nome Trigger");
     public TableColumn<Rule, String> triggerContentView = new TableColumn<>("Contenuto Trigger");
     public TableColumn<Rule, Boolean> stateView = new TableColumn<>("Attiva");
+    public Button deleteButton;
     ContextMenu contextMenu = new ContextMenu();
     private Stage stage;
     private Scene scene;
@@ -295,5 +296,8 @@ public class FXMLDocumentController extends Application {
 
     public LocalTime getTime() {
         return time;
+    }
+
+    public void delete(ActionEvent actionEvent) {
     }
 }
