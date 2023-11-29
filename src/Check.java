@@ -18,13 +18,11 @@ public class Check extends Thread {
                 Iterator<Rule> iterator = rm.getRules().iterator(); // creiamo un iteratore per la collezione di regole
                 while (iterator.hasNext()) { // fin quando esiste un oggetto Rule
                     Rule rule = iterator.next(); // lo preleviamo
-                    if (rule.getState()) {
+                    if (rule.getState().get()) {
                         if (rule.getTrigger() instanceof TriggerTime) { // preleviamo il trigger
                             if ((((TriggerTime) rule.getTrigger()).isTimeToTrigger(LocalTime.now()))) { // controlliamo se il trigger sia attivo
-                                Platform.runLater(()->{
                                     rule.getAction().execute(); // eseguiamo l'azione annessa
-                                    rule.setState(false); // imposta lo stato della regola appena eseguita su false
-                                });
+                                    rule.setState(false); // imposta lo stato della regola appena eseguita su falso
                             }
                         }
                     }

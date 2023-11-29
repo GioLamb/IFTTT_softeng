@@ -55,9 +55,9 @@ public class RuleTest {
     void state(){
         Platform.runLater(()->{
             Rule rule = new Rule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0));
-            assertEquals(true, rule.getState());
+            assertEquals(true, rule.getState().get());
             rule.setState(false);
-            assertEquals(false, rule.getState());
+            assertEquals(false, rule.getState().get());
         });
     }
 
