@@ -53,7 +53,7 @@ public class Rule{
 
     @Override
     public String toString(){
-            return ""+getNameRule()+","+getNameAction()+","+getAction()+","+getNameTrigger()+","+getTrigger();
+            return ""+getNameRule().get()+","+getNameAction().get()+","+getAction()+","+getNameTrigger().get()+","+getTrigger();
     }
 
     public StringProperty getTriggerContent() {
