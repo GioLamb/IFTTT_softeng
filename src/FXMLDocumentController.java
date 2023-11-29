@@ -23,7 +23,7 @@ public class FXMLDocumentController extends Application {
     public TableColumn<Rule, String> actionContentView = new TableColumn<>("Contenuto Azione");
     public TableColumn<Rule, String> triggerView = new TableColumn<>("Nome Trigger");
     public TableColumn<Rule, String> triggerContentView = new TableColumn<>("Contenuto Trigger");
-    public TableColumn<Rule, Boolean> stateView = new TableColumn<>("Attiva");
+    public TableColumn<Rule, Boolean> stateView = new TableColumn<>("Stato");
     public Button deleteButton;
     ContextMenu contextMenu = new ContextMenu();
     private Stage stage;
@@ -185,6 +185,7 @@ public class FXMLDocumentController extends Application {
         if (this.actionSelector.getValue().toString().equals("Promemoria")) { // verifichiamo che sia selezionato il promemoria
             this.content = this.messageField.getText();
         }
+        tableView.refresh();
         RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
         rm.addRule("Regola #" + (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time);
         tableView.refresh();
@@ -194,16 +195,11 @@ public class FXMLDocumentController extends Application {
     // metodo per accedere alla sezione di creazione delle regole
     @FXML
     void newRule(ActionEvent event) {
-        try {
-            RuleManager rm = RuleManager.getInstance();
-            if (rm.getRules().isEmpty()) { // se non ci sono regole in corso allora possiamo procedere
-                switchRuleMenu(event);
-            } else {
-                Alert a = new Alert(Alert.AlertType.ERROR, "Al momento non è possibile creare più di una regola.");
-                a.show();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        try{
+            switchRuleMenu(event);
+        }catch (Exception e){
+            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
+            a.show();
         }
     }
 
