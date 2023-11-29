@@ -1,4 +1,5 @@
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class Rule{
         // Variabili d'istanza private per memorizzare un'azione, un trigger e informazioni sulla regola
@@ -25,6 +26,25 @@ public class Rule{
             //Utilizza la FactoryTrigger per creare un'istanza del trigger in base al nome e all'orario
             this.trigger = new FactoryTrigger().createConcreteTrigger(nameTrigger, time);
         }
+
+    //Sovrascrive il metodo equals della classe Object
+    @Override
+    public boolean equals(Object o) {
+        //Verifica se l'oggetto corrente è lo stesso di 'o' (stesso riferimento)
+        if (this == o) return true;
+        //Verifica se 'o' è null o appartiene a una classe diversa da Rule
+        if (o == null || getClass() != o.getClass()) return false;
+        //Casting di 'o' a Rule per ottenere un oggetto Rule
+        Rule rule = (Rule) o;
+        //Confronta gli attributi delle due regole per determinare l'uguaglianza
+        return Objects.equals(nameRule, rule.nameRule) &&
+                Objects.equals(nameAction, rule.nameAction) &&
+                Objects.equals(nameTrigger, rule.nameTrigger) &&
+                Objects.equals(triggerContent, rule.triggerContent) &&
+                Objects.equals(actionContent, rule.actionContent) &&
+                Objects.equals(state, rule.state);
+    }
+
 
     public Action getAction() {
         return action;

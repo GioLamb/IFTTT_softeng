@@ -2,6 +2,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalTime;
+
 public class RuleManager{
     private final ObservableList<Rule> rules;
     private static RuleManager instance;
@@ -23,6 +24,8 @@ public class RuleManager{
     public void addRule(String nameRule, String nameAction, String nameTrigger, String content, LocalTime time){
         this.rules.add(new Rule(nameRule, nameAction, nameTrigger, content, time));
     }
+
+    public void removeRule(Rule rule){ rules.remove(rule); }; //Metodo utilizzato per la rimozione di una regola (rule) dalla lista rules di regole.
 
     public ObservableList<Rule> getRules(){ return this.rules;}
 

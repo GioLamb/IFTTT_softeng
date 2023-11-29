@@ -1,9 +1,11 @@
-import static org.junit.jupiter.api.Assertions.*;
-import javafx.embed.swing.JFXPanel;
 import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalTime;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RuleTest {
     @BeforeAll
@@ -57,5 +59,43 @@ public class RuleTest {
             rule.setState(false);
             assertEquals(false, rule.getState());
         });
+    }
+
+    @Test
+    void equals_shouldReturnTrueForEqualObjects() {
+        // Creazione di due oggetti Rule con gli stessi attributi
+        Rule rule1 = new Rule("Rule1", "Promemoria", "TriggerTime", "Content1", LocalTime.of(12, 0));
+        Rule rule2 = new Rule("Rule1", "Promemoria", "TriggerTime", "Content1", LocalTime.of(12, 0));
+
+        // Verifica che equals restituisca true
+        assertTrue(rule1.equals(rule2));
+    }
+
+    @Test
+    void equals_shouldReturnFalseForDifferentObjects() {
+        // Creazione di due oggetti Rule con attributi diversi
+        Rule rule1 = new Rule("Rule1", "Promemoria", "TriggerTime", "Content1", LocalTime.of(12, 0));
+        Rule rule2 = new Rule("Rule2", "Promemoria", "TriggerTime", "Content2", LocalTime.of(14, 30));
+
+        // Verifica che equals restituisca false
+        assertFalse(rule1.equals(rule2));
+    }
+
+    @Test
+    void equals_shouldReturnFalseForNullObject() {
+        // Creazione di un oggetto Rule
+        Rule rule = new Rule("Rule1", "Promemoria", "TriggerTime", "Content1", LocalTime.of(12, 0));
+
+        // Verifica che equals restituisca false quando confrontato con null
+        assertFalse(rule.equals(null));
+    }
+
+    @Test
+    void equals_shouldReturnFalseForDifferentClass() {
+        // Creazione di un oggetto Rule
+        Rule rule = new Rule("Rule1", "Promemoria", "TriggerTime", "Content1", LocalTime.of(12, 0));
+
+        // Verifica che equals restituisca false quando confrontato con un oggetto di una classe diversa
+        assertFalse(rule.equals("non è un oggetto Rule"));
     }
 }

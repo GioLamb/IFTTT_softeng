@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,8 +10,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -55,6 +58,7 @@ public class FXMLDocumentController extends Application {
     private TextField minutesSelector;
     private String content;
     private LocalTime time = LocalTime.of(0, 0);
+    private Rule selectedRuleToDelete;
 
     private final RuleManager rm = RuleManager.getInstance();
 
@@ -91,6 +95,10 @@ public class FXMLDocumentController extends Application {
         tableView.setRowFactory(tv -> {
             TableRow<Rule> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
+                if(!row.isEmpty() && event.getButton() == MouseButton.PRIMARY) {
+                    Rule selecctedRule = row.getItem();
+                    selectedRuleToDelete = selecctedRule;
+                }
                 if (!row.isEmpty() && event.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
                     contextMenu.show(tableView, event.getScreenX(), event.getScreenY());
                 }
@@ -214,6 +222,20 @@ public class FXMLDocumentController extends Application {
         }
     }
 
+    //Metodo per la cancellazione di una regola inserita precedentemente
+    @FXML
+    public void deleteRule(ActionEvent actionEvent) {
+        //Verifica se una regola è stata selezionata
+        if (selectedRuleToDelete != null) {
+            //Chiama il metodo delete con la regola selezionata
+            delete(selectedRuleToDelete);
+            //Rimuovi la regola dalla TableView
+            tableView.getItems().remove(selectedRuleToDelete);
+            //Resetta la variabile
+            selectedRuleToDelete = null;
+        }
+    }
+
     // metodo per il controllo degli input nel campo delle ore
     public void checkHours(KeyEvent event) {
         try {
@@ -266,6 +288,14 @@ public class FXMLDocumentController extends Application {
         }
     }
 
+    //Metodo per l'eliminazione della regola
+    public void delete(Rule selectedRuleToDelete) {
+        //Rimuovi la regola dal RuleManager
+        rm.removeRule(selectedRuleToDelete);
+        //Aggiorna la TableView dopo l'eliminazione
+        Platform.runLater(() -> tableView.refresh());
+    }
+
     public Scene getScene() {
         return scene;
     }
@@ -294,6 +324,7 @@ public class FXMLDocumentController extends Application {
         return time;
     }
 
-    public void delete(ActionEvent actionEvent) {
+    public Object getSelectedRuleToDelete() {
+        return selectedRuleToDelete;
     }
 }

@@ -1,5 +1,6 @@
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.event.ActionEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -197,4 +198,73 @@ public class FXMLDocumentControllerTest {
             // Add assertions based on the expected behavior for the "Promemoria" case
         });
     }
+
+    @Test
+    void testDeleteRule() {
+        //Si crea una nuova regola da eliminare che aggiungiamo alla TableView
+        FXMLDocumentController controller = new FXMLDocumentController();
+        Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now());
+        controller.getTableView().getItems().add(ruleToDelete);
+
+        //Chiama il metodo deleteRule per eliminare la regola
+        controller.deleteRule(new ActionEvent());
+
+        //Ci assicuriamo che la tableView non contenga più la regola,
+        //implementando un Platform per far si che si legga la tabella correttamente
+        Platform.runLater(() ->{
+            assertFalse(controller.getTableView().getItems().contains(ruleToDelete), "La regola dovrebbe essere eliminata dalla TableView");
+            assertNull(controller.getSelectedRuleToDelete(), "La regola selezionata dovrebbe essere reimpostata a null");
+        });
+    }
+
+    @Test
+    void testDeleteRuleFromEmptyTableView() {
+        //Ci assicuriamo che la TableView sia inizialmente vuota
+        FXMLDocumentController controller = new FXMLDocumentController();
+
+        //Chiamiamo deleteRule su una TableView vuota, cosa che non dovrebbe generare errori
+        controller.deleteRule(new ActionEvent());
+
+        //Ci assicuriamo che la TableView sia rimasta vuota dopo l'eliminazione,
+        //oltre che assicurarci che la variabile relativa alla regola selezionata sia rimasta vuota
+        assertTrue(controller.getTableView().getItems().isEmpty(), "La TableView dovrebbe rimanere vuota");
+        assertNull(controller.getSelectedRuleToDelete(), "La regola selezionata dovrebbe essere null");
+    }
+
+    @Test
+    void testDelete() {
+        //Crea una nuova regola da eliminare, e aggiungiamo la stessa alla
+        //TableView del controller
+        FXMLDocumentController controller = new FXMLDocumentController();
+        Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now());
+        controller.getTableView().getItems().add(ruleToDelete);
+
+        //Chiamiamo delete per eliminare la regola della TableView
+        controller.delete(ruleToDelete);
+
+        //Ci assicuriamo che la TableView sia vuota dopo l'eliminazione, e che la
+        //variabile relativa alla regola selezionata sia vuota, dopo l'eliminazione
+        //utilizziamo un Platoform, per attendere la corretta lettura della TableView
+        //dopo l'eliminazione
+        Platform.runLater(() -> {
+            assertFalse(controller.getTableView().getItems().contains(ruleToDelete), "La regola dovrebbe essere eliminata dalla TableView");
+            assertNull(controller.getSelectedRuleToDelete(), "La regola selezionata dovrebbe essere reimpostata a null");
+        });
+    }
+
+    @Test
+    void testDeleteFromEmptyTableView() {
+        //Creiamo una nuova regola da eliminare
+        FXMLDocumentController controller = new FXMLDocumentController();
+        Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now());
+
+        //Chiamiamo delete per eliminare la regola della TableView (vuota)
+        controller.delete(ruleToDelete);
+
+        //Ci assicuriamo che la TableView sia vuota, e che lo sia anche la
+        //variabile relativa alla regola selezionata
+        assertTrue(controller.getTableView().getItems().isEmpty(), "La TableView dovrebbe rimanere vuota");
+        assertNull(controller.getSelectedRuleToDelete(), "La regola selezionata dovrebbe essere null");
+    }
+
 }

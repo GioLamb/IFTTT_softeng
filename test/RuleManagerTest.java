@@ -1,6 +1,8 @@
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
@@ -8,6 +10,10 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RuleManagerTest {
+
+
+    private RuleManager ruleManager;
+    private ObservableList<Rule> rules;
     @BeforeAll
     public static void initJFX() {
         new JFXPanel(); // Inizializza JavaFX
@@ -53,5 +59,43 @@ class RuleManagerTest {
             RuleManager rm = RuleManager.getInstance();
             assertNotNull(rm.getCheck());
         });
+    }
+
+    @BeforeEach
+    void setUp() {
+        ruleManager = RuleManager.getInstance();
+        rules = ruleManager.getRules();
+        rules.clear(); // Assicuriamoci che la lista delle regole sia vuota prima di ogni test
+    }
+
+    @Test
+    void removeRule_shouldRemoveRuleFromList() {
+        // Creiamo una regola da aggiungere e rimuovere
+        Rule rule = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.of(12, 0));
+        ruleManager.addRule(rule.getNameRule(), rule.getNameAction(), rule.getNameTrigger(), rule.getActionContent(), LocalTime.parse(rule.getTriggerContent()));
+
+        // Verifichiamo che la regola sia stata aggiunta correttamente
+        assertTrue(rules.contains(rule));
+
+        // Rimuoviamo la regola
+        ruleManager.removeRule(rule);
+
+        // Verifichiamo che la regola sia stata rimossa correttamente
+        assertFalse(rules.contains(rule));
+    }
+
+    @Test
+    void removeRule_shouldDoNothingForNonexistentRule() {
+        // Creiamo una regola, ma non la aggiungiamo alla lista
+        Rule rule = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.of(12, 0));
+
+        // Verifichiamo che la regola non sia presente nella lista
+        assertFalse(rules.contains(rule));
+
+        // Tentiamo di rimuovere la regola
+        ruleManager.removeRule(rule);
+
+        // Verifichiamo che la lista non sia stata modificata (la regola non esisteva)
+        assertFalse(rules.contains(rule));
     }
 }
