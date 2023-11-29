@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +18,7 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 
-public class FXMLDocumentController extends Application {
+public class FXMLDocumentController extends Application{
     public TableColumn<Rule, String> ruleNameView = new TableColumn<>("Nome Regola");
     public TableColumn<Rule, String> actionView = new TableColumn<>("Nome Azione");
     public TableColumn<Rule, String> actionContentView = new TableColumn<>("Contenuto Azione");
@@ -66,28 +67,28 @@ public class FXMLDocumentController extends Application {
 
     @FXML
     public void initialize() { // durante l'inizializzazione del controller creiamo la tableview per visualizzare i dati
-        ruleNameView.setCellValueFactory(new PropertyValueFactory<>("nameRule"));
-        actionView.setCellValueFactory(new PropertyValueFactory<>("nameAction"));
-        actionContentView.setCellValueFactory(new PropertyValueFactory<>("actionContent"));
-        triggerView.setCellValueFactory(new PropertyValueFactory<>("nameTrigger"));
-        triggerContentView.setCellValueFactory(new PropertyValueFactory<>("triggerContent"));
-        stateView.setCellValueFactory(new PropertyValueFactory<>("state"));
+        tableView.setItems(rm.getRules());
+        ruleNameView.setCellValueFactory(cellData -> cellData.getValue().getNameRule());
+        actionView.setCellValueFactory(cellData -> cellData.getValue().getNameAction());
+        actionContentView.setCellValueFactory(cellData -> cellData.getValue().getActionContent());
+        triggerView.setCellValueFactory(cellData -> cellData.getValue().getNameTrigger());
+        triggerContentView.setCellValueFactory(cellData -> cellData.getValue().getTriggerContent());
+        stateView.setCellValueFactory(cellData -> cellData.getValue().getState());
         tableView.getColumns().addAll(ruleNameView, actionView, actionContentView, triggerView, triggerContentView, stateView);
+
         MenuItem active = new MenuItem("Attiva");
         MenuItem deactive = new MenuItem("Disattiva");
         active.setOnAction(event -> {
             Rule selectedData = tableView.getSelectionModel().getSelectedItem();
             selectedData.setState(true);
-            tableView.refresh();
         });
 
         deactive.setOnAction(event -> {
             Rule selectedData = tableView.getSelectionModel().getSelectedItem();
             selectedData.setState(false);
-            tableView.refresh();
         });
         contextMenu.getItems().addAll(active,deactive);
-        tableView.setItems(rm.getRules());
+
         tableView.setRowFactory(tv -> {
             TableRow<Rule> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -185,10 +186,8 @@ public class FXMLDocumentController extends Application {
         if (this.actionSelector.getValue().toString().equals("Promemoria")) { // verifichiamo che sia selezionato il promemoria
             this.content = this.messageField.getText();
         }
-        tableView.refresh();
         RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
         rm.addRule("Regola #" + (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time);
-        tableView.refresh();
         cancel(event);
     }
 
