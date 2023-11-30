@@ -7,10 +7,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -97,13 +97,24 @@ public class FXMLDocumentController extends Application{
             row.setOnMouseClicked(event -> {
                 if(!row.isEmpty() && event.getButton() == MouseButton.PRIMARY) {
                     Rule selecctedRule = row.getItem();
-                    selectedRuleToDelete = selecctedRule;
                 }
                 if (!row.isEmpty() && event.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
                     contextMenu.show(tableView, event.getScreenX(), event.getScreenY());
                 }
             });
             return row;
+        });
+        //Listener-Handler utilizzata per poter abilitare il bottone di cancellazione della regola
+        //quando viene fatto un click sinistro su una regola da voler cancellare
+        tableView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if(event.getButton() == MouseButton.PRIMARY) {
+                //Abilita il deleteButton quando si effettua un click sinistro
+                //su una regola da voler cancellare
+                deleteButton.setDisable(false);
+            } else {
+                //Altrimenti lo stesso bottone rimane disabilitato
+                deleteButton.setDisable(true);
+            }
         });
     }
 
