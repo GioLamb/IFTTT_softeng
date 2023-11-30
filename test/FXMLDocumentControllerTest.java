@@ -1,6 +1,7 @@
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -34,6 +35,16 @@ public class FXMLDocumentControllerTest {
             assertNotNull(controller.getTableView());
             assertNotNull(controller.getTableView().getColumns());
             assertFalse(controller.getTableView().getColumns().isEmpty());
+            this.controller.deleteButton = new Button();
+
+            // Verifica che il bottone di cancellazione sia inizialmente disabilitato
+            assertTrue(controller.deleteButton.isDisabled());
+            // Aggiungi una riga fittizia alla TableView (simulazione della presenza di dati nella TableView)
+            controller.getTableView().getItems().add(new Rule("Test Rule", "Promemoria", "Test Trigger", "Test Content", LocalTime.now()));
+            // Simula la selezione di un elemento nella TableView
+            controller.getTableView().getSelectionModel().select(0);
+            // Verifica che il bottone di cancellazione sia ora abilitato
+            assertFalse(controller.deleteButton.isDisabled());
         });
     }
 

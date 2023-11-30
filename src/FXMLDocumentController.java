@@ -235,7 +235,9 @@ public class FXMLDocumentController extends Application{
     @FXML
     public void deleteRule(ActionEvent actionEvent) {
         //Verifica se una regola è stata selezionata
-        if (selectedRuleToDelete != null) {
+        Rule selectedData = tableView.getSelectionModel().getSelectedItem();
+        if (selectedData != null) {
+            selectedRuleToDelete = selectedData;
             //Chiama il metodo delete con la regola selezionata
             delete(selectedRuleToDelete);
             //Rimuovi la regola dalla TableView
