@@ -3,6 +3,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -16,10 +17,18 @@ public class Rule{
         private StringProperty actionContent = new SimpleStringProperty();
         private StringProperty triggerContent = new SimpleStringProperty();
         private BooleanProperty state=new SimpleBooleanProperty(true);
+        private Boolean oneTime;
+        private Boolean recurrent;
+        private int sleepDays;
+        private int sleepHours;
+        private int sleepMinutes;
+        private LocalDateTime now;
+        private LocalDateTime nowPlusSleep;
+        private Boolean repeat;
 
         //Costruttore della classe Rule che accetta il nome della regola, il nome dell'azione,
         //il nome del trigger, il contenuto dell'azione e l'orario del trigger come parametri
-        public Rule(String nameRule, String nameAction, String nameTrigger, String content, LocalTime time) {
+        public Rule(String nameRule, String nameAction, String nameTrigger, String content, LocalTime time, Boolean oneTime, int sleepDays, int sleepHours, int sleepMinutes, Boolean recurrent) {
             //Inizializza le variabili d'istanza con i valori forniti
             this.nameRule.set(nameRule);
             this.nameAction.set(nameAction);
@@ -30,6 +39,12 @@ public class Rule{
             this.action = new FactoryAction().createConcreteAction(nameAction, content);
             //Utilizza la FactoryTrigger per creare un'istanza del trigger in base al nome e all'orario
             this.trigger = new FactoryTrigger().createConcreteTrigger(nameTrigger, time);
+            this.oneTime = oneTime;
+            this.sleepDays = sleepDays;
+            this.sleepHours = sleepHours;
+            this.sleepMinutes = sleepMinutes;
+            this.recurrent = recurrent;
+            this.repeat = recurrent;
         }
 
     //Sovrascrive il metodo equals della classe Object
@@ -90,5 +105,51 @@ public class Rule{
 
     public void setState(Boolean state) {
             this.state.set(state);
+    }
+    public Boolean getOneTime(){
+        return this.oneTime;
+    }
+
+    public Boolean setOneTime(Boolean oneTime){
+        return this.oneTime  = oneTime;
+    }
+    public Boolean getRecurrent(){
+        return this.recurrent;
+    }
+
+    public Boolean setRecurrent(Boolean recurrent){
+        return this.recurrent = recurrent;
+    }
+
+    public Boolean getRepeat(){
+        return this.repeat;
+    }
+
+    public Boolean setRepeat(Boolean active){
+        return this.repeat= active;
+    }
+
+    public int getSleepDays(){
+        return this.sleepDays;
+    }
+    public int getSleepHours(){
+        return this.sleepHours;
+    }
+    public int getSleepMinutess(){
+        return this.sleepMinutes;
+    }
+
+    public LocalDateTime getNow(){
+        return this.now;
+    }
+
+    public LocalDateTime setNow (LocalDateTime time){
+        return this.now = time;
+    }
+    public LocalDateTime getNowPlusSleep(){
+        return this.nowPlusSleep;
+    }
+    public LocalDateTime setNowPlusSleep (LocalDateTime time){
+        return this.nowPlusSleep = time;
     }
 }

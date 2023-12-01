@@ -58,6 +58,31 @@ public class FXMLDocumentController extends Application{
 
     @FXML
     private TextField minutesSelector;
+    @FXML
+    private CheckBox oneTimeSelector;
+
+    @FXML
+    private CheckBox recurrentSelector;
+
+    @FXML
+    private TextField sleepDaySelector;
+
+    @FXML
+    private TextField sleepHourSelector;
+
+    @FXML
+    private TextField sleepMinuteSelector;
+
+    @FXML
+    private Label labelSleepDay;
+    @FXML
+    private Label labelSleepHour;
+    @FXML
+    private Label labelSleepMinute;
+
+    private int sleepDays;
+    private int sleepHours;
+    private int sleepMinutes;
     private String content;
     private LocalTime time = LocalTime.of(0, 0);
     private Rule selectedRuleToDelete;
@@ -133,7 +158,7 @@ public class FXMLDocumentController extends Application{
         if (file.createNewFile()){
             return;
         }
-        read();
+        //read();
     }
 
     // Questo metodo ci permette di poter cambiare la scena caricando un diverso file FXML
@@ -204,8 +229,56 @@ public class FXMLDocumentController extends Application{
         if (this.actionSelector.getValue().toString().equals("Promemoria")) { // verifichiamo che sia selezionato il promemoria
             this.content = this.messageField.getText();
         }
+        if (!(this.oneTimeSelector.isSelected() || this.recurrentSelector.isSelected())){
+            Alert a = new Alert(Alert.AlertType.ERROR, "Scegliere quante volte la regola deve essere riattivata");
+            a.show();
+            return;
+        }
+        if(this.recurrentSelector.isSelected()) {
+            if (this.sleepDaySelector.getText().isEmpty() ) {
+                Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Giorni' ");// inviamo un alert di errore
+                a.show();
+                return;
+            } else if (this.sleepDaySelector.getText().charAt(0) == 'G') {
+                Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Giorni' ");// inviamo un alert di errore
+                a.show();
+                return;
+            } else if (this.sleepHourSelector.getText().isEmpty()) {
+                Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Ore' ");// inviamo un alert di errore
+                a.show();
+                return;
+            } else if (this.sleepHourSelector.getText().charAt(0) == 'O') {
+                Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Ore' ");// inviamo un alert di errore
+                a.show();
+                return;
+            }else if (this.sleepMinuteSelector.getText().isEmpty()) {
+                Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Minuti' ");// inviamo un alert di errore
+                a.show();
+                return;
+            } else if (this.sleepMinuteSelector.getText().charAt(0) == 'M') {
+                Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Minuti' ");// inviamo un alert di errore
+                a.show();
+                return;
+            } else {
+                sleepDays = Integer.parseInt(this.sleepDaySelector.getCharacters().toString());
+                sleepHours = Integer.parseInt(this.sleepHourSelector.getCharacters().toString()); // convertiamo i valori in interi
+                sleepMinutes = Integer.parseInt(this.sleepMinuteSelector.getCharacters().toString());
+                if (sleepHours >= 0 && sleepHours < 24 && sleepMinutes >= 0 && sleepMinutes < 60) { // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti
+                } else {
+                    Alert a = new Alert(Alert.AlertType.ERROR, "L'orario inserito non è corretto.\n" + // inviamo un alert di errore
+                            "Le ore devono essere comprese tra 0 e 23\n" +
+                            "I minuti devono essere compresi tra 0 e 59.\n Riprovare");
+                    a.show();
+                    return;
+                }
+            }
+        }else {
+            this.sleepDays = 0;
+            this.sleepHours = 0;
+            this.sleepMinutes = 0;
+        }
         RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
-        rm.addRule("Regola #" + (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time);
+        rm.addRule("Regola #" + (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time, this.oneTimeSelector.isSelected(), this.sleepDays, this.sleepHours, this.sleepMinutes, this.recurrentSelector.isSelected());
         cancel(event);
     }
 
@@ -307,6 +380,83 @@ public class FXMLDocumentController extends Application{
         Platform.runLater(() -> tableView.refresh());
     }
 
+    public void oneTimeCheck(){
+        if(oneTimeSelector.isSelected()){
+            if(recurrentSelector.isSelected()){
+                recurrentSelector.setSelected(false);
+                sleepDaySelector.setVisible(false);
+                sleepHourSelector.setVisible(false);
+                sleepMinuteSelector.setVisible(false);
+                labelSleepDay.setVisible(false);
+                labelSleepHour.setVisible(false);
+                labelSleepMinute.setVisible(false);
+            }
+        }
+    }
+
+    public void recurrentCheck(){
+        if (recurrentSelector.isSelected()) {
+            // Se la checkbox è selezionata, mostra i textfield
+            sleepDaySelector.setVisible(true);
+            sleepHourSelector.setVisible(true);
+            sleepMinuteSelector.setVisible(true);
+            labelSleepDay.setVisible(true);
+            labelSleepHour.setVisible(true);
+            labelSleepMinute.setVisible(true);
+            if(oneTimeSelector.isSelected()){
+                oneTimeSelector.setSelected(false);
+            }
+        } else {
+            // Altrimenti, nascondi i textfield
+            sleepDaySelector.setVisible(false);
+            sleepHourSelector.setVisible(false);
+            sleepMinuteSelector.setVisible(false);
+            labelSleepDay.setVisible(false);
+            labelSleepHour.setVisible(false);
+            labelSleepMinute.setVisible(false);
+            sleepDaySelector.setText("");
+            sleepHourSelector.setText("");
+            sleepMinuteSelector.setText("");
+        }
+    }
+
+    public void checkDayNumber(KeyEvent event){
+        try {
+            if (!event.getCharacter().matches("[0-9]")) { // se l'input non fa match con un carattere compreso tra [0-9]
+                event.consume(); // marchiamo l'evento come consumato
+                sleepDaySelector.backward();
+                sleepDaySelector.deleteNextChar();
+            }
+        } catch (Exception e) {
+            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
+            a.show();
+        }
+    }
+    public void checkHourNumber(KeyEvent event){
+        try {
+            if (!event.getCharacter().matches("[0-9]")) { // se l'input non fa match con un carattere compreso tra [0-9]
+                event.consume(); // marchiamo l'evento come consumato
+                sleepHourSelector.backward();
+                sleepHourSelector.deleteNextChar();
+            }
+        } catch (Exception e) {
+            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
+            a.show();
+        }
+    }
+    public void checkMinuteNumber(KeyEvent event) {
+        try {
+            if (!event.getCharacter().matches("[0-9]")) { // se l'input non fa match con un carattere compreso tra [0-9]
+                event.consume(); // marchiamo l'evento come consumato
+                sleepMinuteSelector.backward();
+                sleepMinuteSelector.deleteNextChar();
+            }
+        } catch (Exception e) {
+            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
+            a.show();
+        }
+    }
+
     public Scene getScene() {
         return scene;
     }
@@ -352,7 +502,7 @@ public class FXMLDocumentController extends Application{
         }
     }
 
-    private void read() throws FileNotFoundException {
+    /*private void read() throws FileNotFoundException {
         Scanner sc = new Scanner(file);
         sc.useDelimiter("\n\n");   //sets the delimiter pattern
         while (sc.hasNext())  //returns a boolean value
@@ -365,7 +515,7 @@ public class FXMLDocumentController extends Application{
 
         }
         sc.close();  //closes the scanner
-    }
+    }*/
 
     @Override
     public void stop(){
