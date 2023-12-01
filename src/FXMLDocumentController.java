@@ -14,13 +14,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalTime;
 import java.util.Objects;
+import java.util.Scanner;
 
 
 public class FXMLDocumentController extends Application{
+    private String filepath = System.getProperty("user.dir");
+    private File file = new File(filepath,"rules.txt");
     public TableColumn<Rule, String> ruleNameView = new TableColumn<>("Nome Regola");
     public TableColumn<Rule, String> actionView = new TableColumn<>("Nome Azione");
     public TableColumn<Rule, String> actionContentView = new TableColumn<>("Contenuto Azione");
@@ -128,12 +130,10 @@ public class FXMLDocumentController extends Application{
         stage.getIcons().add(new Image(Objects.requireNonNull(FXMLDocumentController.class.getResourceAsStream("icon.png"))));
         stage.setScene(scene1);
         stage.show();
-    }
-
-    @Override
-    public void stop() throws Exception { // metodo per fermare il thread per il controllo alla chiusura del programma
-        rm.getCheck().stopThread();
-        super.stop();
+        if (file.createNewFile()){
+            return;
+        }
+        read();
     }
 
     // Questo metodo ci permette di poter cambiare la scena caricando un diverso file FXML
@@ -337,5 +337,39 @@ public class FXMLDocumentController extends Application{
 
     public Object getSelectedRuleToDelete() {
         return selectedRuleToDelete;
+    }
+
+
+    private void write() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            // Scrivi i dati dall'ObservableList al TXT
+            for (Rule item : rm.getRules()) {
+                writer.write(item.getNameRule().get() + "\n" + item.getNameAction().get() + "\n" +
+                        item.getNameTrigger().get()+ "\n" + item.getActionContent().get() + "\n" + item.getTriggerContent().get() + "\n\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void read() throws FileNotFoundException {
+        Scanner sc = new Scanner(file);
+        sc.useDelimiter("\n\n");   //sets the delimiter pattern
+        while (sc.hasNext())  //returns a boolean value
+        {
+            String[] elements = sc.next().split("\n");
+            String[] hoursMinutes = elements[4].split(":");
+            Integer h = Integer.parseInt(hoursMinutes[0]);
+            Integer m = Integer.parseInt(hoursMinutes[1]);
+            rm.addRule(elements[0],elements[1],elements[2],elements[3],LocalTime.of(h,m));
+
+        }
+        sc.close();  //closes the scanner
+    }
+
+    @Override
+    public void stop(){
+        write();
+        System.exit(0);
     }
 }

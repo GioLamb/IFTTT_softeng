@@ -4,7 +4,7 @@ import javafx.collections.ObservableList;
 import java.time.LocalTime;
 
 public class RuleManager{
-    private final ObservableList<Rule> rules;
+    private ObservableList<Rule> rules;
     private static RuleManager instance;
     private final Check checkRule = new Check();
 
@@ -28,6 +28,8 @@ public class RuleManager{
     public void removeRule(Rule rule){ rules.remove(rule); }; //Metodo utilizzato per la rimozione di una regola (rule) dalla lista rules di regole.
 
     public ObservableList<Rule> getRules(){ return this.rules;}
+
+    public void setRules(ObservableList<Rule> rules){this.rules=rules;}
 
     public void check(){
         checkRule.start(); // eseguiamo il trigger
