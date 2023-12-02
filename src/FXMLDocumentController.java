@@ -522,4 +522,36 @@ public class FXMLDocumentController extends Application{
         write();
         System.exit(0);
     }
+
+    public CheckBox getOneTimeSelector() {
+        return oneTimeSelector;
+    }
+
+    public CheckBox getRecurrentSelector() {
+        return recurrentSelector;
+    }
+
+    public Node getSleepDaySelector() {
+        return sleepDaySelector;
+    }
+
+    public Node getSleepHourSelector() {
+        return sleepHourSelector;
+    }
+
+    public Node getSleepMinuteSelector() {
+        return sleepMinuteSelector;
+    }
+
+    public Node getLabelSleepDay() {
+        return labelSleepDay;
+    }
+
+    public Node getLabelSleepHour() {
+        return labelSleepHour;
+    }
+
+    public Node getLabelSleepMinute() {
+        return labelSleepMinute;
+    }
 }

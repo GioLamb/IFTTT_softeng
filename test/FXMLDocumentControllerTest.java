@@ -2,6 +2,7 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -305,4 +306,124 @@ public class FXMLDocumentControllerTest {
         });
     }
 
+    @Test
+    void testOneTimeCheck() {
+        Platform.runLater(() -> {
+            // Simuliamo la selezione di oneTimeSelector e recurrentSelector
+            controller.getOneTimeSelector().setSelected(true);
+            controller.getRecurrentSelector().setSelected(true);
+
+            controller.oneTimeCheck();
+
+            // Verifica che recurrentSelector sia deselezionato e i campi siano invisibili
+            assertFalse(controller.getRecurrentSelector().isSelected());
+            assertFalse(controller.getSleepDaySelector().isVisible());
+            assertFalse(controller.getSleepHourSelector().isVisible());
+            assertFalse(controller.getSleepMinuteSelector().isVisible());
+            assertFalse(controller.getLabelSleepDay().isVisible());
+            assertFalse(controller.getLabelSleepHour().isVisible());
+            assertFalse(controller.getLabelSleepMinute().isVisible());
+        });
+    }
+
+    @Test
+    void testRecurrentCheck() {
+        Platform.runLater(() -> {
+            // Simuliamo la selezione di recurrentSelector
+            controller.getRecurrentSelector().setSelected(true);
+
+            controller.recurrentCheck();
+
+            // Verifica che i campi siano visibili
+            assertTrue(controller.getSleepDaySelector().isVisible());
+            assertTrue(controller.getSleepHourSelector().isVisible());
+            assertTrue(controller.getSleepMinuteSelector().isVisible());
+            assertTrue(controller.getLabelSleepDay().isVisible());
+            assertTrue(controller.getLabelSleepHour().isVisible());
+            assertTrue(controller.getLabelSleepMinute().isVisible());
+
+            // Simuliamo la deselezione di recurrentSelector e oneTimeSelector
+            controller.getRecurrentSelector().setSelected(false);
+            controller.getOneTimeSelector().setSelected(true);
+
+            controller.recurrentCheck();
+
+            // Verifica che i campi siano invisibili e oneTimeSelector sia deselezionato
+            assertFalse(controller.getRecurrentSelector().isSelected());
+            assertFalse(controller.getOneTimeSelector().isSelected());
+            assertFalse(controller.getSleepDaySelector().isVisible());
+            assertFalse(controller.getSleepHourSelector().isVisible());
+            assertFalse(controller.getSleepMinuteSelector().isVisible());
+            assertFalse(controller.getLabelSleepDay().isVisible());
+            assertFalse(controller.getLabelSleepHour().isVisible());
+            assertFalse(controller.getLabelSleepMinute().isVisible());
+        });
+    }
+
+    @Test
+    void testCheckDayNumber() {
+        Platform.runLater(() -> {
+            // Simuliamo la pressione di un tasto numerico
+            KeyEvent event = new KeyEvent(
+                    KeyEvent.KEY_TYPED,
+                    "1",
+                    "1",
+                    KeyCode.UNDEFINED,
+                    false,
+                    false,
+                    false,
+                    false
+            );
+
+            controller.checkDayNumber(event);
+
+            // Verifica che il carattere "1" sia accettato
+            assertEquals("1", controller.getSleepDaySelector().getDepthTest());
+        });
+    }
+
+    @Test
+    void testCheckHourNumber() {
+        Platform.runLater(() -> {
+            // Simuliamo la pressione di un tasto numerico
+            KeyEvent event = new KeyEvent(
+                    KeyEvent.KEY_TYPED,
+                    "2",
+                    "2",
+                    KeyCode.UNDEFINED,
+                    false,
+                    false,
+                    false,
+                    false
+            );
+
+            controller.checkHourNumber(event);
+
+            // Verifica che il carattere "2" sia accettato
+            assertEquals("2", controller.getSleepHourSelector().getDepthTest());
+        });
+    }
+
+    @Test
+    void testCheckMinuteNumber() {
+        Platform.runLater(() -> {
+            // Simuliamo la pressione di un tasto numerico
+            KeyEvent event = new KeyEvent(
+                    KeyEvent.KEY_TYPED,
+                    "3",
+                    "3",
+                    KeyCode.UNDEFINED,
+                    false,
+                    false,
+                    false,
+                    false
+            );
+
+            controller.checkMinuteNumber(event);
+
+            // Verifica che il carattere "3" sia accettato
+            assertEquals("3", controller.getSleepMinuteSelector().getDepthTest());
+        });
+    }
 }
+
