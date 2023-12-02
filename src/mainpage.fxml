@@ -8,19 +8,25 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.TextField?>
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLDocumentController">
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="852.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-      <Pane prefHeight="400.0" prefWidth="174.0" style="-fx-background-color: #c3c3c3;">
+    <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="852.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+        <Pane prefHeight="400.0" prefWidth="174.0" style="-fx-background-color: #c3c3c3;">
             <Label alignment="CENTER" prefHeight="65.0" prefWidth="174.0" text="IFTTT_softeng" textAlignment="CENTER" textFill="#40bc21">
-               <font>
-                  <Font name="FiraCode Nerd Font Mono Reg" size="18.0" />
-               </font>
+                <font>
+                    <Font name="FiraCode Nerd Font Mono Reg" size="18.0" />
+                </font>
             </Label>
             <Button layoutX="16.0" layoutY="78.0" mnemonicParsing="false" onAction="#newRule" prefHeight="43.0" prefWidth="142.0" text="Nuova Regola" />
-         <Button fx:id="deleteButton" disable="true" layoutX="16.0" layoutY="150.0" mnemonicParsing="false" onAction="#deleteRule" prefHeight="43.0" prefWidth="142.0" text="Cancella Regola" textFill="RED" />
-      </Pane>
-      <TableView fx:id="tableView" prefHeight="400.0" prefWidth="678.0" style="-fx-background-color: #1c1c1c;">
-      </TableView>
-</HBox>
+            <Button layoutX="16.0" layoutY="220.0" mnemonicParsing="false" onAction="#writeToFileAction" prefHeight="43.0" prefWidth="142.0" text="Scrivi su file" />
+            <Button fx:id="deleteButton" disable="true" layoutX="16.0" layoutY="150.0" mnemonicParsing="false" onAction="#deleteRule" prefHeight="43.0" prefWidth="142.0" text="Cancella Regola" textFill="RED" />
+            <Button fx:id="okButton" layoutX="16.0" layoutY="350.0" mnemonicParsing="false" onAction="#okButtonAction" text="OK" managed="false" visible="false" />
+            <Label fx:id="successLabel" layoutX="16.0" layoutY="380.0" text="" textFill="GREEN" managed="false" visible="false" />
+            <TextField fx:id="userInputField" layoutX="16.0" layoutY="300.0" prefHeight="43.0" prefWidth="142.0" promptText="Inserisci la tua stringa" managed="false" visible="false" />
+        </Pane>
+        <TableView fx:id="tableView" prefHeight="400.0" prefWidth="678.0" style="-fx-background-color: #1c1c1c;">
+        </TableView>
+    </HBox>
 </AnchorPane>
+

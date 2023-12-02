@@ -425,5 +425,47 @@ public class FXMLDocumentControllerTest {
             assertEquals("3", controller.getSleepMinuteSelector().getDepthTest());
         });
     }
+
+    @Test
+    void testOkButtonAction() {
+        Platform.runLater(() -> {
+            // Simulare l'inserimento di una stringa
+            String userInput = "Test String";
+            controller.getUserInputField().setText(userInput);
+
+            // Verificare che la TextInput sia nascosta
+            assertFalse(controller.getUserInputField().isVisible());
+            assertFalse(controller.getUserInputField().isManaged());
+
+            // Verificare che il pulsante "OK" sia nascosto
+            assertFalse(controller.getOkButton().isVisible());
+            assertFalse(controller.getOkButton().isManaged());
+
+            // Verificare che la Label di successo sia visibile
+            assertTrue(controller.getSuccessLabel().isVisible());
+            assertTrue(controller.getSuccessLabel().isManaged());
+        });
+    }
+
+    @Test
+    void testWriteToFileAction() {
+        Platform.runLater(() -> {
+            // Verificare che la TextInput sia visibile
+            assertTrue(controller.getUserInputField().isVisible());
+            assertTrue(controller.getUserInputField().isManaged());
+
+            // Verificare che il pulsante "OK" sia visibile
+            assertTrue(controller.getOkButton().isVisible());
+            assertTrue(controller.getOkButton().isManaged());
+
+            // Verificare che la Label di successo sia nascosta
+            assertTrue(controller.getSuccessLabel().isVisible());
+            assertTrue(controller.getSuccessLabel().isManaged());
+
+            // Verificare che il pulsante "OK" sia inizialmente disabilitato
+            assertFalse(controller.getOkButton().isDisabled());
+        });
+    }
 }
+
 

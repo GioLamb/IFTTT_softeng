@@ -79,6 +79,12 @@ public class FXMLDocumentController extends Application{
     private Label labelSleepHour;
     @FXML
     private Label labelSleepMinute;
+    @FXML
+    private TextField userInputField = new TextField();
+    @FXML
+    private Button okButton = new Button();
+    @FXML
+    private Label successLabel = new Label();
 
     private int sleepDays;
     private int sleepHours;
@@ -142,6 +148,15 @@ public class FXMLDocumentController extends Application{
                 //Altrimenti lo stesso bottone rimane disabilitato
                 deleteButton.setDisable(true);
             }
+        });
+
+        // Disabilita il pulsante "Ok" inizialmente
+        okButton.setDisable(true);
+
+        // Aggiungi un listener per il campo di input
+        userInputField.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Abilita il pulsante "Ok" se il campo di input non è vuoto
+            okButton.setDisable(newValue.isEmpty());
         });
     }
 
@@ -457,6 +472,45 @@ public class FXMLDocumentController extends Application{
         }
     }
 
+    @FXML
+    void okButtonAction(ActionEvent event) {
+        userInputField.setManaged(true);
+        userInputField.setVisible(true);
+        // Ottieni la stringa inserita dall'utente dal campo di input
+        String userInput = userInputField.getText();
+
+        // Ottieni l'istanza di Action appropriata (WriteToFileAction, ad esempio)
+        Action writeToFileAction = new WriteToFileAction("/Users/vivi/Documents/Prova.txt", userInput);
+
+        // Esegui l'azione di scrittura su file
+        writeToFileAction.execute();
+
+        // Mostra il messaggio di conferma
+        successLabel.setText("Contenuto inserito");
+        successLabel.setManaged(true);
+        successLabel.setVisible(true);
+
+        // Nascondi la TextInput e il pulsante "OK"
+        userInputField.setManaged(false);
+        userInputField.setVisible(false);
+        okButton.setManaged(false);
+        okButton.setVisible(false);
+    }
+
+    @FXML
+    void writeToFileAction(ActionEvent event) {
+        // Abilita la TextInput e il pulsante "OK" per l'inserimento della stringa
+        userInputField.setManaged(true);
+        userInputField.setVisible(true);
+        okButton.setManaged(true);
+        okButton.setVisible(true);
+
+        // Nascondi la Label del successo
+        successLabel.setManaged(false);
+        successLabel.setVisible(false);
+        okButton.setDisable(true);
+    }
+
     public Scene getScene() {
         return scene;
     }
@@ -553,5 +607,17 @@ public class FXMLDocumentController extends Application{
 
     public Node getLabelSleepMinute() {
         return labelSleepMinute;
+    }
+
+    public TextField getUserInputField() {
+        return userInputField;
+    }
+
+    public Button getOkButton() {
+        return okButton;
+    }
+
+    public Node getSuccessLabel() {
+        return successLabel;
     }
 }
