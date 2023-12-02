@@ -35,7 +35,7 @@ public class Check extends Thread {
                                 rule.getAction().execute(); // eseguiamo l'azione annessa
                                 rule.setNow(LocalDateTime.now());
                                 //calcoliamo dopo quanto tempo la regola può essere eseguita nuovamente
-                                rule.setNowPlusSleep(LocalDateTime.now().plusDays(rule.getSleepDays()).plusHours(rule.getSleepHours()).plusMinutes(rule.getSleepMinutess()));
+                                rule.setNowPlusSleep(LocalDateTime.now().plusDays(rule.getSleepDays()).plusHours(rule.getSleepHours()).plusMinutes(rule.getSleepMinutes()));
                                 rule.setRepeat(false);
                             }
                             //Caso in cui la regola può essere rieseguita dopo un periodo di sleep.
@@ -46,7 +46,7 @@ public class Check extends Thread {
                                 //se è passato il periodo di sleep e il trigger è attivo, viene eseguita l'azione
                                 if (rule.getNow().isAfter(rule.getNowPlusSleep()) && (((TriggerTime) rule.getTrigger()).isTimeToTrigger(LocalTime.now()))) {
                                     rule.getAction().execute();
-                                    rule.setNowPlusSleep(LocalDateTime.now().plusDays(rule.getSleepDays()).plusHours(rule.getSleepHours()).plusMinutes(rule.getSleepMinutess()));
+                                    rule.setNowPlusSleep(LocalDateTime.now().plusDays(rule.getSleepDays()).plusHours(rule.getSleepHours()).plusMinutes(rule.getSleepMinutes()));
                                     //se è passato il periodo di sleep ma il trigger non è attivo, allora impostiamo
                                     //che la regola può essere eseguita nuovamente
                                 }else  if (rule.getNow().isAfter(rule.getNowPlusSleep())) {

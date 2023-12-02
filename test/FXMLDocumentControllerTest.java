@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
 
@@ -136,7 +137,7 @@ public class FXMLDocumentControllerTest {
         Platform.runLater(() -> {
             // Simulazione del comportamento di RuleManager con una regola "Promemoria" esistente
             RuleManager rm = RuleManager.getInstance();
-            rm.addRule("Test Rule", "Promemoria", "Test Trigger", "Test Content", LocalTime.now(), true,0,0,0,false);
+            rm.addRule("Test Rule", "Promemoria", "Test Trigger", "Test Content", LocalTime.now(), true,0,0,0,false, true);
 
             // Aggiunta di una nuova regola e verifica del comportamento atteso
             assertDoesNotThrow(() -> controller.newRule(null)); // Tentativo di aggiungere una nuova regola
@@ -151,7 +152,7 @@ public class FXMLDocumentControllerTest {
         Platform.runLater(() -> {
             // Simulazione del comportamento di RuleManager con una regola "Sveglia" esistente
             RuleManager rm = RuleManager.getInstance();
-            rm.addRule("Test Rule", "Sveglia", "Test Trigger", "/Users/vivi/Downloads/Prova.wav", LocalTime.now(), true,0,0,0,false);
+            rm.addRule("Test Rule", "Sveglia", "Test Trigger", "/Users/vivi/Downloads/Prova.wav", LocalTime.now(), true,0,0,0,false, true);
 
             // Aggiunta di una nuova regola e verifica del comportamento atteso
             assertDoesNotThrow(() -> controller.newRule(null)); // Tentativo di aggiungere una nuova regola
@@ -237,7 +238,7 @@ public class FXMLDocumentControllerTest {
         Platform.runLater(()->{
             //Si crea una nuova regola da eliminare che aggiungiamo alla TableView
             FXMLDocumentController controller = new FXMLDocumentController();
-            Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false);
+            Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false, true);
             controller.getTableView().getItems().add(ruleToDelete);
 
             //Chiama il metodo deleteRule per eliminare la regola
@@ -272,7 +273,7 @@ public class FXMLDocumentControllerTest {
             //Crea una nuova regola da eliminare, e aggiungiamo la stessa alla
             //TableView del controller
             FXMLDocumentController controller = new FXMLDocumentController();
-            Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false);
+            Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false, true);
             controller.getTableView().getItems().add(ruleToDelete);
 
             //Chiamiamo delete per eliminare la regola della TableView
@@ -294,7 +295,7 @@ public class FXMLDocumentControllerTest {
         Platform.runLater(()->{
             //Creiamo una nuova regola da eliminare
             FXMLDocumentController controller = new FXMLDocumentController();
-            Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false);
+            Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false, true);
 
             //Chiamiamo delete per eliminare la regola della TableView (vuota)
             controller.delete(ruleToDelete);
@@ -423,6 +424,26 @@ public class FXMLDocumentControllerTest {
 
             // Verifica che il carattere "3" sia accettato
             assertEquals("3", controller.getSleepMinuteSelector().getDepthTest());
+        });
+    }
+
+    @Test
+    void testFile(){
+        Platform.runLater(() -> {
+            FXMLDocumentController controller = new FXMLDocumentController();
+            RuleManager rm = RuleManager.getInstance();
+            try {
+                File file = File.createTempFile(controller.getFilepath(),"rulesTest.txt");
+                controller.setFile(file);
+                Rule test = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false,true);
+                rm.addRule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false,true);
+                controller.write();
+                rm.removeRule(test);
+                controller.read();
+                assert(rm.getRules().contains(test));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 }

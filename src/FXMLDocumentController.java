@@ -158,7 +158,7 @@ public class FXMLDocumentController extends Application{
         if (file.createNewFile()){
             return;
         }
-        //read();
+        read();
     }
 
     // Questo metodo ci permette di poter cambiare la scena caricando un diverso file FXML
@@ -278,7 +278,7 @@ public class FXMLDocumentController extends Application{
             this.sleepMinutes = 0;
         }
         RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
-        rm.addRule("Regola #" + (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time, this.oneTimeSelector.isSelected(), this.sleepDays, this.sleepHours, this.sleepMinutes, this.recurrentSelector.isSelected());
+        rm.addRule("Regola #" + (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time, this.oneTimeSelector.isSelected(), this.sleepDays, this.sleepHours, this.sleepMinutes, this.recurrentSelector.isSelected(), true);
         cancel(event);
     }
 
@@ -490,19 +490,21 @@ public class FXMLDocumentController extends Application{
     }
 
 
-    private void write() {
+    public void write() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             // Scrivi i dati dall'ObservableList al TXT
             for (Rule item : rm.getRules()) {
                 writer.write(item.getNameRule().get() + "\n" + item.getNameAction().get() + "\n" +
-                        item.getNameTrigger().get()+ "\n" + item.getActionContent().get() + "\n" + item.getTriggerContent().get() + "\n\n");
+                        item.getNameTrigger().get()+ "\n" + item.getActionContent().get() + "\n" + item.getTriggerContent().get() +
+                        "\n" + item.getOneTime() + "\n" + item.getSleepDays() + "\n" + item.getSleepHours() + "\n" +
+                        item.getSleepMinutes() + "\n" + item.getRecurrent() + "\n" + item.getState().get() + "\n\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    /*private void read() throws FileNotFoundException {
+    public void read() throws FileNotFoundException {
         Scanner sc = new Scanner(file);
         sc.useDelimiter("\n\n");   //sets the delimiter pattern
         while (sc.hasNext())  //returns a boolean value
@@ -511,11 +513,17 @@ public class FXMLDocumentController extends Application{
             String[] hoursMinutes = elements[4].split(":");
             Integer h = Integer.parseInt(hoursMinutes[0]);
             Integer m = Integer.parseInt(hoursMinutes[1]);
-            rm.addRule(elements[0],elements[1],elements[2],elements[3],LocalTime.of(h,m));
+            Integer sd = Integer.parseInt(elements[6]);
+            Integer sh = Integer.parseInt(elements[7]);
+            Integer sm = Integer.parseInt(elements[8]);
+            Boolean oneTime = Boolean.parseBoolean(elements[5]);
+            Boolean recurrent = Boolean.parseBoolean(elements[9]);
+            Boolean state = Boolean.parseBoolean(elements[10]);
+            rm.addRule(elements[0],elements[1],elements[2],elements[3],LocalTime.of(h,m),oneTime,sd,sh,sm,recurrent,state);
 
         }
         sc.close();  //closes the scanner
-    }*/
+    }
 
     @Override
     public void stop(){
@@ -553,5 +561,17 @@ public class FXMLDocumentController extends Application{
 
     public Node getLabelSleepMinute() {
         return labelSleepMinute;
+    }
+
+    public String getFilepath() {
+        return filepath;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 }

@@ -21,8 +21,8 @@ public class RuleManager{
     }
 
 
-    public void addRule(String nameRule, String nameAction, String nameTrigger, String content, LocalTime time, Boolean oneTime, int sleepDays, int sleepHours, int sleepMinutes, Boolean recurrent){
-        this.rules.add(new Rule(nameRule, nameAction, nameTrigger, content, time, oneTime, sleepDays, sleepHours, sleepMinutes, recurrent));
+    public void addRule(String nameRule, String nameAction, String nameTrigger, String content, LocalTime time, Boolean oneTime, int sleepDays, int sleepHours, int sleepMinutes, Boolean recurrent, Boolean state){
+        this.rules.add(new Rule(nameRule, nameAction, nameTrigger, content, time, oneTime, sleepDays, sleepHours, sleepMinutes, recurrent, state));
     }
 
     public void removeRule(Rule rule){ rules.remove(rule); }; //Metodo utilizzato per la rimozione di una regola (rule) dalla lista rules di regole.

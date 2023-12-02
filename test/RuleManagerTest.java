@@ -31,7 +31,7 @@ class RuleManagerTest {
     void addRule() {
         Platform.runLater(() -> {
             RuleManager rm = RuleManager.getInstance();
-            rm.addRule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0),true,0,0,0,false);
+            rm.addRule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0),true,0,0,0,false, true);
             assertNotNull(rm.getRules().get(0));
         });
     }
@@ -40,7 +40,7 @@ class RuleManagerTest {
     void getRules() {
         Platform.runLater(() -> {
             RuleManager rm = RuleManager.getInstance();
-            rm.addRule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0),true,0,0,0,false);
+            rm.addRule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0),true,0,0,0,false, true);
             assertNotNull(rm.getRules().get(0));
         });
     }
@@ -72,8 +72,8 @@ class RuleManagerTest {
     void removeRule_shouldRemoveRuleFromList() {
         Platform.runLater(() -> {
             // Creiamo una regola da aggiungere e rimuovere
-            Rule rule = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.of(12, 0), true, 0, 0, 0, false);
-            ruleManager.addRule(rule.getNameRule().get(), rule.getNameAction().get(), rule.getNameTrigger().get(), rule.getActionContent().get(), LocalTime.parse(rule.getTriggerContent().get()), rule.getOneTime(), rule.getSleepDays(), rule.getSleepHours(), rule.getSleepMinutess(), rule.getRecurrent());
+            Rule rule = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.of(12, 0), true, 0, 0, 0, false, true);
+            ruleManager.addRule(rule.getNameRule().get(), rule.getNameAction().get(), rule.getNameTrigger().get(), rule.getActionContent().get(), LocalTime.parse(rule.getTriggerContent().get()), rule.getOneTime(), rule.getSleepDays(), rule.getSleepHours(), rule.getSleepMinutes(), rule.getRecurrent(), true);
 
             // Verifichiamo che la regola sia stata aggiunta correttamente
             assertTrue(rules.contains(rule));
@@ -90,7 +90,7 @@ class RuleManagerTest {
     void removeRule_shouldDoNothingForNonexistentRule() {
         Platform.runLater(() -> {
             // Creiamo una regola, ma non la aggiungiamo alla lista
-            Rule rule = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.of(12, 0), true, 0, 0, 0, false);
+            Rule rule = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.of(12, 0), true, 0, 0, 0, false, true);
 
             // Verifichiamo che la regola non sia presente nella lista
             assertFalse(rules.contains(rule));
