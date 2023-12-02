@@ -430,17 +430,17 @@ public class FXMLDocumentControllerTest {
     @Test
     void testFile(){
         Platform.runLater(() -> {
-            FXMLDocumentController controller = new FXMLDocumentController();
-            RuleManager rm = RuleManager.getInstance();
+            FXMLDocumentController controller = new FXMLDocumentController(); // viene inizializzato un nuovo controller
+            RuleManager rm = RuleManager.getInstance(); // viene presa una istanza del RuleManager
             try {
-                File file = File.createTempFile(controller.getFilepath(),"rulesTest.txt");
+                File file = File.createTempFile(controller.getFilepath(),"rulesTest.txt"); // viene creato un file temporaneo
                 controller.setFile(file);
                 Rule test = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false,true);
                 rm.addRule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false,true);
-                controller.write();
-                rm.removeRule(test);
-                controller.read();
-                assert(rm.getRules().contains(test));
+                controller.write(); // scriviamo la regola all'interno del file
+                rm.removeRule(test); // rimuoviamo la regola dal RuleManager
+                controller.read(); // leggiamo il file
+                assert(rm.getRules().contains(test)); // verifichiamo che la regola sia stata letta e inserita correttamente all'interno dell lista
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

@@ -155,10 +155,10 @@ public class FXMLDocumentController extends Application{
         stage.getIcons().add(new Image(Objects.requireNonNull(FXMLDocumentController.class.getResourceAsStream("icon.png"))));
         stage.setScene(scene1);
         stage.show();
-        if (file.createNewFile()){
+        if (file.createNewFile()){ // se il file è stato appena creato allora non c'è bisogno di leggerlo
             return;
         }
-        read();
+        read(); // leggiamo il file
     }
 
     // Questo metodo ci permette di poter cambiare la scena caricando un diverso file FXML
@@ -505,12 +505,13 @@ public class FXMLDocumentController extends Application{
     }
 
     public void read() throws FileNotFoundException {
-        Scanner sc = new Scanner(file);
-        sc.useDelimiter("\n\n");   //sets the delimiter pattern
-        while (sc.hasNext())  //returns a boolean value
+        Scanner sc = new Scanner(file); // scannerizziamo il file
+        sc.useDelimiter("\n\n");   // impostiamo i caratteri di delimitazione
+        while (sc.hasNext())  // ritorna un valore booleano
         {
-            String[] elements = sc.next().split("\n");
-            String[] hoursMinutes = elements[4].split(":");
+            String[] elements = sc.next().split("\n"); // separiamo i vari componenti
+            String[] hoursMinutes = elements[4].split(":"); // separiamo le ore dai minuti
+            // facciamo le dovute conversioni ai fini della compatibilità
             Integer h = Integer.parseInt(hoursMinutes[0]);
             Integer m = Integer.parseInt(hoursMinutes[1]);
             Integer sd = Integer.parseInt(elements[6]);
@@ -519,10 +520,11 @@ public class FXMLDocumentController extends Application{
             Boolean oneTime = Boolean.parseBoolean(elements[5]);
             Boolean recurrent = Boolean.parseBoolean(elements[9]);
             Boolean state = Boolean.parseBoolean(elements[10]);
+            // inseriamo il nuovo elemento
             rm.addRule(elements[0],elements[1],elements[2],elements[3],LocalTime.of(h,m),oneTime,sd,sh,sm,recurrent,state);
 
         }
-        sc.close();  //closes the scanner
+        sc.close();  // chiudiamo lo scanner
     }
 
     @Override
