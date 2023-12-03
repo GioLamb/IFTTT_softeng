@@ -28,7 +28,7 @@ public class Rule{
 
         //Costruttore della classe Rule che accetta il nome della regola, il nome dell'azione,
         //il nome del trigger, il contenuto dell'azione e l'orario del trigger come parametri
-        public Rule(String nameRule, String nameAction, String nameTrigger, String content, LocalTime time, Boolean oneTime, int sleepDays, int sleepHours, int sleepMinutes, Boolean recurrent, Boolean state) {
+        public Rule(String nameRule, String nameAction, String nameTrigger, String content, LocalTime time, Boolean oneTime, int sleepDays, int sleepHours, int sleepMinutes, Boolean recurrent, Boolean state, Boolean repeat, LocalDateTime nowPlusSleep) {
             //Inizializza le variabili d'istanza con i valori forniti
             this.nameRule.set(nameRule);
             this.nameAction.set(nameAction);
@@ -44,8 +44,9 @@ public class Rule{
             this.sleepHours = sleepHours;
             this.sleepMinutes = sleepMinutes;
             this.recurrent = recurrent;
-            this.repeat = recurrent;
+            this.repeat = repeat;
             setState(state);
+            this.nowPlusSleep = nowPlusSleep;
         }
 
     //Sovrascrive il metodo equals della classe Object

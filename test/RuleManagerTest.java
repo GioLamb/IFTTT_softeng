@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +32,7 @@ class RuleManagerTest {
     void addRule() {
         Platform.runLater(() -> {
             RuleManager rm = RuleManager.getInstance();
-            rm.addRule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0),true,0,0,0,false, true);
+            rm.addRule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0),true,0,0,0,false, true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
             assertNotNull(rm.getRules().get(0));
         });
     }
@@ -40,7 +41,7 @@ class RuleManagerTest {
     void getRules() {
         Platform.runLater(() -> {
             RuleManager rm = RuleManager.getInstance();
-            rm.addRule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0),true,0,0,0,false, true);
+            rm.addRule("Rule1", "Promemoria", "TriggerTime", "Content", LocalTime.of(12, 0),true,0,0,0,false, true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
             assertNotNull(rm.getRules().get(0));
         });
     }
@@ -72,8 +73,8 @@ class RuleManagerTest {
     void removeRule_shouldRemoveRuleFromList() {
         Platform.runLater(() -> {
             // Creiamo una regola da aggiungere e rimuovere
-            Rule rule = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.of(12, 0), true, 0, 0, 0, false, true);
-            ruleManager.addRule(rule.getNameRule().get(), rule.getNameAction().get(), rule.getNameTrigger().get(), rule.getActionContent().get(), LocalTime.parse(rule.getTriggerContent().get()), rule.getOneTime(), rule.getSleepDays(), rule.getSleepHours(), rule.getSleepMinutes(), rule.getRecurrent(), true);
+            Rule rule = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.of(12, 0), true, 0, 0, 0, false, true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
+            ruleManager.addRule(rule.getNameRule().get(), rule.getNameAction().get(), rule.getNameTrigger().get(), rule.getActionContent().get(), LocalTime.parse(rule.getTriggerContent().get()), rule.getOneTime(), rule.getSleepDays(), rule.getSleepHours(), rule.getSleepMinutes(), rule.getRecurrent(), true, rule.getRepeat(), rule.getNowPlusSleep());
 
             // Verifichiamo che la regola sia stata aggiunta correttamente
             assertTrue(rules.contains(rule));
@@ -90,7 +91,7 @@ class RuleManagerTest {
     void removeRule_shouldDoNothingForNonexistentRule() {
         Platform.runLater(() -> {
             // Creiamo una regola, ma non la aggiungiamo alla lista
-            Rule rule = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.of(12, 0), true, 0, 0, 0, false, true);
+            Rule rule = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.of(12, 0), true, 0, 0, 0, false, true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
 
             // Verifichiamo che la regola non sia presente nella lista
             assertFalse(rules.contains(rule));
