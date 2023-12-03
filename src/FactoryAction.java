@@ -10,9 +10,9 @@ public class FactoryAction {
             return new DisplayMessage(content); // Crea e restituisce un oggetto DisplayMessage
         } else if (nameAction.equals("Sveglia")) {
             return new AlarmClock(content); // Crea e restituisce un oggetto AlarmClock
-        } else if (nameAction.equals("Scrittura su File")){
+        } /*else if (nameAction.equals("Scrittura su File")){
             return new WriteToFileAction(content, content);
-        }
+        }*/
         else {
             // Se il nome dell'azione non corrisponde a nessuno dei casi precedenti, lancia un'eccezione
             throw new IllegalArgumentException("Azione non valida: " + nameAction);

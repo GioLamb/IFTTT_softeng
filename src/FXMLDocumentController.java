@@ -80,12 +80,13 @@ public class FXMLDocumentController extends Application{
     private Label labelSleepHour;
     @FXML
     private Label labelSleepMinute;
-    @FXML
+    /* @FXML
     private TextField userInputField = new TextField();
     @FXML
     private Button okButton = new Button();
     @FXML
     private Label successLabel = new Label();
+     */
 
     private int sleepDays;
     private int sleepHours;
@@ -154,13 +155,13 @@ public class FXMLDocumentController extends Application{
         });
 
         // Disabilita il pulsante "Ok" inizialmente
-        okButton.setDisable(true);
+        //okButton.setDisable(true);
 
         // Aggiungi un listener per il campo di input
-        userInputField.textProperty().addListener((observable, oldValue, newValue) -> {
+        //userInputField.textProperty().addListener((observable, oldValue, newValue) -> {
             // Abilita il pulsante "Ok" se il campo di input non è vuoto
-            okButton.setDisable(newValue.isEmpty());
-        });
+            //okButton.setDisable(newValue.isEmpty());
+        //});
     }
 
     @Override // metodo per l'avvio del programma
@@ -479,7 +480,7 @@ public class FXMLDocumentController extends Application{
         }
     }
 
-    @FXML
+    /*@FXML
     void okButtonAction(ActionEvent event) {
         userInputField.setManaged(true);
         userInputField.setVisible(true);
@@ -517,6 +518,7 @@ public class FXMLDocumentController extends Application{
         successLabel.setVisible(false);
         okButton.setDisable(true);
     }
+     */
 
     public Scene getScene() {
         return scene;
@@ -627,7 +629,7 @@ public class FXMLDocumentController extends Application{
         return labelSleepMinute;
     }
 
-    public TextField getUserInputField() {
+    /*public TextField getUserInputField() {
         return userInputField;
     }
 
@@ -638,4 +640,5 @@ public class FXMLDocumentController extends Application{
     public Node getSuccessLabel() {
         return successLabel;
     }
+     */
 }
