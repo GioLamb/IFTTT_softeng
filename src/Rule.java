@@ -5,6 +5,7 @@ import javafx.beans.property.StringProperty;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Rule{
@@ -59,12 +60,12 @@ public class Rule{
         //Casting di 'o' a Rule per ottenere un oggetto Rule
         Rule rule = (Rule) o;
         //Confronta gli attributi delle due regole per determinare l'uguaglianza
-        return Objects.equals(nameRule, rule.nameRule) &&
-                Objects.equals(nameAction, rule.nameAction) &&
-                Objects.equals(nameTrigger, rule.nameTrigger) &&
-                Objects.equals(triggerContent, rule.triggerContent) &&
-                Objects.equals(actionContent, rule.actionContent) &&
-                Objects.equals(state, rule.state);
+        return Objects.equals(this.nameRule, rule.nameRule) &&
+                Objects.equals(this.nameAction, rule.nameAction) &&
+                Objects.equals(this.nameTrigger, rule.nameTrigger) &&
+                Objects.equals(this.triggerContent, rule.triggerContent) &&
+                Objects.equals(this.actionContent, rule.actionContent) &&
+                Objects.equals(this.state, rule.state);
     }
 
 
@@ -151,7 +152,13 @@ public class Rule{
     public LocalDateTime getNowPlusSleep(){
         return this.nowPlusSleep;
     }
-    public LocalDateTime setNowPlusSleep (LocalDateTime time){
-        return this.nowPlusSleep = time;
+    public void setNowPlusSleep (LocalDateTime time){
+        nowPlusSleep = time;
+    }
+    public StringProperty getNowPlusSleepFormat(){
+            StringProperty timeFormat = new SimpleStringProperty();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
+            timeFormat.set(nowPlusSleep.format(formatter));
+            return timeFormat;
     }
 }

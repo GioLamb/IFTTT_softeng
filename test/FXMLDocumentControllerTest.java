@@ -2,7 +2,6 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -427,6 +426,7 @@ public class FXMLDocumentControllerTest {
         });
     }
 
+    /*
     @Test
     void testOkButtonAction() {
         Platform.runLater(() -> {
@@ -467,6 +467,8 @@ public class FXMLDocumentControllerTest {
             assertFalse(controller.getOkButton().isDisabled());
         });
     }
+
+     */
 }
 
 

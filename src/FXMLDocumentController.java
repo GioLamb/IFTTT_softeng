@@ -30,6 +30,7 @@ public class FXMLDocumentController extends Application{
     public TableColumn<Rule, String> triggerView = new TableColumn<>("Nome Trigger");
     public TableColumn<Rule, String> triggerContentView = new TableColumn<>("Contenuto Trigger");
     public TableColumn<Rule, Boolean> stateView = new TableColumn<>("Stato");
+    public TableColumn<Rule, String> plusSleepView = new TableColumn<>("Nuova ripetizione");
     public Button deleteButton;
     ContextMenu contextMenu = new ContextMenu();
     private Stage stage;
@@ -114,7 +115,8 @@ public class FXMLDocumentController extends Application{
         triggerView.setCellValueFactory(cellData -> cellData.getValue().getNameTrigger());
         triggerContentView.setCellValueFactory(cellData -> cellData.getValue().getTriggerContent());
         stateView.setCellValueFactory(cellData -> cellData.getValue().getState());
-        tableView.getColumns().addAll(ruleNameView, actionView, actionContentView, triggerView, triggerContentView, stateView);
+        plusSleepView.setCellValueFactory(cellData -> cellData.getValue().getNowPlusSleepFormat());
+        tableView.getColumns().addAll(ruleNameView, actionView, actionContentView, triggerView, triggerContentView, stateView, plusSleepView);
 
         MenuItem active = new MenuItem("Attiva");
         MenuItem deactive = new MenuItem("Disattiva");
