@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.TextField?>
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLDocumentController">
 
     <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="852.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
@@ -21,6 +20,7 @@
             <Button layoutX="16.0" layoutY="78.0" mnemonicParsing="false" onAction="#newRule" prefHeight="43.0" prefWidth="142.0" text="Nuova Regola" />
             <!--<Button layoutX="16.0" layoutY="220.0" mnemonicParsing="false" onAction="#writeToFileAction" prefHeight="43.0" prefWidth="142.0" text="Scrivi su file" /> -->
             <Button fx:id="deleteButton" disable="true" layoutX="16.0" layoutY="150.0" mnemonicParsing="false" onAction="#deleteRule" prefHeight="43.0" prefWidth="142.0" text="Cancella Regola" textFill="RED" />
+         <Button fx:id="refreshButton" layoutX="39.0" layoutY="327.0" mnemonicParsing="false" onAction="#refresh" text="Aggiorna Table" />
             <!--
             <Button fx:id="okButton" layoutX="16.0" layoutY="350.0" mnemonicParsing="false" onAction="#okButtonAction" text="OK" managed="false" visible="false" />
             <Label fx:id="successLabel" layoutX="16.0" layoutY="380.0" text="" textFill="GREEN" managed="false" visible="false" />
@@ -31,4 +31,3 @@
         </TableView>
     </HBox>
 </AnchorPane>
-

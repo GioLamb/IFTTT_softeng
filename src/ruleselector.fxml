@@ -82,7 +82,7 @@
                      </TextField>
                   </children>
                </VBox>
-                  <CheckBox fx:id="recurrentSelector" layoutX="-7.0" layoutY="318.0" mnemonicParsing="false" onAction="#recurrentCheck" text="Attivazione dopo quanto" textFill="WHITE" />
+                  <CheckBox fx:id="recurrentSelector" layoutX="-7.0" layoutY="318.0" mnemonicParsing="false" onAction="#recurrentCheck" text="Riattivazione dopo :" textFill="WHITE" />
                   <TextField fx:id="sleepDaySelector" layoutX="-11.0" layoutY="367.0" onKeyTyped="#checkDayNumber" prefHeight="20.0" prefWidth="50.0" visible="false" />
                   <TextField fx:id="sleepHourSelector" layoutX="69.0" layoutY="367.0" onKeyTyped="#checkHourNumber" prefHeight="20.0" prefWidth="50.0" visible="false" />
                   <TextField fx:id="sleepMinuteSelector" layoutX="143.0" layoutY="367.0" onKeyTyped="#checkMinuteNumber" prefHeight="20.0" prefWidth="50.0" visible="false" />

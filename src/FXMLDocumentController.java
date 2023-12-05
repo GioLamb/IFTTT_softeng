@@ -15,6 +15,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -22,7 +23,7 @@ import java.util.Scanner;
 
 
 public class FXMLDocumentController extends Application{
-    private String filepath = System.getProperty("user.dir");
+    private final String filepath = System.getProperty("user.dir");
     private File file = new File(filepath,"rules.txt");
     public TableColumn<Rule, String> ruleNameView = new TableColumn<>("Nome Regola");
     public TableColumn<Rule, String> actionView = new TableColumn<>("Nome Azione");
@@ -32,7 +33,7 @@ public class FXMLDocumentController extends Application{
     public TableColumn<Rule, Boolean> stateView = new TableColumn<>("Stato");
     public TableColumn<Rule, String> plusSleepView = new TableColumn<>("Nuova ripetizione");
     public Button deleteButton;
-    ContextMenu contextMenu = new ContextMenu();
+    public ContextMenu contextMenu = new ContextMenu();
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -300,7 +301,7 @@ public class FXMLDocumentController extends Application{
             this.sleepMinutes = 0;
             this.repeat = false;
         }
-        this.nowPlusSleep = LocalDateTime.now();
+        this.nowPlusSleep = LocalDateTime.of(LocalDate.now(),LocalTime.of(hours,minutes)).plusDays(sleepDays).plusHours(sleepHours).plusMinutes(sleepMinutes);
 
         RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
         rm.addRule("Regola #" + (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time, this.oneTimeSelector.isSelected(), this.sleepDays, this.sleepHours, this.sleepMinutes, this.recurrentSelector.isSelected(),true, this.repeat, this.nowPlusSleep);
@@ -629,6 +630,10 @@ public class FXMLDocumentController extends Application{
 
     public Node getLabelSleepMinute() {
         return labelSleepMinute;
+    }
+
+    public void refresh(ActionEvent actionEvent) {
+        tableView.refresh();
     }
 
     /*public TextField getUserInputField() {
