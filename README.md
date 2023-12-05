@@ -24,7 +24,7 @@ Mentra tra le foglie dell'albero `Trigger` notiamo una singola classe:
 1. `TriggerTime`
    Rappresenta la classe che si occuperà di impostare un orario per l'oggetto regola annesso.
 
-Di seguito è presente un collegamento ad un file .docx su Google Documents in cui si può visualizzare nel totale l'architettura dell'intero software [Architettura_Software_IFTTT](https://docs.google.com/document/d/1ICIhP03cLgoz6Qr6QUi-3G4HcRFjDhAr982_lNbPVm8/edit#heading=h.yibgaur7hr98)
+Di seguito è possibile visualizzare un file .svg, in cui è rappresentata nel totale l'architettura dell'intero software, [a questo link.](https://raw.githubusercontent.com/GioLamb/IFTTT_softeng/main/Architettura_IFTTT.svg)
 ## Definiton of Done (DoD)
 È stato stilato un documento per la Definition of Done dell'intero software ed è consultabile al seguente [link.](https://docs.google.com/document/d/17hKDsjm6unqMskwzPeQu_q7Cmel3s3g-sp2IlAWASrQ/edit?usp=sharing)
 ## Product Backlog
