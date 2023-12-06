@@ -1,5 +1,7 @@
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +15,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,9 +23,18 @@ import java.util.Objects;
 import java.util.Scanner;
 
 
-public class FXMLDocumentController extends Application{
+public class FXMLDocumentController extends Application {
     private final String filepath = System.getProperty("user.dir");
-    private File file = new File(filepath,"rules.txt");
+    public Label labelHour = new Label();
+    public Label labelMinutes = new Label();
+    private final File file = new File(filepath, "rules.txt");
+    public Button fileButton = new Button();
+    public TextField messageField2 = new TextField();
+    public ComboBox comboWeek = new ComboBox<>();
+    public ComboBox comboMonth = new ComboBox();
+    public Button fileButton2 = new Button();
+    private String nameTrigger;
+    private String nameAction;
     public TableColumn<Rule, String> ruleNameView = new TableColumn<>("Nome Regola");
     public TableColumn<Rule, String> actionView = new TableColumn<>("Nome Azione");
     public TableColumn<Rule, String> actionContentView = new TableColumn<>("Contenuto Azione");
@@ -32,7 +42,6 @@ public class FXMLDocumentController extends Application{
     public TableColumn<Rule, String> triggerContentView = new TableColumn<>("Contenuto Trigger");
     public TableColumn<Rule, Boolean> stateView = new TableColumn<>("Stato");
     public TableColumn<Rule, String> plusSleepView = new TableColumn<>("Nuova ripetizione");
-    public Button deleteButton;
     public ContextMenu contextMenu = new ContextMenu();
     private Stage stage;
     private Scene scene;
@@ -42,25 +51,19 @@ public class FXMLDocumentController extends Application{
     private TableView<Rule> tableView = new TableView<>();
 
     @FXML
-    private ComboBox actionSelector;
+    private ComboBox actionSelector = new ComboBox<>();
 
     @FXML
-    private Label audioLabel;
+    private Button buttonAudio = new Button();
 
     @FXML
-    private Button buttonAudio;
+    private TextField hourSelector = new TextField();
 
     @FXML
-    private TextField hourSelector;
+    private TextField messageField = new TextField();
 
     @FXML
-    private TextField messageField;
-
-    @FXML
-    private Label messageLabel;
-
-    @FXML
-    private TextField minutesSelector;
+    private TextField minutesSelector = new TextField();
     @FXML
     private CheckBox oneTimeSelector;
 
@@ -68,13 +71,13 @@ public class FXMLDocumentController extends Application{
     private CheckBox recurrentSelector;
 
     @FXML
-    private TextField sleepDaySelector;
+    private TextField sleepDaySelector = new TextField();
 
     @FXML
-    private TextField sleepHourSelector;
+    private TextField sleepHourSelector = new TextField();
 
     @FXML
-    private TextField sleepMinuteSelector;
+    private TextField sleepMinuteSelector = new TextField();
 
     @FXML
     private Label labelSleepDay;
@@ -82,6 +85,13 @@ public class FXMLDocumentController extends Application{
     private Label labelSleepHour;
     @FXML
     private Label labelSleepMinute;
+    @FXML
+    Button deleteButton = new Button();
+    @FXML
+    private ComboBox triggerSelector = new ComboBox<>();
+    @FXML
+    private Button submitButton = new Button();
+
     /* @FXML
     private TextField userInputField = new TextField();
     @FXML
@@ -93,7 +103,10 @@ public class FXMLDocumentController extends Application{
     private int sleepDays;
     private int sleepHours;
     private int sleepMinutes;
+    private int hours;
+    private int minutes;
     private String content;
+    private String content2 = null;
     private LocalTime time = LocalTime.of(0, 0);
     private Rule selectedRuleToDelete;
     private Boolean repeat;
@@ -130,12 +143,12 @@ public class FXMLDocumentController extends Application{
             Rule selectedData = tableView.getSelectionModel().getSelectedItem();
             selectedData.setState(false);
         });
-        contextMenu.getItems().addAll(active,deactive);
+        contextMenu.getItems().addAll(active, deactive);
 
         tableView.setRowFactory(tv -> {
             TableRow<Rule> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if(!row.isEmpty() && event.getButton() == MouseButton.PRIMARY) {
+                if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY) {
                     Rule selecctedRule = row.getItem();
                 }
                 if (!row.isEmpty() && event.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
@@ -147,7 +160,7 @@ public class FXMLDocumentController extends Application{
         //Listener-Handler utilizzata per poter abilitare il bottone di cancellazione della regola
         //quando viene fatto un click sinistro su una regola da voler cancellare
         tableView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if(event.getButton() == MouseButton.PRIMARY) {
+            if (event.getButton() == MouseButton.PRIMARY) {
                 //Abilita il deleteButton quando si effettua un click sinistro
                 //su una regola da voler cancellare
                 deleteButton.setDisable(false);
@@ -156,14 +169,60 @@ public class FXMLDocumentController extends Application{
                 deleteButton.setDisable(true);
             }
         });
+        try {
+            BooleanBinding isDisplayMessageSelected = Bindings.createBooleanBinding(
+                    () -> "Promemoria".equals(actionSelector.getValue()),
+                    actionSelector.valueProperty()
+            );
+            BooleanBinding isClockSelected = Bindings.createBooleanBinding(
+                    () -> "Sveglia".equals(this.actionSelector.getValue()),
+                    this.actionSelector.valueProperty()
+            );
+            BooleanBinding isCopySelected = Bindings.createBooleanBinding(
+                    () -> "Copia un file".equals(this.actionSelector.getValue()),
+                    this.actionSelector.valueProperty()
+            );
+            BooleanBinding isMoveSelected = Bindings.createBooleanBinding(
+                    () -> "Sposta un file".equals(this.actionSelector.getValue()),
+                    this.actionSelector.valueProperty()
+            );
+            BooleanBinding isDeleteSelected = Bindings.createBooleanBinding(
+                    () -> "Elimina un file".equals(this.actionSelector.getValue()),
+                    this.actionSelector.valueProperty()
+            );
 
+            BooleanBinding isTriggerTimeSelected = Bindings.createBooleanBinding(
+                    () -> "Orario della giornata".equals(this.triggerSelector.getValue()),
+                    this.triggerSelector.valueProperty()
+            );
+            BooleanBinding isTriggerMonthSelected = Bindings.createBooleanBinding(
+                    () -> "Giorno del mese".equals(this.triggerSelector.getValue()),
+                    this.triggerSelector.valueProperty()
+            );
+            BooleanBinding isTriggerWeekSelected = Bindings.createBooleanBinding(
+                    () -> "Giorno della settimana".equals(this.triggerSelector.getValue()),
+                    this.triggerSelector.valueProperty()
+            );
+
+            this.messageField.visibleProperty().bind(isDisplayMessageSelected);
+            this.fileButton.visibleProperty().bind(isClockSelected.or(isMoveSelected.or(isCopySelected.or(isDeleteSelected))));
+            this.fileButton2.visibleProperty().bind(isMoveSelected.or(isCopySelected));
+            this.hourSelector.visibleProperty().bind(isTriggerTimeSelected);
+            this.minutesSelector.visibleProperty().bind(isTriggerTimeSelected);
+            this.labelHour.visibleProperty().bind(isTriggerTimeSelected);
+            this.labelMinutes.visibleProperty().bind(isTriggerTimeSelected);
+            this.comboWeek.visibleProperty().bind(isTriggerWeekSelected);
+            this.comboMonth.visibleProperty().bind(isTriggerMonthSelected);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // Disabilita il pulsante "Ok" inizialmente
         //okButton.setDisable(true);
 
         // Aggiungi un listener per il campo di input
         //userInputField.textProperty().addListener((observable, oldValue, newValue) -> {
-            // Abilita il pulsante "Ok" se il campo di input non è vuoto
-            //okButton.setDisable(newValue.isEmpty());
+        // Abilita il pulsante "Ok" se il campo di input non è vuoto
+        //okButton.setDisable(newValue.isEmpty());
         //});
     }
 
@@ -177,7 +236,7 @@ public class FXMLDocumentController extends Application{
         stage.getIcons().add(new Image(Objects.requireNonNull(FXMLDocumentController.class.getResourceAsStream("icon.png"))));
         stage.setScene(scene1);
         stage.show();
-        if (file.createNewFile()){
+        if (file.createNewFile()) {
             return;
         }
         read();
@@ -203,117 +262,217 @@ public class FXMLDocumentController extends Application{
 
     // Metodo che ci permette di scegliere un file audio
     @FXML
-    void selectAudio() {
+    void selectFile() {
         FileChooser fileChooser = new FileChooser();
-        // impostiamo al FileChooser dei filtri in modo tale da essere sicuri di scegliere un file corretto.
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Audio files (*.mp3, wav)", "*.mp3", "*.wav");
-        fileChooser.getExtensionFilters().add(filter);
+        switch (actionSelector.getValue().toString()){
+            case "Sveglia":
+                // impostiamo al FileChooser dei filtri in modo tale da essere sicuri di scegliere un file corretto.
+                FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Audio files (*.wav)", "*.wav");
+                fileChooser.getExtensionFilters().add(filter);
 
-        File file = fileChooser.showOpenDialog(stage);
-        if (file != null) {
-            this.buttonAudio.setText(file.getAbsolutePath()); // cambiamo il testo del bottone con il path del file audio
-            this.content = file.getAbsolutePath();
+                File file = fileChooser.showOpenDialog(stage);
+                if (file != null) {
+                    this.fileButton.setText(file.getAbsolutePath()); // cambiamo il testo del bottone con il path del file audio
+                    this.content = file.getAbsolutePath();
+                }
+                break;
+            case "Sposta un file":
+            case "Copia un file":
+            case "Elimina un file":
+                // impostiamo al FileChooser dei filtri in modo tale da essere sicuri di scegliere un file corretto.
+                FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("All files", "*");
+                fileChooser.getExtensionFilters().add(filter1);
+
+                File file1 = fileChooser.showOpenDialog(stage);
+                if (file1 != null) {
+                    this.fileButton.setText(file1.getAbsolutePath()); // cambiamo il testo del bottone con il path del file audio
+                    this.content = file1.getAbsolutePath();
+                }
+                break;
         }
     }
 
+    @FXML
+    void selectFile2() {
+        FileChooser fileChooser = new FileChooser();
+        switch (actionSelector.getValue().toString()){
+            case "Sposta un file":
+            case "Copia un file":
+                // impostiamo al FileChooser dei filtri in modo tale da essere sicuri di scegliere un file corretto.
+                FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("All files", "*");
+                fileChooser.getExtensionFilters().add(filter1);
+
+                File file1 = fileChooser.showOpenDialog(stage);
+                if (file1 != null) {
+                    this.fileButton2.setText(file1.getAbsolutePath()); // cambiamo il testo del bottone con il path del file audio
+                    this.content = file1.getAbsolutePath();
+                }
+                break;
+        }
+    }
     // metodo per inviare tutti i dati raccolti in input al RuleManager
     @FXML
     void submit(ActionEvent event) {
-        if(hourSelector.getCharacters().isEmpty() || minutesSelector.getCharacters().isEmpty()){
-            Alert a = new Alert(Alert.AlertType.ERROR, "Attenzione si è verificato un errore, controlla di aver riempito tutti campi necessari");
-            a.show();
-            return;
-        }
-        int hours = Integer.parseInt(this.hourSelector.getCharacters().toString()); // convertiamo i valori in interi
-        int minutes = Integer.parseInt(this.minutesSelector.getCharacters().toString());
-        if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60) { // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti
-            this.time = LocalTime.of(hours, minutes); // creiamo l'oggetto LocalTime da associare alla azione
-        } else {
-            Alert a = new Alert(Alert.AlertType.ERROR, "L'orario inserito non è corretto.\n" + // inviamo un alert di errore
-                    "Le ore devono essere comprese tra 0 e 23\n" +
-                    "I minuti devono essere compresi tra 0 e 59.\n Riprovare");
-            a.show();
-            return;
-        }
+        try {
 
-        if (this.actionSelector.getSelectionModel().isEmpty()) { // verifichiamo che il selettore non sia vuoto
-            Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserita alcuna azione. Si prega di selezionarne una.");// inviamo un alert di errore
-            a.show();
-            return;
-        }
+            if (this.actionSelector.getSelectionModel().isEmpty()) { // verifichiamo che il selettore non sia vuoto
+                Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserita alcuna azione. Si prega di selezionarne una.");// inviamo un alert di errore
+                a.show();
+                return;
+            }
 
-        if (!this.buttonAudio.isDisable() && this.buttonAudio.textProperty().getValue().equals("Seleziona file audio")) { // verifichiamo che il filechooser non sia vuoto
-            Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserita alcuna traccia audio. Si prega di selezionarne una.");// inviamo un alert di errore
-            a.show();
-            return;
-        }
+            if (this.triggerSelector.getSelectionModel().isEmpty()) { // verifichiamo che il selettore non sia vuoto
+                Alert a = new Alert(Alert.AlertType.ERROR, "Non è stato inserito alcun Trigger. Si prega di selezionarne uno.");// inviamo un alert di errore
+                a.show();
+                return;
+            }
 
-        if (this.actionSelector.getValue().toString().equals("Promemoria")) { // verifichiamo che sia selezionato il promemoria
-            this.content = this.messageField.getText();
-        }
-        if (!(this.oneTimeSelector.isSelected() || this.recurrentSelector.isSelected())){
-            Alert a = new Alert(Alert.AlertType.ERROR, "Scegliere quante volte la regola deve essere riattivata");
-            a.show();
-            return;
-        }
-        if(this.recurrentSelector.isSelected()) {
-            if (this.sleepDaySelector.getText().isEmpty() ) {
-                Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Giorni' ");// inviamo un alert di errore
+            switch (actionSelector.getValue().toString()){
+                case "Promemoria":
+                    content = messageField.getText().toString();
+                    nameAction = "Promemoria";
+                    break;
+                case "Sveglia":
+                    nameAction = "Sveglia";
+                    if (this.fileButton.isVisible() && this.fileButton.textProperty().getValue().equals("Seleziona un file")) { // verifichiamo che il filechooser non sia vuoto
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserita alcuna traccia audio. Si prega di selezionarne una.");// inviamo un alert di errore
+                        a.show();
+                        return;
+                    }
+                    content = fileButton.textProperty().getValue();
+                    break;
+                case "Elimina un file":
+                    nameAction="Elimina un file";
+                    if (this.fileButton.isVisible() && this.fileButton.textProperty().getValue().equals("Seleziona un file")) { // verifichiamo che il filechooser non sia vuoto
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcun file. Si prega di selezionarne uno.");// inviamo un alert di errore
+                        a.show();
+                        return;
+                    }
+                    content = fileButton.textProperty().getValue();
+                    break;
+                case "Copia un file":
+                    nameAction="Copia un file";
+                    if (this.fileButton.isVisible() && this.fileButton.textProperty().getValue().equals("Seleziona un file")) { // verifichiamo che il filechooser non sia vuoto
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcun file. Si prega di selezionarne uno.");// inviamo un alert di errore
+                        a.show();
+                        return;
+                    }
+                    if (this.fileButton2.isVisible() && this.fileButton2.textProperty().getValue().equals("Seleziona un file")) { // verifichiamo che il filechooser non sia vuoto
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcun file. Si prega di selezionarne uno.");// inviamo un alert di errore
+                        a.show();
+                        return;
+                    }
+                    content= fileButton.textProperty().getValue().toString();
+                    content2= fileButton2.textProperty().getValue().toString();
+                    break;
+                case "Sposta un file":
+                    nameAction="Sposta un file";
+                    if (this.fileButton.isVisible() && this.fileButton.textProperty().getValue().equals("Seleziona un file")) { // verifichiamo che il filechooser non sia vuoto
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcun file. Si prega di selezionarne uno.");// inviamo un alert di errore
+                        a.show();
+                        return;
+                    }
+                    if (this.fileButton2.isVisible() && this.fileButton2.textProperty().getValue().equals("Seleziona un file")) { // verifichiamo che il filechooser non sia vuoto
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcun file. Si prega di selezionarne uno.");// inviamo un alert di errore
+                        a.show();
+                        return;
+                    }
+                    content= fileButton.textProperty().getValue().toString();
+                    content2= fileButton2.textProperty().getValue().toString();
+                    break;
+            }
+
+            switch (triggerSelector.getValue().toString()) {
+                case "Orario della giornata":
+                    nameTrigger = "TriggerTime";
+                    if (this.hourSelector.getCharacters().isEmpty() || this.minutesSelector.getCharacters().isEmpty()) {
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Attenzione si è verificato un errore, controlla di aver riempito tutti campi necessari");
+                        a.show();
+                        return;
+                    }
+                    hours = Integer.parseInt(this.hourSelector.getCharacters().toString()); // convertiamo i valori in interi
+                    minutes = Integer.parseInt(this.minutesSelector.getCharacters().toString());
+                    if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60) { // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti
+                        this.time = LocalTime.of(hours, minutes); // creiamo l'oggetto LocalTime da associare alla azione
+                    } else {
+                        Alert a = new Alert(Alert.AlertType.ERROR, "L'orario inserito non è corretto.\n" + // inviamo un alert di errore
+                                "Le ore devono essere comprese tra 0 e 23\n" +
+                                "I minuti devono essere compresi tra 0 e 59.\n Riprovare");
+                        a.show();
+                        return;
+                    }
+                    break;
+                    /*
+                case "Giorno della settimana":
+                    nameTrigger = "TriggerWeek";
+                     */
+            }
+
+            if (!(this.oneTimeSelector.isSelected() || this.recurrentSelector.isSelected())) {
+                Alert a = new Alert(Alert.AlertType.ERROR, "Scegliere quante volte la regola deve essere riattivata");
                 a.show();
                 return;
-            } else if (this.sleepDaySelector.getText().charAt(0) == 'G') {
-                Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Giorni' ");// inviamo un alert di errore
-                a.show();
-                return;
-            } else if (this.sleepHourSelector.getText().isEmpty()) {
-                Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Ore' ");// inviamo un alert di errore
-                a.show();
-                return;
-            } else if (this.sleepHourSelector.getText().charAt(0) == 'O') {
-                Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Ore' ");// inviamo un alert di errore
-                a.show();
-                return;
-            }else if (this.sleepMinuteSelector.getText().isEmpty()) {
-                Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Minuti' ");// inviamo un alert di errore
-                a.show();
-                return;
-            } else if (this.sleepMinuteSelector.getText().charAt(0) == 'M') {
-                Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Minuti' ");// inviamo un alert di errore
-                a.show();
-                return;
-            } else {
-                sleepDays = Integer.parseInt(this.sleepDaySelector.getCharacters().toString());
-                sleepHours = Integer.parseInt(this.sleepHourSelector.getCharacters().toString()); // convertiamo i valori in interi
-                sleepMinutes = Integer.parseInt(this.sleepMinuteSelector.getCharacters().toString());
-                if (sleepHours >= 0 && sleepHours < 24 && sleepMinutes >= 0 && sleepMinutes < 60) { // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti
-                } else {
-                    Alert a = new Alert(Alert.AlertType.ERROR, "L'orario inserito non è corretto.\n" + // inviamo un alert di errore
-                            "Le ore devono essere comprese tra 0 e 23\n" +
-                            "I minuti devono essere compresi tra 0 e 59.\n Riprovare");
+            }
+            if (this.recurrentSelector.isSelected()) {
+                if (this.sleepDaySelector.getText().isEmpty()) {
+                    Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Giorni' ");// inviamo un alert di errore
                     a.show();
                     return;
+                } else if (this.sleepDaySelector.getText().charAt(0) == 'G') {
+                    Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Giorni' ");// inviamo un alert di errore
+                    a.show();
+                    return;
+                } else if (this.sleepHourSelector.getText().isEmpty()) {
+                    Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Ore' ");// inviamo un alert di errore
+                    a.show();
+                    return;
+                } else if (this.sleepHourSelector.getText().charAt(0) == 'O') {
+                    Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Ore' ");// inviamo un alert di errore
+                    a.show();
+                    return;
+                } else if (this.sleepMinuteSelector.getText().isEmpty()) {
+                    Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Minuti' ");// inviamo un alert di errore
+                    a.show();
+                    return;
+                } else if (this.sleepMinuteSelector.getText().charAt(0) == 'M') {
+                    Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Minuti' ");// inviamo un alert di errore
+                    a.show();
+                    return;
+                } else {
+                    sleepDays = Integer.parseInt(this.sleepDaySelector.getCharacters().toString());
+                    sleepHours = Integer.parseInt(this.sleepHourSelector.getCharacters().toString()); // convertiamo i valori in interi
+                    sleepMinutes = Integer.parseInt(this.sleepMinuteSelector.getCharacters().toString());
+                    if (sleepHours >= 0 && sleepHours < 24 && sleepMinutes >= 0 && sleepMinutes < 60) { // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti
+                    } else {
+                        Alert a = new Alert(Alert.AlertType.ERROR, "L'orario inserito non è corretto.\n" + // inviamo un alert di errore
+                                "Le ore devono essere comprese tra 0 e 23\n" +
+                                "I minuti devono essere compresi tra 0 e 59.\n Riprovare");
+                        a.show();
+                        return;
+                    }
                 }
+                this.repeat = true;
+            } else {
+                this.sleepDays = 0;
+                this.sleepHours = 0;
+                this.sleepMinutes = 0;
+                this.repeat = false;
             }
-            this.repeat = true;
-        }else {
-            this.sleepDays = 0;
-            this.sleepHours = 0;
-            this.sleepMinutes = 0;
-            this.repeat = false;
+            this.nowPlusSleep = LocalDateTime.of(LocalDate.now(), LocalTime.of(hours, minutes)).plusDays(sleepDays).plusHours(sleepHours).plusMinutes(sleepMinutes);
+            RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
+            rm.addRule("Regola #" + (rm.getRules().size() + 1), nameAction, nameTrigger, this.content,content2,this.time, this.oneTimeSelector.isSelected(), this.sleepDays, this.sleepHours, this.sleepMinutes, this.recurrentSelector.isSelected(), true, this.repeat, this.nowPlusSleep);
+            cancel(event);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        this.nowPlusSleep = LocalDateTime.of(LocalDate.now(),LocalTime.of(hours,minutes)).plusDays(sleepDays).plusHours(sleepHours).plusMinutes(sleepMinutes);
-
-        RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
-        rm.addRule("Regola #" + (rm.getRules().size() + 1), this.actionSelector.getValue().toString(), "TriggerTime", this.content, this.time, this.oneTimeSelector.isSelected(), this.sleepDays, this.sleepHours, this.sleepMinutes, this.recurrentSelector.isSelected(),true, this.repeat, this.nowPlusSleep);
-        cancel(event);
     }
 
     // metodo per accedere alla sezione di creazione delle regole
     @FXML
     void newRule(ActionEvent event) {
-        try{
+        try {
             switchRuleMenu(event);
-        }catch (Exception e){
+        } catch (Exception e) {
             Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
             a.show();
         }
@@ -374,30 +533,6 @@ public class FXMLDocumentController extends Application{
         }
     }
 
-    // metodo per cambiare dinamicamente i campi in base alla azione selezionata
-    public void changeContentAction() {
-        try {
-            switch (actionSelector.getValue().toString()) {
-                case "Sveglia":
-                    messageField.setDisable(true); // disattiviamo il messageField per la scrittura del messsaggio
-                    messageLabel.setDisable(true); // disattiviamo il messageLabel
-                    audioLabel.setDisable(false); // attiviamo l'audioLabel
-                    buttonAudio.setDisable(false); // attiviamo il buttonAudio per la selezione del file audio
-                    break;
-
-                case "Promemoria":
-                    messageField.setDisable(false); // attiviamo il messageField per la scrittura del messsaggio
-                    messageLabel.setDisable(false); // attiviamo il messageLabel
-                    audioLabel.setDisable(true); // disattiviamo l'audioLabel
-                    buttonAudio.setDisable(true); // disattiviamo il buttonAudio per la selezione del file audio
-                    break;
-            }
-        } catch (Exception e) {
-            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
-            a.show();
-        }
-    }
-
     //Metodo per l'eliminazione della regola
     public void delete(Rule selectedRuleToDelete) {
         //Rimuovi la regola dal RuleManager
@@ -406,9 +541,9 @@ public class FXMLDocumentController extends Application{
         Platform.runLater(() -> tableView.refresh());
     }
 
-    public void oneTimeCheck(){
-        if(oneTimeSelector.isSelected()){
-            if(recurrentSelector.isSelected()){
+    public void oneTimeCheck() {
+        if (oneTimeSelector.isSelected()) {
+            if (recurrentSelector.isSelected()) {
                 recurrentSelector.setSelected(false);
                 sleepDaySelector.setVisible(false);
                 sleepHourSelector.setVisible(false);
@@ -420,7 +555,7 @@ public class FXMLDocumentController extends Application{
         }
     }
 
-    public void recurrentCheck(){
+    public void recurrentCheck() {
         if (recurrentSelector.isSelected()) {
             // Se la checkbox è selezionata, mostra i textfield
             sleepDaySelector.setVisible(true);
@@ -429,7 +564,7 @@ public class FXMLDocumentController extends Application{
             labelSleepDay.setVisible(true);
             labelSleepHour.setVisible(true);
             labelSleepMinute.setVisible(true);
-            if(oneTimeSelector.isSelected()){
+            if (oneTimeSelector.isSelected()) {
                 oneTimeSelector.setSelected(false);
             }
         } else {
@@ -446,36 +581,12 @@ public class FXMLDocumentController extends Application{
         }
     }
 
-    public void checkDayNumber(KeyEvent event){
+    public void checkDayNumber(KeyEvent event) {
         try {
             if (!event.getCharacter().matches("[0-9]")) { // se l'input non fa match con un carattere compreso tra [0-9]
                 event.consume(); // marchiamo l'evento come consumato
                 sleepDaySelector.backward();
                 sleepDaySelector.deleteNextChar();
-            }
-        } catch (Exception e) {
-            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
-            a.show();
-        }
-    }
-    public void checkHourNumber(KeyEvent event){
-        try {
-            if (!event.getCharacter().matches("[0-9]")) { // se l'input non fa match con un carattere compreso tra [0-9]
-                event.consume(); // marchiamo l'evento come consumato
-                sleepHourSelector.backward();
-                sleepHourSelector.deleteNextChar();
-            }
-        } catch (Exception e) {
-            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
-            a.show();
-        }
-    }
-    public void checkMinuteNumber(KeyEvent event) {
-        try {
-            if (!event.getCharacter().matches("[0-9]")) { // se l'input non fa match con un carattere compreso tra [0-9]
-                event.consume(); // marchiamo l'evento come consumato
-                sleepMinuteSelector.backward();
-                sleepMinuteSelector.deleteNextChar();
             }
         } catch (Exception e) {
             Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
@@ -561,9 +672,10 @@ public class FXMLDocumentController extends Application{
             // Scrivi i dati dall'ObservableList al TXT
             for (Rule item : rm.getRules()) {
                 writer.write(item.getNameRule().get() + "\n" + item.getNameAction().get() + "\n" +
-                        item.getNameTrigger().get()+ "\n" + item.getActionContent().get() + "\n" + item.getTriggerContent().get() +
-                        "\n" + item.getOneTime() + "\n" + item.getSleepDays() + "\n" + item.getSleepHours() + "\n" +
-                        item.getSleepMinutes() + "\n" + item.getRecurrent() + "\n" + item.getState().get() + "\n" + item.getRepeat() + "\n" + item.getNowPlusSleep() + "\n\n");
+                        item.getNameTrigger().get() + "\n" + item.getActionContent().get() + "\n" + item.getActionContent2() +
+                        "\n" + item.getTriggerContent().get() + "\n" + item.getOneTime() + "\n" + item.getSleepDays() +
+                        "\n" + item.getSleepHours() + "\n" + item.getSleepMinutes() + "\n" + item.getRecurrent() +
+                        "\n" + item.getState().get() + "\n" + item.getRepeat() + "\n" + item.getNowPlusSleep() + "\n\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -576,26 +688,26 @@ public class FXMLDocumentController extends Application{
         while (sc.hasNext())  //returns a boolean value
         {
             String[] elements = sc.next().split("\n");
-            String[] hoursMinutes = elements[4].split(":");
+            String[] hoursMinutes = elements[5].split(":");
             Integer h = Integer.parseInt(hoursMinutes[0]);
             Integer m = Integer.parseInt(hoursMinutes[1]);
-            Integer sd = Integer.parseInt(elements[6]);
-            Integer sh = Integer.parseInt(elements[7]);
-            Integer sm = Integer.parseInt(elements[8]);
-            Boolean oneTime = Boolean.parseBoolean(elements[5]);
-            Boolean recurrent = Boolean.parseBoolean(elements[9]);
-            Boolean state = Boolean.parseBoolean(elements[10]);
-            Boolean repeat = Boolean.parseBoolean(elements[11]);
-            nowPlusSleep = LocalDateTime.parse(elements[12]);
+            Integer sd = Integer.parseInt(elements[7]);
+            Integer sh = Integer.parseInt(elements[8]);
+            Integer sm = Integer.parseInt(elements[9]);
+            Boolean oneTime = Boolean.parseBoolean(elements[6]);
+            Boolean recurrent = Boolean.parseBoolean(elements[10]);
+            Boolean state = Boolean.parseBoolean(elements[11]);
+            Boolean repeat = Boolean.parseBoolean(elements[12]);
+            nowPlusSleep = LocalDateTime.parse(elements[13]);
             // inseriamo il nuovo elemento
-            rm.addRule(elements[0],elements[1],elements[2],elements[3],LocalTime.of(h,m),oneTime,sd,sh,sm,recurrent,state, repeat, nowPlusSleep);
+            rm.addRule(elements[0], elements[1], elements[2], elements[3], elements[4], LocalTime.of(h, m), oneTime, sd, sh, sm, recurrent, state, repeat, nowPlusSleep);
 
         }
         sc.close();  //closes the scanner
     }
 
     @Override
-    public void stop(){
+    public void stop() {
         write();
         System.exit(0);
     }
@@ -635,6 +747,7 @@ public class FXMLDocumentController extends Application{
     public void refresh(ActionEvent actionEvent) {
         tableView.refresh();
     }
+}
 
     /*public TextField getUserInputField() {
         return userInputField;
@@ -648,4 +761,3 @@ public class FXMLDocumentController extends Application{
         return successLabel;
     }
      */
-}

@@ -78,7 +78,7 @@ public class FXMLDocumentControllerTest {
     @Test
     void testSelectAudio() {
         Platform.runLater(() -> {
-            controller.selectAudio();
+            controller.selectFile();
             // Simulate file selection
             controller.getContent(); // Assuming getContent() returns the selected file path
             // Add assertions based on your application logic
@@ -207,28 +207,6 @@ public class FXMLDocumentControllerTest {
             );
             controller.checkMinutes(event);
             // Aggiungere le asserzioni in base al comportamento atteso del metodo checkMinutes()
-        });
-    }
-
-    @Test
-    void testChangeContentActionForSveglia() {
-        Platform.runLater(()->{
-            // Mock ActionSelector value
-            controller.getActionSelector().setValue("Sveglia");
-
-            controller.changeContentAction();
-            // Add assertions based on the expected behavior for the "Sveglia" case
-        });
-    }
-
-    @Test
-    void testChangeContentActionForPromemoria() {
-        Platform.runLater(()->{
-            // Mock ActionSelector value
-            controller.getActionSelector().setValue("Promemoria");
-
-            controller.changeContentAction();
-            // Add assertions based on the expected behavior for the "Promemoria" case
         });
     }
 
