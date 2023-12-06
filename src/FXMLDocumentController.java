@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.*;
@@ -121,7 +122,8 @@ public class FXMLDocumentController extends Application {
 
 
     @FXML
-    public void initialize() { // durante l'inizializzazione del controller creiamo la tableview per visualizzare i dati
+    public void initialize() {
+        // durante l'inizializzazione del controller creiamo la tableview per visualizzare i dati
         tableView.setItems(rm.getRules());
         ruleNameView.setCellValueFactory(cellData -> cellData.getValue().getNameRule());
         actionView.setCellValueFactory(cellData -> cellData.getValue().getNameAction());
@@ -131,7 +133,7 @@ public class FXMLDocumentController extends Application {
         stateView.setCellValueFactory(cellData -> cellData.getValue().getState());
         plusSleepView.setCellValueFactory(cellData -> cellData.getValue().getNowPlusSleepFormat());
         tableView.getColumns().addAll(ruleNameView, actionView, actionContentView, triggerView, triggerContentView, stateView, plusSleepView);
-
+        // impostiamo le scelte da poter effettuare con il tasto sinistro
         MenuItem active = new MenuItem("Attiva");
         MenuItem deactive = new MenuItem("Disattiva");
         active.setOnAction(event -> {
@@ -169,7 +171,8 @@ public class FXMLDocumentController extends Application {
                 deleteButton.setDisable(true);
             }
         });
-        try {
+
+        try { // creiamo dei bind per poter cambiare in maniera dinamica la visualizzazione degli elementi nella selezione delle regole
             BooleanBinding isDisplayMessageSelected = Bindings.createBooleanBinding(
                     () -> "Promemoria".equals(actionSelector.getValue()),
                     actionSelector.valueProperty()
@@ -203,7 +206,7 @@ public class FXMLDocumentController extends Application {
                     () -> "Giorno della settimana".equals(this.triggerSelector.getValue()),
                     this.triggerSelector.valueProperty()
             );
-
+            // colleghiamo i bind agli elementi
             this.messageField.visibleProperty().bind(isDisplayMessageSelected);
             this.fileButton.visibleProperty().bind(isClockSelected.or(isMoveSelected.or(isCopySelected.or(isDeleteSelected))));
             this.fileButton2.visibleProperty().bind(isMoveSelected.or(isCopySelected));
@@ -213,6 +216,10 @@ public class FXMLDocumentController extends Application {
             this.labelMinutes.visibleProperty().bind(isTriggerTimeSelected);
             this.comboWeek.visibleProperty().bind(isTriggerWeekSelected);
             this.comboMonth.visibleProperty().bind(isTriggerMonthSelected);
+            actionSelector.valueProperty().addListener((observable, oldValue, newValue) -> {
+                // Aggiorna il testo del bottone in base alla selezione
+                fileButton2.setText("Seleziona una cartella");
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -272,20 +279,19 @@ public class FXMLDocumentController extends Application {
 
                 File file = fileChooser.showOpenDialog(stage);
                 if (file != null) {
-                    this.fileButton.setText(file.getAbsolutePath()); // cambiamo il testo del bottone con il path del file audio
+                    this.fileButton.setText(file.getAbsolutePath()); // cambiamo il testo del bottone con il path del file
                     this.content = file.getAbsolutePath();
                 }
                 break;
             case "Sposta un file":
             case "Copia un file":
             case "Elimina un file":
-                // impostiamo al FileChooser dei filtri in modo tale da essere sicuri di scegliere un file corretto.
                 FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("All files", "*");
                 fileChooser.getExtensionFilters().add(filter1);
 
                 File file1 = fileChooser.showOpenDialog(stage);
                 if (file1 != null) {
-                    this.fileButton.setText(file1.getAbsolutePath()); // cambiamo il testo del bottone con il path del file audio
+                    this.fileButton.setText(file1.getAbsolutePath()); // cambiamo il testo del bottone con il path del file
                     this.content = file1.getAbsolutePath();
                 }
                 break;
@@ -294,18 +300,14 @@ public class FXMLDocumentController extends Application {
 
     @FXML
     void selectFile2() {
-        FileChooser fileChooser = new FileChooser();
         switch (actionSelector.getValue().toString()){
             case "Sposta un file":
             case "Copia un file":
-                // impostiamo al FileChooser dei filtri in modo tale da essere sicuri di scegliere un file corretto.
-                FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("All files", "*");
-                fileChooser.getExtensionFilters().add(filter1);
-
-                File file1 = fileChooser.showOpenDialog(stage);
-                if (file1 != null) {
-                    this.fileButton2.setText(file1.getAbsolutePath()); // cambiamo il testo del bottone con il path del file audio
-                    this.content = file1.getAbsolutePath();
+                DirectoryChooser directoryChooser = new DirectoryChooser();
+                java.io.File selectedDirectory = directoryChooser.showDialog(stage);
+                if (selectedDirectory != null) {
+                    this.fileButton2.setText(selectedDirectory.getAbsolutePath()); // cambiamo il testo del bottone con il path del file
+                    this.content = selectedDirectory.getAbsolutePath();
                 }
                 break;
         }
@@ -357,13 +359,13 @@ public class FXMLDocumentController extends Application {
                         a.show();
                         return;
                     }
-                    if (this.fileButton2.isVisible() && this.fileButton2.textProperty().getValue().equals("Seleziona un file")) { // verifichiamo che il filechooser non sia vuoto
-                        Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcun file. Si prega di selezionarne uno.");// inviamo un alert di errore
+                    if (this.fileButton2.isVisible() && this.fileButton2.textProperty().getValue().equals("Seleziona una cartella")) { // verifichiamo che il directorychooser non sia vuoto
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcuna cartella. Si prega di selezionarne una.");// inviamo un alert di errore
                         a.show();
                         return;
                     }
-                    content= fileButton.textProperty().getValue().toString();
-                    content2= fileButton2.textProperty().getValue().toString();
+                    content= fileButton.textProperty().getValue().toString(); // path del file
+                    content2= fileButton2.textProperty().getValue().toString(); // path della cartella
                     break;
                 case "Sposta un file":
                     nameAction="Sposta un file";
@@ -372,13 +374,14 @@ public class FXMLDocumentController extends Application {
                         a.show();
                         return;
                     }
-                    if (this.fileButton2.isVisible() && this.fileButton2.textProperty().getValue().equals("Seleziona un file")) { // verifichiamo che il filechooser non sia vuoto
-                        Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcun file. Si prega di selezionarne uno.");// inviamo un alert di errore
+                    if (this.fileButton2.isVisible() && this.fileButton2.textProperty().getValue().equals("Seleziona una cartella")) { // verifichiamo che il directorychooser non sia vuoto
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcuna cartella. Si prega di selezionarne una.");// inviamo un alert di errore
                         a.show();
                         return;
                     }
-                    content= fileButton.textProperty().getValue().toString();
-                    content2= fileButton2.textProperty().getValue().toString();
+                    content= fileButton.textProperty().getValue().toString(); // path del file
+                    content2= fileButton2.textProperty().getValue().toString(); // path della cartella
+
                     break;
             }
 
