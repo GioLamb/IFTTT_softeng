@@ -64,7 +64,7 @@ public class AlarmClockTest {
     @Test
     public void testGetContent() {
         Platform.runLater(()->{
-            assertEquals(TEST_AUDIO_FILE_PATH, alarmClock.getContent());
+            assertEquals(TEST_AUDIO_FILE_PATH, alarmClock.getContent1());
         });
     }
 }

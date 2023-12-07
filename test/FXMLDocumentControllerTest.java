@@ -136,7 +136,7 @@ public class FXMLDocumentControllerTest {
         Platform.runLater(() -> {
             // Simulazione del comportamento di RuleManager con una regola "Promemoria" esistente
             RuleManager rm = RuleManager.getInstance();
-            rm.addRule("Test Rule", "Promemoria", "Test Trigger", "Test Content", LocalTime.now(), true,0,0,0,false,true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
+            rm.addRule("Test Rule", "Promemoria", "Test Trigger", "Test Content", null,null,LocalTime.now(), true,0,0,0,false,true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
 
             // Aggiunta di una nuova regola e verifica del comportamento atteso
             assertDoesNotThrow(() -> controller.newRule(null)); // Tentativo di aggiungere una nuova regola
@@ -151,7 +151,7 @@ public class FXMLDocumentControllerTest {
         Platform.runLater(() -> {
             // Simulazione del comportamento di RuleManager con una regola "Sveglia" esistente
             RuleManager rm = RuleManager.getInstance();
-            rm.addRule("Test Rule", "Sveglia", "Test Trigger", "/Users/vivi/Downloads/Prova.wav", LocalTime.now(), true,0,0,0,false,true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
+            rm.addRule("Test Rule", "Sveglia", "Test Trigger", "/Users/vivi/Downloads/Prova.wav",null, null, LocalTime.now(), true,0,0,0,false,true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
 
             // Aggiunta di una nuova regola e verifica del comportamento atteso
             assertDoesNotThrow(() -> controller.newRule(null)); // Tentativo di aggiungere una nuova regola
@@ -215,7 +215,7 @@ public class FXMLDocumentControllerTest {
         Platform.runLater(()->{
             //Si crea una nuova regola da eliminare che aggiungiamo alla TableView
             FXMLDocumentController controller = new FXMLDocumentController();
-            Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false,true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
+            Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", null, null,LocalTime.now(),true,0,0,0,false,true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
             controller.getTableView().getItems().add(ruleToDelete);
 
             //Chiama il metodo deleteRule per eliminare la regola
@@ -250,7 +250,7 @@ public class FXMLDocumentControllerTest {
             //Crea una nuova regola da eliminare, e aggiungiamo la stessa alla
             //TableView del controller
             FXMLDocumentController controller = new FXMLDocumentController();
-            Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false,true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
+            Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", null, null,LocalTime.now(),true,0,0,0,false,true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
             controller.getTableView().getItems().add(ruleToDelete);
 
             //Chiamiamo delete per eliminare la regola della TableView
@@ -272,7 +272,7 @@ public class FXMLDocumentControllerTest {
         Platform.runLater(()->{
             //Creiamo una nuova regola da eliminare
             FXMLDocumentController controller = new FXMLDocumentController();
-            Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", LocalTime.now(),true,0,0,0,false,true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
+            Rule ruleToDelete = new Rule("Regola 1", "Promemoria", "TriggerTime", "TestContent", null,null,LocalTime.now(),true,0,0,0,false,true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
 
             //Chiamiamo delete per eliminare la regola della TableView (vuota)
             controller.delete(ruleToDelete);
@@ -375,7 +375,7 @@ public class FXMLDocumentControllerTest {
                     false
             );
 
-            controller.checkHourNumber(event);
+            controller.checkHours(event);
 
             // Verifica che il carattere "2" sia accettato
             assertEquals("2", controller.getSleepHourSelector().getDepthTest());
@@ -397,7 +397,7 @@ public class FXMLDocumentControllerTest {
                     false
             );
 
-            controller.checkMinuteNumber(event);
+            controller.checkMinutes(event);
 
             // Verifica che il carattere "3" sia accettato
             assertEquals("3", controller.getSleepMinuteSelector().getDepthTest());

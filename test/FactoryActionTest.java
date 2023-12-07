@@ -96,7 +96,7 @@ public class FactoryActionTest {
         // Test per verificare il lancio di un'eccezione nel caso di un'azione non valida
         assertThrows(IllegalArgumentException.class, () ->
                 // Tentativo di creare un'azione con un tipo non valido
-                new FactoryAction().createConcreteAction("InvalidAction", "content")
+                new FactoryAction().createConcreteAction("InvalidAction", "content","content2")
         );
     }
 }

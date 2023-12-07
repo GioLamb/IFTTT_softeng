@@ -4,7 +4,7 @@ import javafx.scene.control.ButtonType;
 
 public class DisplayMessage extends FactoryAction implements Action {
 
-    private Alert alert;
+    Alert alert;
     private String message;
 
     public DisplayMessage(String message) {
