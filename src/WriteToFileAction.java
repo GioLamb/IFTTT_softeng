@@ -11,9 +11,11 @@ public class WriteToFileAction extends FactoryAction implements Action {
     private String filePath;
     private String content;
     private Alert alertConfirm;
+    private File FileToWrite;
     Alert alertError;
 
     public WriteToFileAction(String filePath, String content) {
+        this.FileToWrite = new File(filePath);
         this.filePath = filePath;
         this.content = content;
         this.alertConfirm = new Alert(Alert.AlertType.INFORMATION);
@@ -26,7 +28,7 @@ public class WriteToFileAction extends FactoryAction implements Action {
 
     @Override
     public String getName() {
-        return null;
+        return "WriteToFileAction";
     }
 
     @Override
@@ -43,10 +45,15 @@ public class WriteToFileAction extends FactoryAction implements Action {
 
     @Override
     public void execute() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            writer.write(content);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(FileToWrite.exists() && FileToWrite.isFile()) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+                writer.write(content);
+                alertConfirm.show();
+                alertConfirm.setOnCloseRequest(event -> onActionClose());
+            } catch (IOException e) {
+                System.out.println("Si è verificato un errore durante la cancellazione del file.");
+                e.printStackTrace();
+            }
         }
     }
 
