@@ -108,6 +108,7 @@ public class FXMLDocumentController extends Application {
     private int minutes;
     private String content;
     private String content2 = null;
+    private Integer content3 = null;
     private LocalTime time = LocalTime.of(0, 0);
     private Rule selectedRuleToDelete;
     private Boolean repeat;
@@ -329,7 +330,7 @@ public class FXMLDocumentController extends Application {
                 return;
             }
 
-            switch (actionSelector.getValue().toString()){
+            switch (actionSelector.getValue().toString()) {
                 case "Promemoria":
                     content = messageField.getText().toString();
                     nameAction = "Promemoria";
@@ -344,7 +345,7 @@ public class FXMLDocumentController extends Application {
                     content = fileButton.textProperty().getValue();
                     break;
                 case "Elimina un file":
-                    nameAction="Elimina un file";
+                    nameAction = "Elimina un file";
                     if (this.fileButton.isVisible() && this.fileButton.textProperty().getValue().equals("Seleziona un file")) { // verifichiamo che il filechooser non sia vuoto
                         Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcun file. Si prega di selezionarne uno.");// inviamo un alert di errore
                         a.show();
@@ -353,7 +354,7 @@ public class FXMLDocumentController extends Application {
                     content = fileButton.textProperty().getValue();
                     break;
                 case "Copia un file":
-                    nameAction="Copia un file";
+                    nameAction = "Copia un file";
                     if (this.fileButton.isVisible() && this.fileButton.textProperty().getValue().equals("Seleziona un file")) { // verifichiamo che il filechooser non sia vuoto
                         Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcun file. Si prega di selezionarne uno.");// inviamo un alert di errore
                         a.show();
@@ -364,11 +365,11 @@ public class FXMLDocumentController extends Application {
                         a.show();
                         return;
                     }
-                    content= fileButton.textProperty().getValue().toString(); // path del file
-                    content2= fileButton2.textProperty().getValue().toString(); // path della cartella
+                    content = fileButton.textProperty().getValue().toString(); // path del file
+                    content2 = fileButton2.textProperty().getValue().toString(); // path della cartella
                     break;
                 case "Sposta un file":
-                    nameAction="Sposta un file";
+                    nameAction = "Sposta un file";
                     if (this.fileButton.isVisible() && this.fileButton.textProperty().getValue().equals("Seleziona un file")) { // verifichiamo che il filechooser non sia vuoto
                         Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcun file. Si prega di selezionarne uno.");// inviamo un alert di errore
                         a.show();
@@ -379,8 +380,8 @@ public class FXMLDocumentController extends Application {
                         a.show();
                         return;
                     }
-                    content= fileButton.textProperty().getValue().toString(); // path del file
-                    content2= fileButton2.textProperty().getValue().toString(); // path della cartella
+                    content = fileButton.textProperty().getValue().toString(); // path del file
+                    content2 = fileButton2.textProperty().getValue().toString(); // path della cartella
 
                     break;
             }
@@ -405,70 +406,98 @@ public class FXMLDocumentController extends Application {
                         return;
                     }
                     break;
-                    /*
-                case "Giorno della settimana":
-                    nameTrigger = "TriggerWeek";
-                     */
-            }
 
-            if (!(this.oneTimeSelector.isSelected() || this.recurrentSelector.isSelected())) {
-                Alert a = new Alert(Alert.AlertType.ERROR, "Scegliere quante volte la regola deve essere riattivata");
-                a.show();
-                return;
+                case "Giorno della settimana":
+                    nameTrigger = "TriggerDayOfWeek";
+                    switch (comboWeek.getValue().toString()) {
+                        case "Domenica":
+                            content3 = 1;
+                            break;
+                        case "Lunedì":
+                            content3 = 2;
+                            break;
+                        case "Martedì":
+                            content3 = 3;
+                            break;
+                        case "Mercoledì":
+                            content3 = 4;
+                            break;
+                        case "Giovedì":
+                            content3 = 5;
+                            break;
+                        case "Venerdì":
+                            content3 = 6;
+                            break;
+                        case "Sabato":
+                            content3 = 7;
+                            break;
+                    }
+                    break;
+
+                case "Giorno del mese":
+                    nameTrigger = "TriggerDayOfMonth";
+                    content3 = Integer.parseInt(comboMonth.getValue().toString());
+                    break;
             }
-            if (this.recurrentSelector.isSelected()) {
-                if (this.sleepDaySelector.getText().isEmpty()) {
-                    Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Giorni' ");// inviamo un alert di errore
-                    a.show();
-                    return;
-                } else if (this.sleepDaySelector.getText().charAt(0) == 'G') {
-                    Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Giorni' ");// inviamo un alert di errore
-                    a.show();
-                    return;
-                } else if (this.sleepHourSelector.getText().isEmpty()) {
-                    Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Ore' ");// inviamo un alert di errore
-                    a.show();
-                    return;
-                } else if (this.sleepHourSelector.getText().charAt(0) == 'O') {
-                    Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Ore' ");// inviamo un alert di errore
-                    a.show();
-                    return;
-                } else if (this.sleepMinuteSelector.getText().isEmpty()) {
-                    Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Minuti' ");// inviamo un alert di errore
-                    a.show();
-                    return;
-                } else if (this.sleepMinuteSelector.getText().charAt(0) == 'M') {
-                    Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Minuti' ");// inviamo un alert di errore
-                    a.show();
-                    return;
-                } else {
-                    sleepDays = Integer.parseInt(this.sleepDaySelector.getCharacters().toString());
-                    sleepHours = Integer.parseInt(this.sleepHourSelector.getCharacters().toString()); // convertiamo i valori in interi
-                    sleepMinutes = Integer.parseInt(this.sleepMinuteSelector.getCharacters().toString());
-                    if (sleepHours >= 0 && sleepHours < 24 && sleepMinutes >= 0 && sleepMinutes < 60) { // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti
-                    } else {
-                        Alert a = new Alert(Alert.AlertType.ERROR, "L'orario inserito non è corretto.\n" + // inviamo un alert di errore
-                                "Le ore devono essere comprese tra 0 e 23\n" +
-                                "I minuti devono essere compresi tra 0 e 59.\n Riprovare");
+                    if (!(this.oneTimeSelector.isSelected() || this.recurrentSelector.isSelected())) {
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Scegliere quante volte la regola deve essere riattivata");
                         a.show();
                         return;
                     }
-                }
-                this.repeat = true;
-            } else {
-                this.sleepDays = 0;
-                this.sleepHours = 0;
-                this.sleepMinutes = 0;
-                this.repeat = false;
+
+                    if (this.recurrentSelector.isSelected()) {
+                        if (this.sleepDaySelector.getText().isEmpty()) {
+                            Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Giorni' ");// inviamo un alert di errore
+                            a.show();
+                            return;
+                        } else if (this.sleepDaySelector.getText().charAt(0) == 'G') {
+                            Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Giorni' ");// inviamo un alert di errore
+                            a.show();
+                            return;
+                        } else if (this.sleepHourSelector.getText().isEmpty()) {
+                            Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Ore' ");// inviamo un alert di errore
+                            a.show();
+                            return;
+                        } else if (this.sleepHourSelector.getText().charAt(0) == 'O') {
+                            Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Ore' ");// inviamo un alert di errore
+                            a.show();
+                            return;
+                        } else if (this.sleepMinuteSelector.getText().isEmpty()) {
+                            Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Minuti' ");// inviamo un alert di errore
+                            a.show();
+                            return;
+                        } else if (this.sleepMinuteSelector.getText().charAt(0) == 'M') {
+                            Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Minuti' ");// inviamo un alert di errore
+                            a.show();
+                            return;
+                        } else {
+                            sleepDays = Integer.parseInt(this.sleepDaySelector.getCharacters().toString());
+                            sleepHours = Integer.parseInt(this.sleepHourSelector.getCharacters().toString()); // convertiamo i valori in interi
+                            sleepMinutes = Integer.parseInt(this.sleepMinuteSelector.getCharacters().toString());
+                            if (sleepHours >= 0 && sleepHours < 24 && sleepMinutes >= 0 && sleepMinutes < 60) { // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti
+                            } else {
+                                Alert a = new Alert(Alert.AlertType.ERROR, "L'orario inserito non è corretto.\n" + // inviamo un alert di errore
+                                        "Le ore devono essere comprese tra 0 e 23\n" +
+                                        "I minuti devono essere compresi tra 0 e 59.\n Riprovare");
+                                a.show();
+                                return;
+                            }
+                        }
+                        this.repeat = true;
+                    } else {
+                        this.sleepDays = 0;
+                        this.sleepHours = 0;
+                        this.sleepMinutes = 0;
+                        this.repeat = false;
+                    }
+                    this.nowPlusSleep = LocalDateTime.of(LocalDate.now(), LocalTime.of(hours, minutes)).plusDays(sleepDays).plusHours(sleepHours).plusMinutes(sleepMinutes);
+                    RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
+                    rm.addRule("Regola #" + (rm.getRules().size() + 1), nameAction, nameTrigger, this.content, content2, content3, this.time, this.oneTimeSelector.isSelected(), this.sleepDays, this.sleepHours, this.sleepMinutes, this.recurrentSelector.isSelected(), true, this.repeat, this.nowPlusSleep);
+                    cancel(event);
+            } catch(Exception e){
+                e.printStackTrace();
             }
-            this.nowPlusSleep = LocalDateTime.of(LocalDate.now(), LocalTime.of(hours, minutes)).plusDays(sleepDays).plusHours(sleepHours).plusMinutes(sleepMinutes);
-            RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
-            rm.addRule("Regola #" + (rm.getRules().size() + 1), nameAction, nameTrigger, this.content,content2,this.time, this.oneTimeSelector.isSelected(), this.sleepDays, this.sleepHours, this.sleepMinutes, this.recurrentSelector.isSelected(), true, this.repeat, this.nowPlusSleep);
-            cancel(event);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-    }
 
     // metodo per accedere alla sezione di creazione delle regole
     @FXML
@@ -676,9 +705,10 @@ public class FXMLDocumentController extends Application {
             for (Rule item : rm.getRules()) {
                 writer.write(item.getNameRule().get() + "\n" + item.getNameAction().get() + "\n" +
                         item.getNameTrigger().get() + "\n" + item.getActionContent().get() + "\n" + item.getActionContent2() +
-                        "\n" + item.getTriggerContent().get() + "\n" + item.getOneTime() + "\n" + item.getSleepDays() +
-                        "\n" + item.getSleepHours() + "\n" + item.getSleepMinutes() + "\n" + item.getRecurrent() +
-                        "\n" + item.getState().get() + "\n" + item.getRepeat() + "\n" + item.getNowPlusSleep() + "\n\n");
+                        "\n" + item.getTriggerContent().get() +"\n" + item.getContent3() + "\n" + item.getOneTime() +
+                        "\n" + item.getSleepDays() + "\n" + item.getSleepHours() + "\n" + item.getSleepMinutes() +
+                        "\n" + item.getRecurrent() + "\n" + item.getState().get() + "\n" + item.getRepeat() +
+                        "\n" + item.getNowPlusSleep() + "\n\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -691,19 +721,20 @@ public class FXMLDocumentController extends Application {
         while (sc.hasNext())  //returns a boolean value
         {
             String[] elements = sc.next().split("\n");
-            String[] hoursMinutes = elements[5].split(":");
+            Integer content3 = Integer.parseInt(elements[5]);
+            String[] hoursMinutes = elements[6].split(":");
             Integer h = Integer.parseInt(hoursMinutes[0]);
             Integer m = Integer.parseInt(hoursMinutes[1]);
-            Integer sd = Integer.parseInt(elements[7]);
-            Integer sh = Integer.parseInt(elements[8]);
-            Integer sm = Integer.parseInt(elements[9]);
-            Boolean oneTime = Boolean.parseBoolean(elements[6]);
-            Boolean recurrent = Boolean.parseBoolean(elements[10]);
-            Boolean state = Boolean.parseBoolean(elements[11]);
-            Boolean repeat = Boolean.parseBoolean(elements[12]);
-            nowPlusSleep = LocalDateTime.parse(elements[13]);
+            Integer sd = Integer.parseInt(elements[8]);
+            Integer sh = Integer.parseInt(elements[9]);
+            Integer sm = Integer.parseInt(elements[10]);
+            Boolean oneTime = Boolean.parseBoolean(elements[7]);
+            Boolean recurrent = Boolean.parseBoolean(elements[11]);
+            Boolean state = Boolean.parseBoolean(elements[12]);
+            Boolean repeat = Boolean.parseBoolean(elements[13]);
+            nowPlusSleep = LocalDateTime.parse(elements[14]);
             // inseriamo il nuovo elemento
-            rm.addRule(elements[0], elements[1], elements[2], elements[3], elements[4], LocalTime.of(h, m), oneTime, sd, sh, sm, recurrent, state, repeat, nowPlusSleep);
+            rm.addRule(elements[0], elements[1], elements[2], elements[3], elements[4], content3, LocalTime.of(h, m), oneTime, sd, sh, sm, recurrent, state, repeat, nowPlusSleep);
 
         }
         sc.close();  //closes the scanner

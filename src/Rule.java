@@ -28,10 +28,11 @@ public class Rule{
         private Boolean repeat;
 
         private String content2;
+        private Integer content3;
 
         //Costruttore della classe Rule che accetta il nome della regola, il nome dell'azione,
         //il nome del trigger, il contenuto dell'azione e l'orario del trigger come parametri
-        public Rule(String nameRule, String nameAction, String nameTrigger, String content, String content2, LocalTime time, Boolean oneTime, int sleepDays, int sleepHours, int sleepMinutes, Boolean recurrent, Boolean state, Boolean repeat, LocalDateTime nowPlusSleep) {
+        public Rule(String nameRule, String nameAction, String nameTrigger, String content, String content2, Integer content3, LocalTime time, Boolean oneTime, int sleepDays, int sleepHours, int sleepMinutes, Boolean recurrent, Boolean state, Boolean repeat, LocalDateTime nowPlusSleep) {
             //Inizializza le variabili d'istanza con i valori forniti
             this.nameRule.set(nameRule);
             this.nameAction.set(nameAction);
@@ -49,6 +50,7 @@ public class Rule{
             this.recurrent = recurrent;
             this.repeat = repeat;
             this.content2=content2;
+            this.content3 = content3;
             setState(state);
             this.nowPlusSleep = nowPlusSleep;
         }
@@ -100,6 +102,7 @@ public class Rule{
     public StringProperty getTriggerContent() {
         return triggerContent;
     }
+    public Integer getContent3(){return content3;}
 
     public StringProperty getActionContent() {
         return actionContent;
