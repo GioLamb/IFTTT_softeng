@@ -20,7 +20,7 @@ public class FactoryActionTest {
         // Test per la creazione di un'azione di visualizzazione messaggio
         Platform.runLater(() -> {
             // Creazione di un'azione di visualizzazione messaggio
-            Action displayMessage = new FactoryAction().createConcreteAction("Promemoria", "Test Message");
+            Action displayMessage = new FactoryAction().createConcreteAction("Promemoria", "Test Message", null);
             // Verifica che l'azione non sia nulla
             assertNotNull(displayMessage);
             // Verifica che l'azione sia un'istanza di DisplayMessage
@@ -28,13 +28,14 @@ public class FactoryActionTest {
             // Verifica che il nome dell'azione sia corretto
             assertEquals("Promemoria", displayMessage.getName());
             // Verifica che il contenuto dell'azione sia corretto
-            assertEquals("Test Message", displayMessage.getContent());
+            assertEquals("Test Message", displayMessage.getContent1());
+            assertEquals(null, displayMessage.getContent2());
         });
 
         // Test per la creazione di un'azione di sveglia
         Platform.runLater(() -> {
             // Creazione di un'azione di sveglia
-            Action alarmClock = new FactoryAction().createConcreteAction("Sveglia", "audioFilePath");
+            Action alarmClock = new FactoryAction().createConcreteAction("Sveglia", "audioFilePath", null);
             // Verifica che l'azione non sia nulla
             assertNotNull(alarmClock);
             // Verifica che l'azione sia un'istanza di AlarmClock
@@ -42,8 +43,55 @@ public class FactoryActionTest {
             // Verifica che il nome dell'azione sia corretto
             assertEquals("Sveglia", alarmClock.getName());
             // Verifica che il contenuto dell'azione sia corretto
-            assertEquals("audioFilePath", alarmClock.getContent());
+            assertEquals("audioFilePath", alarmClock.getContent1());
+            assertEquals(null, alarmClock.getContent2());
         });
+
+        // Test per la creazione di un'azione di copia di un file
+        Platform.runLater(() -> {
+            // Creazione di un'azione di sveglia
+            Action copyFile = new FactoryAction().createConcreteAction("Copia un file", "File", "Directory");
+            // Verifica che l'azione non sia nulla
+            assertNotNull(copyFile);
+            // Verifica che l'azione sia un'istanza di AlarmClock
+            assertTrue(copyFile instanceof ActionCopy);
+            // Verifica che il nome dell'azione sia corretto
+            assertEquals("Copia un file", copyFile.getName());
+            // Verifica che il contenuto dell'azione sia corretto
+            assertEquals("File", copyFile.getContent1());
+            assertEquals("Directory", copyFile.getContent2());
+        });
+
+        // Test per la creazione di un'azione di spostamento di un file
+        Platform.runLater(() -> {
+            // Creazione di un'azione di sveglia
+            Action moveFile = new FactoryAction().createConcreteAction("Sposta un file", "File", "Directory");
+            // Verifica che l'azione non sia nulla
+            assertNotNull(moveFile);
+            // Verifica che l'azione sia un'istanza di AlarmClock
+            assertTrue(moveFile instanceof ActionCopy);
+            // Verifica che il nome dell'azione sia corretto
+            assertEquals("Sposta un file", moveFile.getName());
+            // Verifica che il contenuto dell'azione sia corretto
+            assertEquals("File", moveFile.getContent1());
+            assertEquals("Directory", moveFile.getContent2());
+        });
+
+        // Test per la creazione di un'azione di eliminazione di un file
+        Platform.runLater(() -> {
+            // Creazione di un'azione di sveglia
+            Action deleteFile = new FactoryAction().createConcreteAction("Elimina un file", "File", null);
+            // Verifica che l'azione non sia nulla
+            assertNotNull(deleteFile);
+            // Verifica che l'azione sia un'istanza di AlarmClock
+            assertTrue(deleteFile instanceof ActionCopy);
+            // Verifica che il nome dell'azione sia corretto
+            assertEquals("Elimina un file", deleteFile.getName());
+            // Verifica che il contenuto dell'azione sia corretto
+            assertEquals("File", deleteFile.getContent1());
+            assertEquals(null, deleteFile.getContent2());
+        });
+
 
         // Test per verificare il lancio di un'eccezione nel caso di un'azione non valida
         assertThrows(IllegalArgumentException.class, () ->
