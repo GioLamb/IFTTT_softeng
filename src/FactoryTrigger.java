@@ -11,7 +11,7 @@ public class FactoryTrigger{
 
     //Metodo per creare un'istanza di una classe che implementa l'interfaccia Trigger
     //in base al nome del trigger fornito come parametro
-    public Trigger createConcreteTrigger(String nameTrigger, LocalTime time, int content3){
+    public Trigger createConcreteTrigger(String nameTrigger, LocalTime time, Integer content3){
         //Verifica il tipo di trigger e restituisce un'istanza corrispondente
         if (nameTrigger != null) {
             // Verifica il tipo di trigger e restituisce un'istanza corrispondente

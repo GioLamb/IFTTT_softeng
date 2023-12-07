@@ -93,7 +93,7 @@ public class FXMLDocumentController extends Application {
     @FXML
     private Button submitButton = new Button();
     @FXML
-    private TextArea messageArea;
+    private TextArea messageArea = new TextArea();
 
     private int sleepDays;
     private int sleepHours;
@@ -176,7 +176,7 @@ public class FXMLDocumentController extends Application {
                     () -> "Sveglia".equals(this.actionSelector.getValue()),
                     this.actionSelector.valueProperty()
             );
-            BooleanBinding isFileSelected = Bindings.createBooleanBinding(
+            BooleanBinding isWriteSelected = Bindings.createBooleanBinding(
                     () -> "Scrivi in un file".equals(this.actionSelector.getValue()),
                     this.actionSelector.valueProperty()
             );
@@ -207,7 +207,7 @@ public class FXMLDocumentController extends Application {
             );
             // colleghiamo i bind agli elementi
             this.messageField.visibleProperty().bind(isDisplayMessageSelected);
-            this.fileButton.visibleProperty().bind(isClockSelected.or(isFileSelected.or(isMoveSelected.or(isCopySelected.or(isDeleteSelected).or(isClockSelected)))));
+            this.fileButton.visibleProperty().bind(isClockSelected.or(isWriteSelected.or(isMoveSelected.or(isCopySelected.or(isDeleteSelected).or(isClockSelected)))));
             this.fileButton2.visibleProperty().bind(isMoveSelected.or(isCopySelected));
             this.hourSelector.visibleProperty().bind(isTriggerTimeSelected);
             this.minutesSelector.visibleProperty().bind(isTriggerTimeSelected);
@@ -215,9 +215,9 @@ public class FXMLDocumentController extends Application {
             this.labelMinutes.visibleProperty().bind(isTriggerTimeSelected);
             this.comboWeek.visibleProperty().bind(isTriggerWeekSelected);
             this.comboMonth.visibleProperty().bind(isTriggerMonthSelected);
-            actionSelector.valueProperty().addListener((observable, oldValue, newValue) -> {
+            this.messageArea.visibleProperty().bind(isWriteSelected);
+            this.actionSelector.valueProperty().addListener((observable, oldValue, newValue) -> {
                 // Aggiorna il testo del bottone in base alla selezione
-                messageArea.setVisible(false);
                 fileButton2.setText("Seleziona una cartella");
             });
         } catch (Exception e) {
@@ -289,7 +289,6 @@ public class FXMLDocumentController extends Application {
                 }
                 break;
         }
-        messageArea.setVisible(true);
     }
 
     @FXML
@@ -344,11 +343,8 @@ public class FXMLDocumentController extends Application {
                         a.show();
                         return;
                     }
-                    content = messageArea.getText();
-                    this.messageArea.setVisible(true);
-                    WriteToFileAction writeToFileAction = new WriteToFileAction(fileButton.textProperty().getValue(), content);
-                    writeToFileAction.execute();
-                    this.messageArea.setVisible(false);
+                    content = fileButton.textProperty().getValue().toString();
+                    content2 = messageArea.getText().toString();
                     break;
                 case "Elimina un file":
                     nameAction = "Elimina un file";
