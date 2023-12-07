@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -53,9 +54,6 @@ public class FXMLDocumentController extends Application {
 
     @FXML
     private ComboBox actionSelector = new ComboBox<>();
-
-    @FXML
-    private Button buttonAudio = new Button();
 
     @FXML
     private TextField hourSelector = new TextField();
@@ -244,10 +242,14 @@ public class FXMLDocumentController extends Application {
         stage.getIcons().add(new Image(Objects.requireNonNull(FXMLDocumentController.class.getResourceAsStream("icon.png"))));
         stage.setScene(scene1);
         stage.show();
-        if (file.createNewFile()) {
-            return;
+        try {
+            if (file.createNewFile()) {
+                return;
+            }
+            read();
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        read();
     }
 
     // Questo metodo ci permette di poter cambiare la scena caricando un diverso file FXML
@@ -721,8 +723,13 @@ public class FXMLDocumentController extends Application {
         while (sc.hasNext())  //returns a boolean value
         {
             String[] elements = sc.next().split("\n");
-            Integer content3 = Integer.parseInt(elements[5]);
-            String[] hoursMinutes = elements[6].split(":");
+            if (!elements[6].equals("null")){
+                Integer content3 = Integer.parseInt(elements[6]);
+            }
+            else{
+                Integer content3 = null;
+            }
+            String[] hoursMinutes = elements[5].split(":");
             Integer h = Integer.parseInt(hoursMinutes[0]);
             Integer m = Integer.parseInt(hoursMinutes[1]);
             Integer sd = Integer.parseInt(elements[8]);
@@ -776,10 +783,6 @@ public class FXMLDocumentController extends Application {
 
     public Node getLabelSleepMinute() {
         return labelSleepMinute;
-    }
-
-    public void refresh(ActionEvent actionEvent) {
-        tableView.refresh();
     }
 }
 

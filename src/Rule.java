@@ -29,6 +29,7 @@ public class Rule{
 
         private String content2;
         private Integer content3;
+        private StringProperty nowPlusSleepFormat = new SimpleStringProperty();
 
         //Costruttore della classe Rule che accetta il nome della regola, il nome dell'azione,
         //il nome del trigger, il contenuto dell'azione e l'orario del trigger come parametri
@@ -53,6 +54,7 @@ public class Rule{
             this.content3 = content3;
             setState(state);
             this.nowPlusSleep = nowPlusSleep;
+            setNowPlusSleep(nowPlusSleep);
         }
 
     //Sovrascrive il metodo equals della classe Object
@@ -163,11 +165,10 @@ public class Rule{
     }
     public void setNowPlusSleep (LocalDateTime time){
         nowPlusSleep = time;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
+        nowPlusSleepFormat.set(nowPlusSleep.format(formatter));
     }
     public StringProperty getNowPlusSleepFormat(){
-            StringProperty timeFormat = new SimpleStringProperty();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
-            timeFormat.set(nowPlusSleep.format(formatter));
-            return timeFormat;
+            return nowPlusSleepFormat;
     }
 }
