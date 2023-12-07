@@ -745,10 +745,6 @@ public class FXMLDocumentController extends Application {
         return labelSleepMinute;
     }
 
-    public void refresh(ActionEvent actionEvent) {
-        tableView.refresh();
-    }
-
     public void checkHourNumber(KeyEvent event) {
         
     }
