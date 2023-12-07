@@ -43,7 +43,7 @@ public class Rule{
             //Utilizza la FactoryAction per creare un'istanza dell'azione in base al nome e al contenuto
             this.action = new FactoryAction().createConcreteAction(nameAction, content, content2);
             //Utilizza la FactoryTrigger per creare un'istanza del trigger in base al nome e all'orario
-            this.trigger = new FactoryTrigger().createConcreteTrigger(nameTrigger, time);
+            this.trigger = new FactoryTrigger().createConcreteTrigger(nameTrigger, time, content3);
             this.oneTime = oneTime;
             this.sleepDays = sleepDays;
             this.sleepHours = sleepHours;

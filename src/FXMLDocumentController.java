@@ -417,25 +417,25 @@ public class FXMLDocumentController extends Application {
                     nameTrigger = "TriggerDayOfWeek";
                     switch (comboWeek.getValue().toString()) {
                         case "Domenica":
-                            content3 = 1;
+                            content3 = 7;
                             break;
                         case "Lunedì":
-                            content3 = 2;
+                            content3 = 1;
                             break;
                         case "Martedì":
-                            content3 = 3;
+                            content3 = 2;
                             break;
                         case "Mercoledì":
-                            content3 = 4;
+                            content3 = 3;
                             break;
                         case "Giovedì":
-                            content3 = 5;
+                            content3 = 4;
                             break;
                         case "Venerdì":
-                            content3 = 6;
+                            content3 = 5;
                             break;
                         case "Sabato":
-                            content3 = 7;
+                            content3 = 6;
                             break;
                     }
                     break;
