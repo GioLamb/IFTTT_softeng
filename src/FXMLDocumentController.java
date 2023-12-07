@@ -9,7 +9,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -56,6 +55,9 @@ public class FXMLDocumentController extends Application {
     private ComboBox actionSelector = new ComboBox<>();
 
     @FXML
+    private Button buttonAudio = new Button();
+
+    @FXML
     private TextField hourSelector = new TextField();
 
     @FXML
@@ -90,14 +92,8 @@ public class FXMLDocumentController extends Application {
     private ComboBox triggerSelector = new ComboBox<>();
     @FXML
     private Button submitButton = new Button();
-
-    /* @FXML
-    private TextField userInputField = new TextField();
     @FXML
-    private Button okButton = new Button();
-    @FXML
-    private Label successLabel = new Label();
-     */
+    private TextArea messageArea;
 
     private int sleepDays;
     private int sleepHours;
@@ -180,6 +176,10 @@ public class FXMLDocumentController extends Application {
                     () -> "Sveglia".equals(this.actionSelector.getValue()),
                     this.actionSelector.valueProperty()
             );
+            BooleanBinding isFileSelected = Bindings.createBooleanBinding(
+                    () -> "Scrivi in un file".equals(this.actionSelector.getValue()),
+                    this.actionSelector.valueProperty()
+            );
             BooleanBinding isCopySelected = Bindings.createBooleanBinding(
                     () -> "Copia un file".equals(this.actionSelector.getValue()),
                     this.actionSelector.valueProperty()
@@ -207,7 +207,7 @@ public class FXMLDocumentController extends Application {
             );
             // colleghiamo i bind agli elementi
             this.messageField.visibleProperty().bind(isDisplayMessageSelected);
-            this.fileButton.visibleProperty().bind(isClockSelected.or(isMoveSelected.or(isCopySelected.or(isDeleteSelected))));
+            this.fileButton.visibleProperty().bind(isClockSelected.or(isFileSelected.or(isMoveSelected.or(isCopySelected.or(isDeleteSelected).or(isClockSelected)))));
             this.fileButton2.visibleProperty().bind(isMoveSelected.or(isCopySelected));
             this.hourSelector.visibleProperty().bind(isTriggerTimeSelected);
             this.minutesSelector.visibleProperty().bind(isTriggerTimeSelected);
@@ -217,19 +217,12 @@ public class FXMLDocumentController extends Application {
             this.comboMonth.visibleProperty().bind(isTriggerMonthSelected);
             actionSelector.valueProperty().addListener((observable, oldValue, newValue) -> {
                 // Aggiorna il testo del bottone in base alla selezione
+                messageArea.setVisible(false);
                 fileButton2.setText("Seleziona una cartella");
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // Disabilita il pulsante "Ok" inizialmente
-        //okButton.setDisable(true);
-
-        // Aggiungi un listener per il campo di input
-        //userInputField.textProperty().addListener((observable, oldValue, newValue) -> {
-        // Abilita il pulsante "Ok" se il campo di input non è vuoto
-        //okButton.setDisable(newValue.isEmpty());
-        //});
     }
 
     @Override // metodo per l'avvio del programma
@@ -242,14 +235,10 @@ public class FXMLDocumentController extends Application {
         stage.getIcons().add(new Image(Objects.requireNonNull(FXMLDocumentController.class.getResourceAsStream("icon.png"))));
         stage.setScene(scene1);
         stage.show();
-        try {
-            if (file.createNewFile()) {
-                return;
-            }
-            read();
-        } catch (Exception e){
-            e.printStackTrace();
+        if (file.createNewFile()) {
+            return;
         }
+        read();
     }
 
     // Questo metodo ci permette di poter cambiare la scena caricando un diverso file FXML
@@ -286,10 +275,11 @@ public class FXMLDocumentController extends Application {
                     this.content = file.getAbsolutePath();
                 }
                 break;
+            case "Scrivi in un file":
             case "Sposta un file":
             case "Copia un file":
             case "Elimina un file":
-                FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("All files", "*");
+                FileChooser.ExtensionFilter filter1 = new FileChooser.ExtensionFilter("Text files(*.txt)", "*.txt");
                 fileChooser.getExtensionFilters().add(filter1);
 
                 File file1 = fileChooser.showOpenDialog(stage);
@@ -299,6 +289,7 @@ public class FXMLDocumentController extends Application {
                 }
                 break;
         }
+        messageArea.setVisible(true);
     }
 
     @FXML
@@ -345,6 +336,19 @@ public class FXMLDocumentController extends Application {
                         return;
                     }
                     content = fileButton.textProperty().getValue();
+                    break;
+                case "Scrivi in un file":
+                    nameAction="Scrittura su File";
+                    if (this.fileButton.isVisible() && this.fileButton.textProperty().getValue().equals("Seleziona un file")) { // verifichiamo che il filechooser non sia vuoto
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Non è stata inserito alcun file. Si prega di selezionarne uno.");// inviamo un alert di errore
+                        a.show();
+                        return;
+                    }
+                    content = messageArea.getText();
+                    this.messageArea.setVisible(true);
+                    WriteToFileAction writeToFileAction = new WriteToFileAction(fileButton.textProperty().getValue(), content);
+                    writeToFileAction.execute();
+                    this.messageArea.setVisible(false);
                     break;
                 case "Elimina un file":
                     nameAction = "Elimina un file";
@@ -628,45 +632,6 @@ public class FXMLDocumentController extends Application {
         }
     }
 
-    /*@FXML
-    void okButtonAction(ActionEvent event) {
-        userInputField.setManaged(true);
-        userInputField.setVisible(true);
-        // Ottieni la stringa inserita dall'utente dal campo di input
-        String userInput = userInputField.getText();
-
-        // Ottieni l'istanza di Action appropriata (WriteToFileAction, ad esempio)
-        Action writeToFileAction = new WriteToFileAction("/Users/vivi/Documents/Prova.txt", userInput);
-
-        // Esegui l'azione di scrittura su file
-        writeToFileAction.execute();
-
-        // Mostra il messaggio di conferma
-        successLabel.setText("Contenuto inserito");
-        successLabel.setManaged(true);
-        successLabel.setVisible(true);
-
-        // Nascondi la TextInput e il pulsante "OK"
-        userInputField.setManaged(false);
-        userInputField.setVisible(false);
-        okButton.setManaged(false);
-        okButton.setVisible(false);
-    }
-
-    @FXML
-    void writeToFileAction(ActionEvent event) {
-        // Abilita la TextInput e il pulsante "OK" per l'inserimento della stringa
-        userInputField.setManaged(true);
-        userInputField.setVisible(true);
-        okButton.setManaged(true);
-        okButton.setVisible(true);
-
-        // Nascondi la Label del successo
-        successLabel.setManaged(false);
-        successLabel.setVisible(false);
-        okButton.setDisable(true);
-    }
-     */
 
     public Scene getScene() {
         return scene;
@@ -723,13 +688,8 @@ public class FXMLDocumentController extends Application {
         while (sc.hasNext())  //returns a boolean value
         {
             String[] elements = sc.next().split("\n");
-            if (!elements[6].equals("null")){
-                Integer content3 = Integer.parseInt(elements[6]);
-            }
-            else{
-                Integer content3 = null;
-            }
-            String[] hoursMinutes = elements[5].split(":");
+            Integer content3 = Integer.parseInt(elements[5]);
+            String[] hoursMinutes = elements[6].split(":");
             Integer h = Integer.parseInt(hoursMinutes[0]);
             Integer m = Integer.parseInt(hoursMinutes[1]);
             Integer sd = Integer.parseInt(elements[8]);
@@ -784,17 +744,16 @@ public class FXMLDocumentController extends Application {
     public Node getLabelSleepMinute() {
         return labelSleepMinute;
     }
+
+    public void refresh(ActionEvent actionEvent) {
+        tableView.refresh();
+    }
+
+    public void checkHourNumber(KeyEvent event) {
+        
+    }
+
+    public void checkMinuteNumber(KeyEvent event) {
+    }
 }
 
-    /*public TextField getUserInputField() {
-        return userInputField;
-    }
-
-    public Button getOkButton() {
-        return okButton;
-    }
-
-    public Node getSuccessLabel() {
-        return successLabel;
-    }
-     */

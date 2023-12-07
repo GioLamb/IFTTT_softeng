@@ -18,13 +18,8 @@
                 </font>
             </Label>
             <Button layoutX="16.0" layoutY="78.0" mnemonicParsing="false" onAction="#newRule" prefHeight="43.0" prefWidth="142.0" text="Nuova Regola" />
-            <!--<Button layoutX="16.0" layoutY="220.0" mnemonicParsing="false" onAction="#writeToFileAction" prefHeight="43.0" prefWidth="142.0" text="Scrivi su file" /> -->
             <Button fx:id="deleteButton" disable="true" layoutX="16.0" layoutY="150.0" mnemonicParsing="false" onAction="#deleteRule" prefHeight="43.0" prefWidth="142.0" text="Cancella Regola" textFill="RED" />
-            <!--
-            <Button fx:id="okButton" layoutX="16.0" layoutY="350.0" mnemonicParsing="false" onAction="#okButtonAction" text="OK" managed="false" visible="false" />
-            <Label fx:id="successLabel" layoutX="16.0" layoutY="380.0" text="" textFill="GREEN" managed="false" visible="false" />
-            <TextField fx:id="userInputField" layoutX="16.0" layoutY="300.0" prefHeight="43.0" prefWidth="142.0" promptText="Inserisci la tua stringa" managed="false" visible="false" />
-            -->
+         <Button fx:id="refreshButton" layoutX="39.0" layoutY="327.0" mnemonicParsing="false" onAction="#refresh" text="Aggiorna Table" />
         </Pane>
         <TableView fx:id="tableView" prefHeight="400.0" prefWidth="678.0" style="-fx-background-color: #1c1c1c;">
         </TableView>
