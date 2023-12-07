@@ -15,7 +15,7 @@ public class FactoryAction {
         } else if (nameAction.equals("Sposta un file")) {
             return new MoveFileAction(content, content2); // Crea e restituisce un oggetto MoveFileAction
         } else if (nameAction.equals("Elimina un file")) {
-            return new DeleteFileAction(content, content2); // Crea e restituisce un oggetto DeleteFileAction
+            return new DeleteFileAction(content); // Crea e restituisce un oggetto DeleteFileAction
         }
         /*else if (nameAction.equals("Scrittura su File")){
             return new WriteToFileAction(content, content);

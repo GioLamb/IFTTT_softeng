@@ -16,9 +16,8 @@ public class DeleteFileAction extends  FactoryAction implements Action{
     private File fileToDelete;
     private String content;
 
-    public DeleteFileAction (String file, String content){
+    public DeleteFileAction (String file){
         this.file = file;
-        this.content = content;
         this.fileToDelete = new File(file);
         this.alertConfirm = new Alert(Alert.AlertType.INFORMATION);
         this.alertConfirm.setTitle("AZIONE ESEGUITA");
@@ -38,7 +37,7 @@ public class DeleteFileAction extends  FactoryAction implements Action{
     }
     @Override
     public String getContent2() {
-        return content;
+        return null;
     }
 
     @Override

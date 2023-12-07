@@ -27,7 +27,7 @@ public class MoveFileAction extends  FactoryAction implements Action {
         this.alertConfirm.setHeaderText(null);
         this.alertConfirm.setContentText("Il file" + file + "è stato spostato nella directory" + directory);
         this.alertError = new Alert(Alert.AlertType.ERROR);
-        alertError.setContentText("Il file non esiste o la directory di destinazione non Ã¨ valida.");
+        alertError.setContentText("Il file non esiste o la directory di destinazione non è valida.");
     }
 
     @Override
@@ -47,7 +47,7 @@ public class MoveFileAction extends  FactoryAction implements Action {
 
     @Override
     public void execute() {
-        // Verifica se il file esiste e se la directory di destinazione Ã¨ una directory valida
+        // Verifica se il file esiste e se la directory di destinazione è una directory valida
         if (fileToMove.exists() && targetDirectory.isDirectory()) {
             try {
                 // Creazione degli oggetti Path per il file e la directory
@@ -55,12 +55,12 @@ public class MoveFileAction extends  FactoryAction implements Action {
                 Path fileDestination = Paths.get(directory, fileToMove.getName());
 
                 // Sposta il file nella directory di destinazione
-                // Se nella directory esiste giÃ  un file con lo stesso nome, viene sovrascritto dal file che si sta spostando
+                // Se nella directory esiste già un file con lo stesso nome, viene sovrascritto dal file che si sta spostando
                 Files.move(fileSource, fileDestination, StandardCopyOption.REPLACE_EXISTING);
                 alertConfirm.show();
                 alertConfirm.setOnCloseRequest(event -> onActionClose());
             } catch (IOException e) {
-                System.out.println("Si Ã¨ verificato un errore durante lo spostamento del file.");
+                System.out.println("Si è verificato un errore durante lo spostamento del file.");
                 e.printStackTrace();
             }
         } else {
