@@ -51,8 +51,12 @@ public class AlarmClock extends FactoryAction implements Action{
     }
 
     @Override
-    public String getContent() {
+    public String getContent1() {
         return audioFilePath;
+    }
+    @Override
+    public String getContent2() {
+        return null;
     }
 
     public Stage getDialogStage(){
