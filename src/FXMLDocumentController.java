@@ -307,7 +307,7 @@ public class FXMLDocumentController extends Application {
                 java.io.File selectedDirectory = directoryChooser.showDialog(stage);
                 if (selectedDirectory != null) {
                     this.fileButton2.setText(selectedDirectory.getAbsolutePath()); // cambiamo il testo del bottone con il path del file
-                    this.content = selectedDirectory.getAbsolutePath();
+                    this.content2 = selectedDirectory.getAbsolutePath();
                 }
                 break;
         }
