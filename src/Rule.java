@@ -37,9 +37,10 @@ public class Rule{
             this.nameAction.set(nameAction);
             this.nameTrigger.set(nameTrigger);
             actionContent.set(content);
+            this.content2=content2;
             triggerContent.set(time.toString());
             //Utilizza la FactoryAction per creare un'istanza dell'azione in base al nome e al contenuto
-            this.action = new FactoryAction().createConcreteAction(nameAction, content);
+            this.action = new FactoryAction().createConcreteAction(nameAction, content, content2);
             //Utilizza la FactoryTrigger per creare un'istanza del trigger in base al nome e all'orario
             this.trigger = new FactoryTrigger().createConcreteTrigger(nameTrigger, time);
             this.oneTime = oneTime;
@@ -48,7 +49,6 @@ public class Rule{
             this.sleepMinutes = sleepMinutes;
             this.recurrent = recurrent;
             this.repeat = repeat;
-            this.content2=content2;
             setState(state);
             this.nowPlusSleep = nowPlusSleep;
         }

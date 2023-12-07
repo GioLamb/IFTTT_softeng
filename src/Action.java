@@ -1,6 +1,7 @@
 public interface Action {
     public String getName();
-    public String getContent();
+    public String getContent1();
+    public String getContent2();
     public void execute();
     public void onActionClose();
     // Nuovo metodo specifico per l'azione di scrittura su file
