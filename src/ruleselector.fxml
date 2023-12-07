@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.TextArea?>
 <AnchorPane prefHeight="400.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLDocumentController">
    <children>
    <Pane prefHeight="400.0" prefWidth="601.0" style="-fx-background-color: #242124;">
@@ -27,6 +28,7 @@
                        <FXCollections fx:factory="observableArrayList">
                           <String fx:value="Promemoria" />
                           <String fx:value="Sveglia" />
+                          <String fx:value="Scrivi in un file"/>
                           <String fx:value="Copia un file" />
                           <String fx:value="Sposta un file" />
                           <String fx:value="Elimina un file" />
@@ -93,8 +95,9 @@
                </items>
             </ComboBox>
             <TextField fx:id="messageField" layoutX="226.0" layoutY="105.0" prefHeight="25.0" prefWidth="174.0" promptText="Inserisci un messaggio..." visible="false" />
-            <Button fx:id="fileButton" layoutX="226.0" layoutY="105.0" mnemonicParsing="false" onAction="#selectFile" prefHeight="25.0" prefWidth="174.0" text="Seleziona un file" visible="false" />
-            <TextField fx:id="messageField2" layoutX="439.0" layoutY="105.0" promptText="Inserisci un messaggio..." visible="false" />
+         <Button fx:id="fileButton" layoutX="226.0" layoutY="105.0" mnemonicParsing="false" onAction="#selectFile" prefHeight="25.0" prefWidth="174.0" text="Seleziona un file" visible="false" />
+         <TextArea fx:id="messageArea" layoutX="226.0" layoutY="105.0" prefHeight="25.0" prefWidth="274.0" promptText="Inserisci il messaggio..." visible="false"/>
+         <TextField fx:id="messageField2" layoutX="439.0" layoutY="105.0" promptText="Inserisci un messaggio..." visible="false" />
             <TextField fx:id="minutesSelector" layoutX="292.0" layoutY="188.0" onKeyTyped="#checkMinutes" prefHeight="25.0" prefWidth="42.0" visible="false" />
             <TextField fx:id="hourSelector" layoutX="226.0" layoutY="188.0" onKeyTyped="#checkHours" prefHeight="25.0" prefWidth="42.0" visible="false" />
             <CheckBox fx:id="oneTimeSelector" layoutX="74.0" layoutY="273.0" mnemonicParsing="false" onAction="#oneTimeCheck" text="Solo una volta" textFill="WHITE" />
