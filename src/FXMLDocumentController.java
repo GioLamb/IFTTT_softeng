@@ -688,8 +688,13 @@ public class FXMLDocumentController extends Application {
         while (sc.hasNext())  //returns a boolean value
         {
             String[] elements = sc.next().split("\n");
-            Integer content3 = Integer.parseInt(elements[5]);
-            String[] hoursMinutes = elements[6].split(":");
+            if(elements[6].equals("null")){
+                content3 = null;
+            }
+            else {
+                Integer content3 = Integer.parseInt(elements[6]);
+            }
+            String[] hoursMinutes = elements[5].split(":");
             Integer h = Integer.parseInt(hoursMinutes[0]);
             Integer m = Integer.parseInt(hoursMinutes[1]);
             Integer sd = Integer.parseInt(elements[8]);
@@ -743,13 +748,6 @@ public class FXMLDocumentController extends Application {
 
     public Node getLabelSleepMinute() {
         return labelSleepMinute;
-    }
-
-    public void checkHourNumber(KeyEvent event) {
-        
-    }
-
-    public void checkMinuteNumber(KeyEvent event) {
     }
 }
 
