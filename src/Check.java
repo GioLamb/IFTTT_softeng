@@ -19,13 +19,13 @@ public class Check extends Thread {
                 Iterator<Rule> iterator = rm.getRules().iterator(); // creiamo un iteratore per la collezione di regole
                 while (iterator.hasNext()) { // fin quando esiste un oggetto Rule
                     Rule rule = iterator.next(); // lo preleviamo
-                    if (rule.getState().get()) {
+                    if (rule.getState() instanceof ActiveState) {
                         if (rule.getTrigger() instanceof TriggerTime) { // preleviamo il trigger
                             //caso in cui la regola che può essere eseguita una sola volta ed il trigger è verificato
                             if ((((TriggerTime) rule.getTrigger()).isTimeToTrigger(LocalTime.now())) && (rule.getOneTime())) {
                                 // eseguiamo l'azione annessa
                                 rule.getAction().execute();
-                                rule.changeState();
+                                rule.getState().deactivate();
                             }
                             //Caso in cui la regola può essere rieseguita dopo un periodo di sleep.
                             //Se il trigger è attivo e la regola può essere eseguita(prima volta)
@@ -59,7 +59,7 @@ public class Check extends Thread {
                             if ((((TriggerDayOfWeek) rule.getTrigger()).isTimeToTrigger(LocalDateTime.now())) && (rule.getOneTime())) {
                                 // eseguiamo l'azione annessa
                                 rule.getAction().execute();
-                                rule.changeState();
+                                rule.getState().deactivate();
                             }
                             //Caso in cui la regola può essere rieseguita dopo un periodo di sleep.
                             //Se il trigger è attivo e la regola può essere eseguita(prima volta)
@@ -93,7 +93,7 @@ public class Check extends Thread {
                             if ((((TriggerDayOfMonth) rule.getTrigger()).isTimeToTrigger(LocalDateTime.now())) && (rule.getOneTime())) {
                                 // eseguiamo l'azione annessa
                                 rule.getAction().execute();
-                                rule.changeState();
+                                rule.getState().deactivate();
                             }
                             //Caso in cui la regola può essere rieseguita dopo un periodo di sleep.
                             //Se il trigger è attivo e la regola può essere eseguita(prima volta)

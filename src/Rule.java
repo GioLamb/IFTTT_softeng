@@ -1,4 +1,5 @@
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -7,7 +8,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class Rule{
+public class Rule {
     // Variabili d'istanza private per memorizzare un'azione, un trigger e informazioni sulla regola
     private Action action;
     private Trigger trigger;
@@ -16,8 +17,8 @@ public class Rule{
     private StringProperty nameAction = new SimpleStringProperty();
     private StringProperty actionContent = new SimpleStringProperty();
     private StringProperty triggerContent = new SimpleStringProperty();
+    private BooleanProperty stateValue = new SimpleBooleanProperty();
     private State state;
-
     private Boolean oneTime;
     private Boolean recurrent;
     private int sleepDays;
@@ -33,7 +34,7 @@ public class Rule{
 
     //Costruttore della classe Rule che accetta il nome della regola, il nome dell'azione,
     //il nome del trigger, il contenuto dell'azione e l'orario del trigger come parametri
-    public Rule(String nameRule, String nameAction, String nameTrigger, String content, String content2, Integer content3, LocalTime time, Boolean oneTime, int sleepDays, int sleepHours, int sleepMinutes, Boolean recurrent, Boolean repeat, Boolean aBoolean, LocalDateTime nowPlusSleep) {
+    public Rule(String nameRule, String nameAction, String nameTrigger, String content, String content2, Integer content3, LocalTime time, Boolean oneTime, int sleepDays, int sleepHours, int sleepMinutes, Boolean recurrent, Boolean state, Boolean repeat, LocalDateTime nowPlusSleep) {
         //Inizializza le variabili d'istanza con i valori forniti
         this.nameRule.set(nameRule);
         this.nameAction.set(nameAction);
@@ -50,9 +51,14 @@ public class Rule{
         this.sleepMinutes = sleepMinutes;
         this.recurrent = recurrent;
         this.repeat = repeat;
-        this.content2=content2;
+        this.content2 = content2;
         this.content3 = content3;
-        this.state = new ActiveState(this);
+        if(state){
+            this.state = new ActiveState(this);
+        }
+        else{
+            this.state = new DeactiveState(this);
+        }
         this.nowPlusSleep = nowPlusSleep;
         setNowPlusSleep(nowPlusSleep);
     }
@@ -97,35 +103,42 @@ public class Rule{
     }
 
     @Override
-    public String toString(){
-        return ""+getNameRule().get()+","+getNameAction().get()+","+getAction()+","+getNameTrigger().get()+","+getTrigger();
+    public String toString() {
+        return "" + getNameRule().get() + "," + getNameAction().get() + "," + getAction() + "," + getNameTrigger().get() + "," + getTrigger();
     }
 
     public StringProperty getTriggerContent() {
         return triggerContent;
     }
-    public Integer getContent3(){return content3;}
+
+    public Integer getContent3() {
+        return content3;
+    }
 
     public StringProperty getActionContent() {
         return actionContent;
     }
+
     public String getActionContent2() {
         return content2;
     }
 
-    public BooleanProperty getState() {
-        return state.get();
+    public State getState() {
+        return state;
     }
 
-    public void setState(State state) {
+    public BooleanProperty getStateValue() {
+        return stateValue;
+    }
+
+    public void changeState(State state){
         this.state = state;
-    }
-    public void changeState(){
-        state.deactivate();
-    }
-
-    public BooleanProperty activeProperty(){
-        return state.get();
+        if (state instanceof ActiveState){
+            stateValue.set(true);
+        }
+        else{
+            stateValue.set(false);
+        }
     }
     public Boolean getOneTime(){
         return this.oneTime;

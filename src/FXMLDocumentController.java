@@ -57,9 +57,6 @@ public class FXMLDocumentController extends Application {
     private ComboBox actionSelector = new ComboBox<>();
 
     @FXML
-    private Button buttonAudio = new Button();
-
-    @FXML
     private TextField hourSelector = new TextField();
 
     @FXML
@@ -127,7 +124,7 @@ public class FXMLDocumentController extends Application {
         actionContentView.setCellValueFactory(cellData -> cellData.getValue().getActionContent());
         triggerView.setCellValueFactory(cellData -> cellData.getValue().getNameTrigger());
         triggerContentView.setCellValueFactory(cellData -> cellData.getValue().getTriggerContent());
-        stateView.setCellValueFactory(cellData -> cellData.getValue().activeProperty());
+        stateView.setCellValueFactory(cellData -> cellData.getValue().getStateValue());
         plusSleepView.setCellValueFactory(cellData -> cellData.getValue().getNowPlusSleepFormat());
         tableView.getColumns().addAll(ruleNameView, actionView, actionContentView, triggerView, triggerContentView, stateView, plusSleepView);
         // impostiamo le scelte da poter effettuare con il tasto sinistro
@@ -135,13 +132,13 @@ public class FXMLDocumentController extends Application {
         MenuItem deactive = new MenuItem("Disattiva");
         active.setOnAction(event -> {
             Rule selectedData = tableView.getSelectionModel().getSelectedItem();
-            selectedData.changeState();
+            selectedData.getState().activate();
             tableView.refresh();
         });
 
         deactive.setOnAction(event -> {
             Rule selectedData = tableView.getSelectionModel().getSelectedItem();
-            selectedData.changeState();
+            selectedData.getState().deactivate();
             tableView.refresh();
         });
         contextMenu.getItems().addAll(active, deactive);
@@ -149,10 +146,6 @@ public class FXMLDocumentController extends Application {
         tableView.setRowFactory(tv -> {
             TableRow<Rule> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY) {
-                    Rule selectedRule = row.getItem();
-                    selectedRule.changeState();
-                }
                 if (!row.isEmpty() && event.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
                     contextMenu.show(tableView, event.getScreenX(), event.getScreenY());
                 }
@@ -161,6 +154,7 @@ public class FXMLDocumentController extends Application {
         });
         //Listener-Handler utilizzata per poter abilitare il bottone di cancellazione della regola
         //quando viene fatto un click sinistro su una regola da voler cancellare
+
         tableView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 //Abilita il deleteButton quando si effettua un click sinistro
@@ -675,7 +669,7 @@ public class FXMLDocumentController extends Application {
                         item.getNameTrigger().get() + "\n" + item.getActionContent().get() + "\n" + item.getActionContent2() +
                         "\n" + item.getTriggerContent().get() +"\n" + item.getContent3() + "\n" + item.getOneTime() +
                         "\n" + item.getSleepDays() + "\n" + item.getSleepHours() + "\n" + item.getSleepMinutes() +
-                        "\n" + item.getRecurrent() + "\n" + item.getState().get() + "\n" + item.getRepeat() +
+                        "\n" + item.getRecurrent() + "\n" + item.getStateValue().get() + "\n" + item.getRepeat() +
                         "\n" + item.getNowPlusSleep() + "\n\n");
             }
         } catch (IOException e) {

@@ -15,12 +15,7 @@ public class DeactiveState extends Context{
     }
 
     @Override
-    public BooleanProperty get() {
-        return new SimpleBooleanProperty(false);
-    }
-
-    @Override
     public void activate(){
-        rule.setState(new ActiveState(rule));
+        rule.changeState(new ActiveState(rule));
     }
 }
