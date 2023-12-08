@@ -44,7 +44,7 @@ Di seguito è possibile visualizzare un file .svg, in cui è rappresentata nel t
 Per la realizzazione del Product Backlog abbiamo utilizzato un foglio di calcolo Google Sheets disponibile al seguente [link.](https://docs.google.com/spreadsheets/d/1Jg-jbu-lqLK0X6i5f5sSLkYn4Eur-_I_bi0ZIpJWjm4/edit?usp=sharing)
 Abbiamo diviso le diverse User Story secondo il numero dell'User Epic corrispondente, per ognuna di esse abbiamo tracciato delle Acceptance Criteria (criteri di accettazione).
 ## Sprint Backlog n°1
-Per la Sprint Backlog abbiamo realizzato un foglio di calcolo su Google Sheets, consultabile a questo [link.](https://docs.google.com/spreadsheets/d/1Jg-jbu-lqLK0X6i5f5sSLkYn4Eur-_I_bi0ZIpJWjm4/edit?usp=sharing)
+Per la Sprint Backlog abbiamo realizzato un foglio di calcolo su Google Sheets, consultabile a questo [link.](https://docs.google.com/spreadsheets/d/1Jg-jbu-lqLK0X6i5f5sSLkYn4Eur-_I_bi0ZIpJWjm4/edit#gid=1742790855)
 Abbiamo selezionato le User Story a priorità maggiore e abbiamo assegnato ad ognuna di esse un peso valutato in Story Points (per il costo degli Story Points abbiamo fatto riferimento ai valori della sequenza di Fibonacci).
 In questa sprint ci siamo concentrati sulla realizzazione dell'interfaccia grafica e delle funzionalità principali del software come, ad esempio, la realizzazione di un promemoria o di una sveglia.
 ## Sprint Backlog n°2
