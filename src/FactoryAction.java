@@ -17,7 +17,7 @@ public class FactoryAction {
         } else if (nameAction.equals("Elimina un file")) {
             return new DeleteFileAction(content); // Crea e restituisce un oggetto DeleteFileAction
         }else if (nameAction.equals("Scrittura su File")){
-            return new WriteToFileAction(content, content2);
+            return new WriteToFileAction(content, content2); //Crea e restituisce un oggetto WriteToFileAction
         }
         else {
             // Se il nome dell'azione non corrisponde a nessuno dei casi precedenti, lancia un'eccezione
