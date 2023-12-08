@@ -14,15 +14,28 @@ Per gestire la creazione di regole da parte dell'utente, ci siamo avvalsi del pa
 La classe `Rule` viene invocata da `RuleManager`, il cui obiettivo è quello di gestire un insieme di regole, non solo raccogliendo la creazione di queste ultime da interfaccia grafica, ma anche permettendo l'aggiunta di nuove regole all'intero sistema. Per questa classe abbiamo utilizzato il pattern Singleton, in modo tale da poter avere sempre una sola istanza di `RuleManager`. 
 La classe `Check` estende la classe `Thread` e gestisce l'attivazione del trigger, permettendo l'esecuzione dell'azione associata, e quindi dell'intera regola.
 Per la rappresentazione delle sottoclassi abbiamo sfruttato il pattern Composite, utile a fornire una struttura ad albero al nostro programma.
-Tra le foglie dell'albero di `Action` notiamo due classi:
+Tra le foglie dell'albero di `Action` notiamo diverse classi come:
 1. `DisplayMessage`
    Rappresenta la classe che si occuperà di legare alla regola la funzione di visualizzare un messaggio scritto dall'utente allo scoccare di un determinato orario anch'esso selezionato dall'utente.
 2. `AlarmClock`
     Rappresenta la classe che si occuperà di legare alla regola la funzione di riprodurre un file audio scelto dall'utente allo scoccare di un determinato orario anch'esso selezionato dall'utente.
+3. `WriteToFileAction`
+   Rappresenta la classe che si occupa della scrittura di un testo scritto dall'untente su un file selezionato in fase id creazione
+4. `MoveFileAction`
+   Rappresenta la classe che si occupa di spostare un file selezionato all'interno di una cartella scelta
+5. `ActionCopy`
+   Rappresenta la classe che si occupa di copiare un file selezionato all'interno di una cartella scelta
+6. `DeleteFileAction`
+   Rappresenta la classe che si occupa di eliminare un file selezionato dall'utente.
 
 Mentra tra le foglie dell'albero `Trigger` notiamo una singola classe:
 1. `TriggerTime`
    Rappresenta la classe che si occuperà di impostare un orario per l'oggetto regola annesso.
+2. `TriggerDayOfMonth`
+   Rappresenta la classe che si occuperà di impostare l'esecuzione della regola al giorno del mese selezionato. 
+3. `TriggerDayOfWeek`
+   Rappresenta la classe che si occuperà di impostare l'esecuzione della regola al giorno della settimana selezionato.
+
 
 Di seguito è possibile visualizzare un file .svg, in cui è rappresentata nel totale l'architettura dell'intero software, [a questo link.](https://raw.githubusercontent.com/GioLamb/IFTTT_softeng/main/Architettura_IFTTT.svg)
 ## Definiton of Done (DoD)
