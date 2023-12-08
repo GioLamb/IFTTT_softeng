@@ -50,3 +50,8 @@ In questa sprint ci siamo concentrati sulla realizzazione dell'interfaccia grafi
 ## Sprint Backlog n°2
 Per la seconda Sprint Backlog abbiamo realizzato un foglio di calcolo su Google Sheets, consultabile a questo [link.](https://docs.google.com/spreadsheets/d/1Jg-jbu-lqLK0X6i5f5sSLkYn4Eur-_I_bi0ZIpJWjm4/edit#gid=1465735659).
 In questa sprint abbiamo implementato nuove funzionalità come la scrittura e lettura su file delle regole in maniera automatica oppure la possibilità di eseguire una regola una o più volte.
+## Sprint Backlog n°3
+Per la terza Sprint Backlog abbiamo realizzato un foglio di calcolo su Google Sheets, consultabile a questo [link.](https://docs.google.com/spreadsheets/d/1Jg-jbu-lqLK0X6i5f5sSLkYn4Eur-_I_bi0ZIpJWjm4/edit#gid=156001873).
+In questa sprint abbiamo implementato nuove funzionalità come l'aggiunta di nuove azioni e nuovi trigger di attivazione.
+Sono state aggiunte azioni di: scrittura in un file, copia di un file, spostamento di un file ed eliminazione di un file.
+Sono stati aggiunti trigger "giorno specifico della settimana" e "giorno specifico del mese.
