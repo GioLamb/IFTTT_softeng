@@ -33,12 +33,12 @@ public class WriteToFileAction extends FactoryAction implements Action {
 
     @Override
     public String getContent1() {
-        return null;
+        return filePath;
     }
 
     @Override
     public String getContent2() {
-        return null;
+        return content;
     }
 
 
