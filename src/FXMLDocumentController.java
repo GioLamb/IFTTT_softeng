@@ -44,7 +44,7 @@ public class FXMLDocumentController extends Application {
     public TableColumn<Rule, String> triggerView = new TableColumn<>("Nome Trigger");
     public TableColumn<Rule, String> triggerContentView = new TableColumn<>("Contenuto Trigger");
     public TableColumn<Rule, Boolean> stateView = new TableColumn<>("Stato");
-    public TableColumn<Rule, String> plusSleepView = new TableColumn<>("Nuova ripetizione");
+    public TableColumn<Rule, String> plusSleepView = new TableColumn<>("Ripetibile a partire da");
     public ContextMenu contextMenu = new ContextMenu();
     private Stage stage;
     private Scene scene;
@@ -689,11 +689,17 @@ public class FXMLDocumentController extends Application {
         while (sc.hasNext())  //returns a boolean value
         {
             String[] elements = sc.next().split("\n");
+            if(elements[4].equals("null")){
+                content2 = null;
+            }
+            else {
+                content2 = elements[4];
+            }
             if(elements[6].equals("null")){
                 content3 = null;
             }
             else {
-                Integer content3 = Integer.parseInt(elements[6]);
+                content3 = Integer.parseInt(elements[6]);
             }
             String[] hoursMinutes = elements[5].split(":");
             Integer h = Integer.parseInt(hoursMinutes[0]);
@@ -707,7 +713,7 @@ public class FXMLDocumentController extends Application {
             Boolean repeat = Boolean.parseBoolean(elements[13]);
             nowPlusSleep = LocalDateTime.parse(elements[14]);
             // inseriamo il nuovo elemento
-            rm.addRule(elements[0], elements[1], elements[2], elements[3], elements[4], content3, LocalTime.of(h, m), oneTime, sd, sh, sm, recurrent, state, repeat, nowPlusSleep);
+            rm.addRule(elements[0], elements[1], elements[2], elements[3], content2, content3, LocalTime.of(h, m), oneTime, sd, sh, sm, recurrent, state, repeat, nowPlusSleep);
 
         }
         sc.close();  //closes the scanner
