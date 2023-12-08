@@ -55,4 +55,7 @@ public class TriggerTime extends FactoryTrigger implements Trigger {
     public LocalTime getTime() {
         return triggerTime;
     }
+    public Boolean isTriggered() {
+        return isTriggered;
+    }
 }

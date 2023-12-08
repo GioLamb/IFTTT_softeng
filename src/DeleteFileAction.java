@@ -14,7 +14,6 @@ public class DeleteFileAction extends  FactoryAction implements Action{
     Alert alertError;
     private String file;
     private File fileToDelete;
-    private String content;
 
     public DeleteFileAction (String file){
         this.file = file;
