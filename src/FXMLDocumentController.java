@@ -2,6 +2,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -125,7 +127,7 @@ public class FXMLDocumentController extends Application {
         actionContentView.setCellValueFactory(cellData -> cellData.getValue().getActionContent());
         triggerView.setCellValueFactory(cellData -> cellData.getValue().getNameTrigger());
         triggerContentView.setCellValueFactory(cellData -> cellData.getValue().getTriggerContent());
-        stateView.setCellValueFactory(cellData -> cellData.getValue().getState());
+        stateView.setCellValueFactory(cellData -> cellData.getValue().activeProperty());
         plusSleepView.setCellValueFactory(cellData -> cellData.getValue().getNowPlusSleepFormat());
         tableView.getColumns().addAll(ruleNameView, actionView, actionContentView, triggerView, triggerContentView, stateView, plusSleepView);
         // impostiamo le scelte da poter effettuare con il tasto sinistro
@@ -133,12 +135,14 @@ public class FXMLDocumentController extends Application {
         MenuItem deactive = new MenuItem("Disattiva");
         active.setOnAction(event -> {
             Rule selectedData = tableView.getSelectionModel().getSelectedItem();
-            selectedData.setState(true);
+            selectedData.changeState();
+            tableView.refresh();
         });
 
         deactive.setOnAction(event -> {
             Rule selectedData = tableView.getSelectionModel().getSelectedItem();
-            selectedData.setState(false);
+            selectedData.changeState();
+            tableView.refresh();
         });
         contextMenu.getItems().addAll(active, deactive);
 
@@ -146,7 +150,8 @@ public class FXMLDocumentController extends Application {
             TableRow<Rule> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY) {
-                    Rule selecctedRule = row.getItem();
+                    Rule selectedRule = row.getItem();
+                    selectedRule.changeState();
                 }
                 if (!row.isEmpty() && event.getButton() == javafx.scene.input.MouseButton.SECONDARY) {
                     contextMenu.show(tableView, event.getScreenX(), event.getScreenY());

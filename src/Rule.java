@@ -1,5 +1,4 @@
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -9,53 +8,54 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Rule{
-        // Variabili d'istanza private per memorizzare un'azione, un trigger e informazioni sulla regola
-        private Action action;
-        private Trigger trigger;
-        private StringProperty nameRule = new SimpleStringProperty();
-        private StringProperty nameTrigger = new SimpleStringProperty();
-        private StringProperty nameAction = new SimpleStringProperty();
-        private StringProperty actionContent = new SimpleStringProperty();
-        private StringProperty triggerContent = new SimpleStringProperty();
-        private BooleanProperty state=new SimpleBooleanProperty();
-        private Boolean oneTime;
-        private Boolean recurrent;
-        private int sleepDays;
-        private int sleepHours;
-        private int sleepMinutes;
-        private LocalDateTime now;
-        private LocalDateTime nowPlusSleep;
-        private Boolean repeat;
+    // Variabili d'istanza private per memorizzare un'azione, un trigger e informazioni sulla regola
+    private Action action;
+    private Trigger trigger;
+    private StringProperty nameRule = new SimpleStringProperty();
+    private StringProperty nameTrigger = new SimpleStringProperty();
+    private StringProperty nameAction = new SimpleStringProperty();
+    private StringProperty actionContent = new SimpleStringProperty();
+    private StringProperty triggerContent = new SimpleStringProperty();
+    private State state;
 
-        private String content2;
-        private Integer content3;
-        private StringProperty nowPlusSleepFormat = new SimpleStringProperty();
+    private Boolean oneTime;
+    private Boolean recurrent;
+    private int sleepDays;
+    private int sleepHours;
+    private int sleepMinutes;
+    private LocalDateTime now;
+    private LocalDateTime nowPlusSleep;
+    private Boolean repeat;
 
-        //Costruttore della classe Rule che accetta il nome della regola, il nome dell'azione,
-        //il nome del trigger, il contenuto dell'azione e l'orario del trigger come parametri
-        public Rule(String nameRule, String nameAction, String nameTrigger, String content, String content2, Integer content3, LocalTime time, Boolean oneTime, int sleepDays, int sleepHours, int sleepMinutes, Boolean recurrent, Boolean state, Boolean repeat, LocalDateTime nowPlusSleep) {
-            //Inizializza le variabili d'istanza con i valori forniti
-            this.nameRule.set(nameRule);
-            this.nameAction.set(nameAction);
-            this.nameTrigger.set(nameTrigger);
-            actionContent.set(content);
-            triggerContent.set(time.toString());
-            //Utilizza la FactoryAction per creare un'istanza dell'azione in base al nome e al contenuto
-            this.action = new FactoryAction().createConcreteAction(nameAction, content, content2);
-            //Utilizza la FactoryTrigger per creare un'istanza del trigger in base al nome e all'orario
-            this.trigger = new FactoryTrigger().createConcreteTrigger(nameTrigger, time, content3);
-            this.oneTime = oneTime;
-            this.sleepDays = sleepDays;
-            this.sleepHours = sleepHours;
-            this.sleepMinutes = sleepMinutes;
-            this.recurrent = recurrent;
-            this.repeat = repeat;
-            this.content2=content2;
-            this.content3 = content3;
-            setState(state);
-            this.nowPlusSleep = nowPlusSleep;
-            setNowPlusSleep(nowPlusSleep);
-        }
+    private String content2;
+    private Integer content3;
+    private StringProperty nowPlusSleepFormat = new SimpleStringProperty();
+
+    //Costruttore della classe Rule che accetta il nome della regola, il nome dell'azione,
+    //il nome del trigger, il contenuto dell'azione e l'orario del trigger come parametri
+    public Rule(String nameRule, String nameAction, String nameTrigger, String content, String content2, Integer content3, LocalTime time, Boolean oneTime, int sleepDays, int sleepHours, int sleepMinutes, Boolean recurrent, Boolean repeat, Boolean aBoolean, LocalDateTime nowPlusSleep) {
+        //Inizializza le variabili d'istanza con i valori forniti
+        this.nameRule.set(nameRule);
+        this.nameAction.set(nameAction);
+        this.nameTrigger.set(nameTrigger);
+        actionContent.set(content);
+        triggerContent.set(time.toString());
+        //Utilizza la FactoryAction per creare un'istanza dell'azione in base al nome e al contenuto
+        this.action = new FactoryAction().createConcreteAction(nameAction, content, content2);
+        //Utilizza la FactoryTrigger per creare un'istanza del trigger in base al nome e all'orario
+        this.trigger = new FactoryTrigger().createConcreteTrigger(nameTrigger, time, content3);
+        this.oneTime = oneTime;
+        this.sleepDays = sleepDays;
+        this.sleepHours = sleepHours;
+        this.sleepMinutes = sleepMinutes;
+        this.recurrent = recurrent;
+        this.repeat = repeat;
+        this.content2=content2;
+        this.content3 = content3;
+        this.state = new ActiveState(this);
+        this.nowPlusSleep = nowPlusSleep;
+        setNowPlusSleep(nowPlusSleep);
+    }
 
     //Sovrascrive il metodo equals della classe Object
     @Override
@@ -98,7 +98,7 @@ public class Rule{
 
     @Override
     public String toString(){
-            return ""+getNameRule().get()+","+getNameAction().get()+","+getAction()+","+getNameTrigger().get()+","+getTrigger();
+        return ""+getNameRule().get()+","+getNameAction().get()+","+getAction()+","+getNameTrigger().get()+","+getTrigger();
     }
 
     public StringProperty getTriggerContent() {
@@ -114,11 +114,18 @@ public class Rule{
     }
 
     public BooleanProperty getState() {
-        return state;
+        return state.get();
     }
 
-    public void setState(Boolean state) {
-            this.state.set(state);
+    public void setState(State state) {
+        this.state = state;
+    }
+    public void changeState(){
+        state.deactivate();
+    }
+
+    public BooleanProperty activeProperty(){
+        return state.get();
     }
     public Boolean getOneTime(){
         return this.oneTime;
@@ -169,6 +176,6 @@ public class Rule{
         nowPlusSleepFormat.set(nowPlusSleep.format(formatter));
     }
     public StringProperty getNowPlusSleepFormat(){
-            return nowPlusSleepFormat;
+        return nowPlusSleepFormat;
     }
 }

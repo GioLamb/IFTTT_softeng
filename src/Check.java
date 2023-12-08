@@ -25,7 +25,7 @@ public class Check extends Thread {
                             if ((((TriggerTime) rule.getTrigger()).isTimeToTrigger(LocalTime.now())) && (rule.getOneTime())) {
                                 // eseguiamo l'azione annessa
                                 rule.getAction().execute();
-                                rule.setState(false);
+                                rule.changeState();
                             }
                             //Caso in cui la regola può essere rieseguita dopo un periodo di sleep.
                             //Se il trigger è attivo e la regola può essere eseguita(prima volta)
@@ -59,7 +59,7 @@ public class Check extends Thread {
                             if ((((TriggerDayOfWeek) rule.getTrigger()).isTimeToTrigger(LocalDateTime.now())) && (rule.getOneTime())) {
                                 // eseguiamo l'azione annessa
                                 rule.getAction().execute();
-                                rule.setState(false);
+                                rule.changeState();
                             }
                             //Caso in cui la regola può essere rieseguita dopo un periodo di sleep.
                             //Se il trigger è attivo e la regola può essere eseguita(prima volta)
@@ -93,7 +93,7 @@ public class Check extends Thread {
                             if ((((TriggerDayOfMonth) rule.getTrigger()).isTimeToTrigger(LocalDateTime.now())) && (rule.getOneTime())) {
                                 // eseguiamo l'azione annessa
                                 rule.getAction().execute();
-                                rule.setState(false);
+                                rule.changeState();
                             }
                             //Caso in cui la regola può essere rieseguita dopo un periodo di sleep.
                             //Se il trigger è attivo e la regola può essere eseguita(prima volta)
