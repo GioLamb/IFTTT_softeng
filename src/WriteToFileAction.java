@@ -21,7 +21,7 @@ public class WriteToFileAction extends FactoryAction implements Action {
         this.alertConfirm = new Alert(Alert.AlertType.INFORMATION);
         this.alertConfirm.setTitle("AZIONE ESEGUITA");
         this.alertConfirm.setHeaderText(null);
-        this.alertConfirm.setContentText("Il contenuto è stato scritto nel file");
+        this.alertConfirm.setContentText("Il contenuto è stato scritto nel file " +filePath);
         this.alertError = new Alert(Alert.AlertType.ERROR);
         alertError.setContentText("Il file non esiste o non è un file regolare (directory)");
     }
@@ -51,9 +51,12 @@ public class WriteToFileAction extends FactoryAction implements Action {
                 alertConfirm.show();
                 alertConfirm.setOnCloseRequest(event -> onActionClose());
             } catch (IOException e) {
-                System.out.println("Si è verificato un errore durante la cancellazione del file.");
+                System.out.println("Si è verificato un errore durante la scrittura del contenuto nel file.");
                 e.printStackTrace();
             }
+        }else {
+            alertError.show();
+            alertError.setOnCloseRequest(event -> onActionClose());
         }
     }
 
