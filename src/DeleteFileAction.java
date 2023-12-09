@@ -19,11 +19,12 @@ public class DeleteFileAction extends  FactoryAction implements Action{
         this.file = file;
         this.fileToDelete = new File(file);
         this.alertConfirm = new Alert(Alert.AlertType.INFORMATION);
+        this.alertConfirm = new Alert(Alert.AlertType.INFORMATION);
         this.alertConfirm.setTitle("AZIONE ESEGUITA");
         this.alertConfirm.setHeaderText(null);
-        this.alertConfirm.setContentText("Il file" + file + " è stato eliminato.");
+        this.alertConfirm.setContentText("Il file " + file + " è stato eliminato");
         this.alertError = new Alert(Alert.AlertType.ERROR);
-        alertError.setContentText("Il file non esiste o non è un file regolare (directory)");
+        alertError.setContentText("Il file " + file + " non esiste o non è un file regolare (directory)");
     }
     @Override
     public String getName() {

@@ -25,9 +25,9 @@ public class MoveFileAction extends  FactoryAction implements Action {
         this.alertConfirm = new Alert(Alert.AlertType.INFORMATION);
         this.alertConfirm.setTitle("AZIONE ESEGUITA");
         this.alertConfirm.setHeaderText(null);
-        this.alertConfirm.setContentText("Il file" + file + "è stato spostato nella directory" + directory);
+        this.alertConfirm.setContentText("Il file " + file + " è stato spostato nella directory " + directory);
         this.alertError = new Alert(Alert.AlertType.ERROR);
-        alertError.setContentText("Il file non esiste o la directory di destinazione non è valida.");
+        alertError.setContentText("Il file" + file + " non esiste o la directory " + directory + " non è valida.");
     }
 
     @Override
