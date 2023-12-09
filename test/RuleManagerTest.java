@@ -11,8 +11,6 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RuleManagerTest {
-
-
     private RuleManager ruleManager;
     private ObservableList<Rule> rules;
     @BeforeAll

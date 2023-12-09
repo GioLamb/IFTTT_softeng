@@ -2,8 +2,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,8 +31,8 @@ public class FXMLDocumentController extends Application {
     private final File file = new File(filepath, "rules.txt");
     public Button fileButton = new Button();
     public TextField messageField2 = new TextField();
-    public ComboBox comboWeek = new ComboBox<>();
-    public ComboBox comboMonth = new ComboBox();
+    public ComboBox<Object> comboWeek = new ComboBox<>();
+    public ComboBox<Object> comboMonth = new ComboBox<>();
     public Button fileButton2 = new Button();
     private String nameTrigger;
     private String nameAction;
@@ -54,7 +52,7 @@ public class FXMLDocumentController extends Application {
     private TableView<Rule> tableView = new TableView<>();
 
     @FXML
-    private ComboBox actionSelector = new ComboBox<>();
+    private ComboBox<Object> actionSelector = new ComboBox<>();
 
     @FXML
     private TextField hourSelector = new TextField();
@@ -88,15 +86,10 @@ public class FXMLDocumentController extends Application {
     @FXML
     Button deleteButton = new Button();
     @FXML
-    private ComboBox triggerSelector = new ComboBox<>();
-    @FXML
-    private Button submitButton = new Button();
+    private ComboBox<Object> triggerSelector = new ComboBox<>();
     @FXML
     private TextArea messageArea = new TextArea();
 
-    private int sleepDays;
-    private int sleepHours;
-    private int sleepMinutes;
     private int hours;
     private int minutes;
     private String content;
@@ -104,7 +97,6 @@ public class FXMLDocumentController extends Application {
     private Integer content3 = null;
     private LocalTime time = LocalTime.of(0, 0);
     private Rule selectedRuleToDelete;
-    private Boolean repeat;
     private LocalDateTime nowPlusSleep;
 
     private final RuleManager rm = RuleManager.getInstance();
@@ -156,14 +148,10 @@ public class FXMLDocumentController extends Application {
         //quando viene fatto un click sinistro su una regola da voler cancellare
 
         tableView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                //Abilita il deleteButton quando si effettua un click sinistro
-                //su una regola da voler cancellare
-                deleteButton.setDisable(false);
-            } else {
-                //Altrimenti lo stesso bottone rimane disabilitato
-                deleteButton.setDisable(true);
-            }
+            //Abilita il deleteButton quando si effettua un click sinistro
+            //su una regola da voler cancellare
+            //Altrimenti lo stesso bottone rimane disabilitato
+            deleteButton.setDisable(event.getButton() != MouseButton.PRIMARY);
         });
 
         try { // creiamo dei bind per poter cambiare in maniera dinamica la visualizzazione degli elementi nella selezione delle regole
@@ -323,7 +311,7 @@ public class FXMLDocumentController extends Application {
 
             switch (actionSelector.getValue().toString()) {
                 case "Promemoria":
-                    content = messageField.getText().toString();
+                    content = messageField.getText();
                     nameAction = "Promemoria";
                     break;
                 case "Sveglia":
@@ -342,8 +330,8 @@ public class FXMLDocumentController extends Application {
                         a.show();
                         return;
                     }
-                    content = fileButton.textProperty().getValue().toString();
-                    content2 = messageArea.getText().toString();
+                    content = fileButton.textProperty().getValue();
+                    content2 = messageArea.getText();
                     break;
                 case "Elimina un file":
                     nameAction = "Elimina un file";
@@ -366,8 +354,8 @@ public class FXMLDocumentController extends Application {
                         a.show();
                         return;
                     }
-                    content = fileButton.textProperty().getValue().toString(); // path del file
-                    content2 = fileButton2.textProperty().getValue().toString(); // path della cartella
+                    content = fileButton.textProperty().getValue(); // path del file
+                    content2 = fileButton2.textProperty().getValue(); // path della cartella
                     break;
                 case "Sposta un file":
                     nameAction = "Sposta un file";
@@ -381,8 +369,8 @@ public class FXMLDocumentController extends Application {
                         a.show();
                         return;
                     }
-                    content = fileButton.textProperty().getValue().toString(); // path del file
-                    content2 = fileButton2.textProperty().getValue().toString(); // path della cartella
+                    content = fileButton.textProperty().getValue(); // path del file
+                    content2 = fileButton2.textProperty().getValue(); // path della cartella
 
                     break;
             }
@@ -446,7 +434,11 @@ public class FXMLDocumentController extends Application {
                         return;
                     }
 
-                    if (this.recurrentSelector.isSelected()) {
+            int sleepDays;
+            int sleepHours;
+            int sleepMinutes;
+            boolean repeat;
+            if (this.recurrentSelector.isSelected()) {
                         if (this.sleepDaySelector.getText().isEmpty()) {
                             Alert a = new Alert(Alert.AlertType.ERROR, "Inserire un valore nel campo 'Giorni' ");// inviamo un alert di errore
                             a.show();
@@ -475,8 +467,7 @@ public class FXMLDocumentController extends Application {
                             sleepDays = Integer.parseInt(this.sleepDaySelector.getCharacters().toString());
                             sleepHours = Integer.parseInt(this.sleepHourSelector.getCharacters().toString()); // convertiamo i valori in interi
                             sleepMinutes = Integer.parseInt(this.sleepMinuteSelector.getCharacters().toString());
-                            if (sleepHours >= 0 && sleepHours < 24 && sleepMinutes >= 0 && sleepMinutes < 60) { // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti
-                            } else {
+                            if (sleepDays < 0 || sleepHours < 0 || sleepHours >= 24 || sleepMinutes < 0 || sleepMinutes >= 60) { // eseguiamo un controllo per verificare la correttezza delle ore e dei minuti
                                 Alert a = new Alert(Alert.AlertType.ERROR, "L'orario inserito non è corretto.\n" + // inviamo un alert di errore
                                         "Le ore devono essere comprese tra 0 e 23\n" +
                                         "I minuti devono essere compresi tra 0 e 59.\n Riprovare");
@@ -484,16 +475,16 @@ public class FXMLDocumentController extends Application {
                                 return;
                             }
                         }
-                        this.repeat = true;
+                        repeat = true;
                     } else {
-                        this.sleepDays = 0;
-                        this.sleepHours = 0;
-                        this.sleepMinutes = 0;
-                        this.repeat = false;
+                        sleepDays = 0;
+                        sleepHours = 0;
+                        sleepMinutes = 0;
+                        repeat = false;
                     }
                     this.nowPlusSleep = LocalDateTime.of(LocalDate.now(), LocalTime.of(hours, minutes)).plusDays(sleepDays).plusHours(sleepHours).plusMinutes(sleepMinutes);
                     RuleManager rm = RuleManager.getInstance(); // accediamo al RuleManager e aggiungiamo la nuova regola
-                    rm.addRule("Regola #" + (rm.getRules().size() + 1), nameAction, nameTrigger, this.content, content2, content3, this.time, this.oneTimeSelector.isSelected(), this.sleepDays, this.sleepHours, this.sleepMinutes, this.recurrentSelector.isSelected(), true, this.repeat, this.nowPlusSleep);
+                    rm.addRule("Regola #" + (rm.getRules().size() + 1), nameAction, nameTrigger, this.content, content2, content3, this.time, this.oneTimeSelector.isSelected(), sleepDays, sleepHours, sleepMinutes, this.recurrentSelector.isSelected(), true, repeat, this.nowPlusSleep);
                     cancel(event);
             } catch(Exception e){
                 e.printStackTrace();
@@ -696,11 +687,11 @@ public class FXMLDocumentController extends Application {
                 content3 = Integer.parseInt(elements[6]);
             }
             String[] hoursMinutes = elements[5].split(":");
-            Integer h = Integer.parseInt(hoursMinutes[0]);
-            Integer m = Integer.parseInt(hoursMinutes[1]);
-            Integer sd = Integer.parseInt(elements[8]);
-            Integer sh = Integer.parseInt(elements[9]);
-            Integer sm = Integer.parseInt(elements[10]);
+            int h = Integer.parseInt(hoursMinutes[0]);
+            int m = Integer.parseInt(hoursMinutes[1]);
+            int sd = Integer.parseInt(elements[8]);
+            int sh = Integer.parseInt(elements[9]);
+            int sm = Integer.parseInt(elements[10]);
             Boolean oneTime = Boolean.parseBoolean(elements[7]);
             Boolean recurrent = Boolean.parseBoolean(elements[11]);
             Boolean state = Boolean.parseBoolean(elements[12]);

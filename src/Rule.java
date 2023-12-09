@@ -10,27 +10,27 @@ import java.util.Objects;
 
 public class Rule {
     // Variabili d'istanza private per memorizzare un'azione, un trigger e informazioni sulla regola
-    private Action action;
-    private Trigger trigger;
-    private StringProperty nameRule = new SimpleStringProperty();
-    private StringProperty nameTrigger = new SimpleStringProperty();
-    private StringProperty nameAction = new SimpleStringProperty();
-    private StringProperty actionContent = new SimpleStringProperty();
-    private StringProperty triggerContent = new SimpleStringProperty();
-    private BooleanProperty stateValue = new SimpleBooleanProperty();
-    private State state;
+    private final Action action;
+    private final Trigger trigger;
+    private final StringProperty nameRule = new SimpleStringProperty();
+    private final StringProperty nameTrigger = new SimpleStringProperty();
+    private final StringProperty nameAction = new SimpleStringProperty();
+    private final StringProperty actionContent = new SimpleStringProperty();
+    private final StringProperty triggerContent = new SimpleStringProperty();
+    private final BooleanProperty stateValue = new SimpleBooleanProperty();
+    private State state = new ActiveState(this);
     private Boolean oneTime;
     private Boolean recurrent;
-    private int sleepDays;
-    private int sleepHours;
-    private int sleepMinutes;
+    private final int sleepDays;
+    private final int sleepHours;
+    private final int sleepMinutes;
     private LocalDateTime now;
     private LocalDateTime nowPlusSleep;
     private Boolean repeat;
 
-    private String content2;
-    private Integer content3;
-    private StringProperty nowPlusSleepFormat = new SimpleStringProperty();
+    private final String content2;
+    private final Integer content3;
+    private final StringProperty nowPlusSleepFormat = new SimpleStringProperty();
 
     //Costruttore della classe Rule che accetta il nome della regola, il nome dell'azione,
     //il nome del trigger, il contenuto dell'azione e l'orario del trigger come parametri
@@ -53,14 +53,14 @@ public class Rule {
         this.repeat = repeat;
         this.content2 = content2;
         this.content3 = content3;
-        if(state){
-            this.state = new ActiveState(this);
-        }
-        else{
-            this.state = new DeactiveState(this);
-        }
         this.nowPlusSleep = nowPlusSleep;
         setNowPlusSleep(nowPlusSleep);
+        if (!state) {
+            this.state.deactivate();
+        } else {
+            this.state.activate();
+        }
+        this.stateValue.set(state);
     }
 
     //Sovrascrive il metodo equals della classe Object
@@ -104,7 +104,7 @@ public class Rule {
 
     @Override
     public String toString() {
-        return "" + getNameRule().get() + "," + getNameAction().get() + "," + getAction() + "," + getNameTrigger().get() + "," + getTrigger();
+        return getNameRule().get() + "," + getNameAction().get() + "," + getAction() + "," + getNameTrigger().get() + "," + getTrigger();
     }
 
     public StringProperty getTriggerContent() {
@@ -133,12 +133,7 @@ public class Rule {
 
     public void changeState(State state){
         this.state = state;
-        if (state instanceof ActiveState){
-            stateValue.set(true);
-        }
-        else{
-            stateValue.set(false);
-        }
+        stateValue.set(state instanceof ActiveState);
     }
     public Boolean getOneTime(){
         return this.oneTime;

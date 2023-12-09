@@ -10,12 +10,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class MoveFileAction extends  FactoryAction implements Action {
-    private Alert alertConfirm;
+    private final Alert alertConfirm;
     Alert alertError;
-    private String file;
-    private String directory;
-    private File fileToMove;
-    private File targetDirectory;
+    private final String file;
+    private final String directory;
+    private final File fileToMove;
+    private final File targetDirectory;
 
     public MoveFileAction (String file, String directory) {
         this.file = file;
