@@ -11,7 +11,7 @@ import java.nio.file.StandardCopyOption;
 
 public class ActionCopy extends  FactoryAction implements Action{
 
-    private final Alert alertConfirm;
+    private Alert alertConfirm;
     Alert alertError;
     private final String file;
     private final String directory;

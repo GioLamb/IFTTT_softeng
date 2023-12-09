@@ -10,20 +10,20 @@ import java.io.IOException;
 public class WriteToFileAction extends FactoryAction implements Action {
     private final String filePath;
     private final String content;
-    private final Alert alertConfirm;
-    private final File FileToWrite;
+    private  Alert alertConfirm;
     Alert alertError;
 
     public WriteToFileAction(String filePath, String content) {
-        this.FileToWrite = new File(filePath);
         this.filePath = filePath;
         this.content = content;
-        this.alertConfirm = new Alert(Alert.AlertType.INFORMATION);
-        this.alertConfirm.setTitle("AZIONE ESEGUITA");
-        this.alertConfirm.setHeaderText(null);
-        this.alertConfirm.setContentText("Il contenuto è stato scritto nel file " +filePath);
-        this.alertError = new Alert(Alert.AlertType.ERROR);
-        alertError.setContentText("Il file non esiste o non è un file regolare (directory)");
+        Platform.runLater(()->{
+            this.alertConfirm = new Alert(Alert.AlertType.INFORMATION);
+            this.alertConfirm.setTitle("AZIONE ESEGUITA");
+            this.alertConfirm.setHeaderText(null);
+            this.alertConfirm.setContentText("Il contenuto è stato scritto nel file " +filePath);
+            this.alertError = new Alert(Alert.AlertType.ERROR);
+            alertError.setContentText("Il file non esiste o non è un file regolare (directory)");
+        });
     }
 
     @Override
@@ -45,19 +45,22 @@ public class WriteToFileAction extends FactoryAction implements Action {
 
     @Override
     public void execute() {
-        if(FileToWrite.exists() && FileToWrite.isFile()) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-                writer.write(content);
-                alertConfirm.show();
-                alertConfirm.setOnCloseRequest(event -> onActionClose());
-            } catch (IOException e) {
-                System.out.println("Si è verificato un errore durante la scrittura del contenuto nel file.");
-                e.printStackTrace();
+        Platform.runLater(()->{
+            File file = new File(filePath);
+            if(file.exists() && file.isFile()) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+                    writer.write(content);
+                    alertConfirm.show();
+                    alertConfirm.setOnCloseRequest(event -> onActionClose());
+                } catch (IOException e) {
+                    System.out.println("Si è verificato un errore durante la scrittura del contenuto nel file.");
+                    e.printStackTrace();
+                }
+            }else {
+                alertError.show();
+                alertError.setOnCloseRequest(event -> onActionClose());
             }
-        }else {
-            alertError.show();
-            alertError.setOnCloseRequest(event -> onActionClose());
-        }
+        });
     }
 
     @Override

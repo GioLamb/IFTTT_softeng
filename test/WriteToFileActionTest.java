@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class WriteToFileActionTest {
 
-    private static final String TEST_FILE_PATH = "/Users/vivi/Documents/Test.txt";
-    private static final String TEST_CONTENT = "Hello, JUnit 5!";
+    private static final String TEST_FILE_PATH = "/Users/vivi/Documents/Text.txt";
+    private static final String TEST_CONTENT = "Ciao";
     private WriteToFileAction writeToFileAction;
 
     @BeforeAll
@@ -23,55 +23,41 @@ public class WriteToFileActionTest {
     }
     @BeforeEach
     void setUp() {
-        Platform.runLater(()->{
-            // Initialize the WriteToFileAction with test data
-            writeToFileAction = new WriteToFileAction(TEST_FILE_PATH, TEST_CONTENT);
-        });
+        writeToFileAction = new WriteToFileAction(TEST_FILE_PATH, TEST_CONTENT);
     }
 
     @Test
     void testExecute() {
-        Platform.runLater(()->{
-            // Perform the action
-            writeToFileAction.execute();
+        writeToFileAction.execute();
 
-            // Verify that the file was created
-            File file = new File(TEST_FILE_PATH);
-            assertTrue(file.exists());
 
-            // Verify the content of the file
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                String fileContent = reader.readLine();
-                assertEquals(TEST_CONTENT, fileContent);
-            } catch (IOException e) {
-                fail("Exception should not be thrown");
-            }
-        });
+        File file = new File(TEST_FILE_PATH);
+
+        assertTrue(file.exists());
+
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String fileContent = reader.readLine();
+            assertEquals(TEST_CONTENT, fileContent);
+        } catch (IOException e) {
+            fail("Exception should not be thrown");
+        }
     }
 
     @Test
     void testGetContent1() {
-        Platform.runLater(()->{
-            WriteToFileAction writeToFileAction = new WriteToFileAction("filePath", "fileContent");
-            // Ensure getContent1 returns the expected content
-            assertEquals("filePath", writeToFileAction.getContent1());
-        });
+        WriteToFileAction writeToFileAction = new WriteToFileAction(TEST_FILE_PATH, TEST_CONTENT);
+        assertEquals(TEST_FILE_PATH, writeToFileAction.getContent1());
     }
 
     @Test
     void testGetContent2() {
-        Platform.runLater(()->{
-            WriteToFileAction writeToFileAction = new WriteToFileAction("filePath", "fileContent");
-            // Ensure getContent2 returns null
-            assertEquals("fileContent", writeToFileAction.getContent2());
-        });
+        WriteToFileAction writeToFileAction = new WriteToFileAction(TEST_FILE_PATH, TEST_CONTENT);
+        assertEquals(TEST_CONTENT, writeToFileAction.getContent2());
     }
 
     @Test
     void testOnActionClose() {
-        Platform.runLater(()->{
-            // Ensure onActionClose does not throw any exceptions
-            assertDoesNotThrow(() -> writeToFileAction.onActionClose());
-        });
+        assertDoesNotThrow(() -> writeToFileAction.onActionClose());
     }
 }
