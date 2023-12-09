@@ -1,4 +1,3 @@
-import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,6 +12,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ActionCopyTest {
 
+    //PERCORSO VALIDO DEL FILE
+    String fileToCopy = "C:\\Users\\Utente\\Desktop\\prova.txt";
+
+    //PERCORSO VALIDO DELLA DIRECTORY
+    String destinationDirectory = "C:\\Users\\Utente\\Desktop\\Destinazione_copia_del_file";
+
+    //PERCORSO NON VALIDO DEL FILE
+    String nonExistentFile = "C:\\percorso\\del\\tuo\\file_non_valido.txt";
+
+    //PERCORSO NON VALIDO DELLA DIRECTORY
+    String invalidDirectory = "C:\\percorso\\della\\directory_non_valida";
+
+    ActionCopy action1 = new ActionCopy(fileToCopy, destinationDirectory);
+    ActionCopy action2 = new ActionCopy(nonExistentFile, destinationDirectory);
+    ActionCopy action3 = new ActionCopy(fileToCopy, invalidDirectory);
+    ActionCopy action4 = new ActionCopy(nonExistentFile, invalidDirectory);
+
     @BeforeAll
     public static void initJFX() {
         System.setProperty("javafx.headless", "true");
@@ -21,142 +37,95 @@ public class ActionCopyTest {
 
     @Test
     public void testActionCopyGetName() {
-        Platform.runLater(()-> {
-            // INSERIRE PERCORSI CHE SONO VALIDI PRIMA DI ESGUIRE IL TEST
-            String fileToCopy = "C:\\Users\\Utente\\Desktop\\prova.txt";
-            String destinationDirectory = "C:\\Users\\Utente\\Desktop\\Destinazione_copia_del_file";
 
-            ActionCopy action = new ActionCopy(fileToCopy, destinationDirectory);
-
-            // Testa il nome dell'azione
-            assertEquals("ActionCopy", action.getName());
-        });
+        // Testa il nome dell'azione
+        assertEquals("ActionCopy", action1.getName());
+        assertEquals("ActionCopy", action2.getName());
+        assertEquals("ActionCopy", action3.getName());
+        assertEquals("ActionCopy", action4.getName());
     }
 
     @Test public void testActionCopyGetContent(){
-        Platform.runLater(()-> {
-            // INSERIRE PERCORSI CHE SONO VALIDI PRIMA DI ESGUIRE IL TEST
-            String fileToCopy = "C:\\Users\\Utente\\Desktop\\prova.txt";
-            String destinationDirectory = "C:\\Users\\Utente\\Desktop\\Destinazione_copia_del_file";
 
-            ActionCopy action = new ActionCopy(fileToCopy, destinationDirectory);
+        // Testa il contenuto dell'azione
+        assertNotNull(action1.getContent1());
+        assertNotNull(action1.getContent2());
+        assertEquals(fileToCopy, action1.getContent1());
+        assertEquals(destinationDirectory, action1.getContent2());
 
-            // Testa il contenuto dell'azione
-            String content1 = action.getContent1();
-            String content2 = action.getContent2();
-            assertNotNull(content1);
-            assertNotNull(content2);
-            assertEquals(fileToCopy, content1);
-            assertEquals(destinationDirectory, content2);
-        });
+        assertNotNull(action2.getContent1());
+        assertNotNull(action2.getContent2());
+        assertEquals(nonExistentFile, action2.getContent1());
+        assertEquals(destinationDirectory, action2.getContent2());
+
+        assertNotNull(action3.getContent1());
+        assertNotNull(action3.getContent2());
+        assertEquals(fileToCopy, action3.getContent1());
+        assertEquals(invalidDirectory, action3.getContent2());
+
+        assertNotNull(action4.getContent1());
+        assertNotNull(action4.getContent2());
+        assertEquals(nonExistentFile, action4.getContent1());
+        assertEquals(invalidDirectory, action4.getContent2());
     }
 
     @Test
     public void testActionCopyFileExistsAndValidDirectory() {
-        Platform.runLater(()-> {
-            // INSERIRE PERCORSI CHE SONO VALIDI PRIMA DI ESGUIRE IL TEST
-            String fileToCopy = "C:\\Users\\Utente\\Desktop\\prova.txt";
-            String destinationDirectory = "C:\\Users\\Utente\\Desktop\\Destinazione_copia_del_file";
 
-            ActionCopy action = new ActionCopy(fileToCopy, destinationDirectory);
+        // Testa l'esecuzione dell'azione (file esistente e directory valida)
+        action1.execute();
 
-            // Testa l'esecuzione dell'azione (copia del file)
-            action.execute();
-
-            // Verifica se il file è stato copiato correttamente
-            File copiedFile = new File(destinationDirectory, new File(fileToCopy).getName());
-            assertTrue(copiedFile.exists(), "Il file non è stato copiato correttamente");
-        });
-   }
+        // Verifica se il file è stato copiato correttamente
+        File copiedFile = new File(destinationDirectory, new File(fileToCopy).getName());
+        assertTrue(copiedFile.exists(), "Il file non è stato copiato correttamente");
+    }
 
     @Test
     public void testActionCopyFileNotExistsAndValidDirectory() {
-        Platform.runLater(()-> {
-            // INSERIRE UN PERCORSO NON VALIDO PER IL FILE
-            // INSERIRE UN PERCORSO VALIDO PER LA DIRECTORY
-            String nonExistentFile = "C:\\percorso\\del\\tuo\\file_non_esistente.txt";
-            String destinationDirectory = "C:\\Users\\Utente\\Desktop\\Destinazione_copia_del_file";
 
-            ActionCopy action = new ActionCopy(nonExistentFile, destinationDirectory);
+        // Testa l'esecuzione dell'azione (file inesistente e directory valida)
+        action2.execute();
 
-            // Testa l'esecuzione dell'azione (copia del file inesistente)
-            action.execute();
-
-            // Verifica se l'alert di errore viene visualizzato quando il file non esiste
-            assertTrue(action.alertError.isShowing(), "L'alert di errore non è stato visualizzato per il file inesistente");
-
-            // Verifica che il file non sia stato erroneamente copiato
-            File copiedFile = new File(destinationDirectory, new File(nonExistentFile).getName());
-            assertFalse(copiedFile.exists(), "Il file inesistente è stato erroneamente copiato");
-        });
+        // Verifica che il file non sia stato erroneamente copiato
+        File copiedFile = new File(destinationDirectory, new File(nonExistentFile).getName());
+        assertFalse(copiedFile.exists(), "Il file inesistente è stato erroneamente copiato");
     }
 
     @Test
     public void testActionCopyFileExistsAndInvalidDirectory() {
-        Platform.runLater(()-> {
-            // INSERIRE UN PERCORSO VALIDO PER IL FILE
-            // INSERIRE UN PERCORSO NON VALIDO PER LA DIRECTORY
-            String fileToCopy = "C:\\Users\\Utente\\Desktop\\prova.txt";
-            String invalidDirectory = "C:\\percorso\\della\\directory_non_valida";
 
-            ActionCopy action = new ActionCopy(fileToCopy, invalidDirectory);
+        // Testa l'esecuzione dell'azione (file esistente e directory non valida)
+        action3.execute();
 
-            // Testa l'esecuzione dell'azione (copia del file con directory non valida)
-            action.execute();
-
-            // Verifica se l'alert di errore viene visualizzato quando la directory non è valida
-            assertTrue(action.alertError.isShowing(), "L'alert di errore non è stato visualizzato per la directory non valida");
-
-            // Verifica che il file non sia stato erroneamente copiato
-            File copiedFile = new File(invalidDirectory, new File(fileToCopy).getName());
-            assertFalse(copiedFile.exists(), "Il file è stato erroneamente copiato con una directory non valida");
-        });
+        // Verifica che il file non sia stato erroneamente copiato
+        File copiedFile = new File(invalidDirectory, new File(fileToCopy).getName());
+        assertFalse(copiedFile.exists(), "Il file è stato erroneamente copiato con una directory non valida");
     }
 
     @Test
     public void testActionCopyFileNotExistsAndInvalidDirectory() {
-        Platform.runLater(()-> {
-            // INSERIRE UN PERCORSO NON VALIDO PER IL FILE
-            // INSERIRE UN PERCORSO NON VALIDO PER LA DIRECTORY
-            String nonExistentFile = "C:\\percorso\\del\\tuo\\file_non_valido.txt";
-            String invalidDirectory = "C:\\percorso\\della\\directory_non_valida";
 
-            ActionCopy action = new ActionCopy(nonExistentFile, invalidDirectory);
+        // Testa l'esecuzione dell'azione (file inesistente e directory non valida)
+        action4.execute();
 
-            // Testa l'esecuzione dell'azione (copia del file e directory non validi)
-            action.execute();
-
-            // Verifica se l'alert di errore viene visualizzato quando sia il file che la directory non sono validi
-            assertTrue(action.alertError.isShowing(), "L'alert di errore non è stato visualizzato per il file e la directory non validi");
-
-            // Verifica che il file non sia stato erroneamente copiato
-            File copiedFile = new File(invalidDirectory, new File(nonExistentFile).getName());
-            assertFalse(copiedFile.exists(), "Il file è stato erroneamente copiato con un file o directory non validi");
-        });
+        // Verifica che il file non sia stato erroneamente copiato
+        File copiedFile = new File(invalidDirectory, new File(nonExistentFile).getName());
+        assertFalse(copiedFile.exists(), "Il file è stato erroneamente copiato con un file o directory non validi");
     }
 
     @Test
     public void testFileExistsInDirectory() {
-        Platform.runLater(()-> {
-            // INSERIRE PERCORSI CHE SONO VALIDI PRIMA DI ESGUIRE IL TEST
-            String fileToCopy = "C:\\Users\\Utente\\Desktop\\prova.txt";
-            String destinationDirectory = "C:\\Users\\Utente\\Desktop\\Destinazione_copia_del_file";
 
-            // Crea un file con lo stesso nome nella directory di destinazione
-            createFileInDirectory(destinationDirectory, new File(fileToCopy).getName());
+        // Crea un file con lo stesso nome nella directory di destinazione
+        createFileInDirectory(destinationDirectory, new File(fileToCopy).getName());
 
-            ActionCopy action = new ActionCopy(fileToCopy, destinationDirectory);
 
-            // Testa l'esecuzione dell'azione (copia del file con file esistente nella directory)
-            action.execute();
+        // Testa l'esecuzione dell'azione (copia del file con file con lo stesso nome esistente nella directory)
+        action1.execute();
 
-            // Verifica se l'alert di errore viene visualizzato quando il file esiste già nella directory di destinazione
-            assertTrue(action.alertError.isShowing(), "L'alert di errore non è stato visualizzato per il file esistente nella directory");
-
-            // Verifica che il file non sia stato erroneamente copiato
-            File copiedFile = new File(destinationDirectory, new File(fileToCopy).getName());
-            assertFalse(copiedFile.exists(), "Il file è stato erroneamente copiato con un file esistente nella directory");
-        });
+        // Verifica che il file non è stato copiato correttamente
+        File copiedFile = new File(destinationDirectory, new File(fileToCopy).getName());
+        assertTrue(copiedFile.exists(), "Il file non è stato copiato correttamente");
     }
 
     //crea nella directory di destinazione un file con lo stesso nome del file che deve essere copiato

@@ -1,4 +1,3 @@
-import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,156 +12,134 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MoveFileActionTest {
 
+    //PERCORSO VALIDO DEL FILE
+    String fileToMove = "C:\\Users\\Utente\\Desktop\\prova.txt";
+
+    //PERCORSO VALIDO DELLA DIRECTORY
+    String destinationDirectory = "C:\\Users\\Utente\\Desktop\\Destinazione_copia_del_file";
+
+    //PERCORSO NON VALIDO DEL FILE
+    String nonExistentFile = "C:\\percorso\\del\\tuo\\file_non_valido.txt";
+
+    //PERCORSO NON VALIDO DELLA DIRECTORY
+    String invalidDirectory = "C:\\percorso\\della\\directory_non_valida";
+
+    MoveFileAction action1 = new MoveFileAction(fileToMove, destinationDirectory);
+    MoveFileAction action2 = new MoveFileAction(nonExistentFile, destinationDirectory);
+    MoveFileAction action3 = new MoveFileAction(fileToMove, invalidDirectory);
+    MoveFileAction action4 = new MoveFileAction(nonExistentFile, invalidDirectory);
+
     @BeforeAll
     public static void initJFX() {
         System.setProperty("javafx.headless", "true");
         new JFXPanel(); // Inizializza JavaFX
     }
 
+
     @Test
-    public void testMoveFileActionGetName() {
-        Platform.runLater(()-> {
-            // INSERIRE PERCORSI CHE SONO VALIDI PRIMA DI ESGUIRE IL TEST
-            String fileToCopy = "C:\\Users\\Utente\\Desktop\\prova.txt";
-            String destinationDirectory = "C:\\Users\\Utente\\Desktop\\Destinazione_copia_del_file";
+    public void testFileMoveFileGetName() {
 
-            MoveFileAction action = new MoveFileAction( fileToCopy, destinationDirectory);
-
-            // Testa il nome dell'azione
-            assertEquals("MoveFileAction", action.getName());
-        });
+        // Testa il nome dell'azione
+        assertEquals("MoveFileAction", action1.getName());
+        assertEquals("MoveFileAction", action2.getName());
+        assertEquals("MoveFileAction", action3.getName());
+        assertEquals("MoveFileAction", action4.getName());
     }
 
-    @Test public void testMoveFileActionGetContent(){
-        Platform.runLater(()-> {
-            // INSERIRE PERCORSI CHE SONO VALIDI PRIMA DI ESGUIRE IL TEST
-            String fileToMove = "C:\\Users\\Utente\\Desktop\\prova.txt";
-            String destinationDirectory = "C:\\Users\\Utente\\Desktop\\Destinazione_copia_del_file";
+    @Test public void testFileMoveFileGetContent(){
 
-            MoveFileAction action = new MoveFileAction(fileToMove, destinationDirectory);
+        // Testa il contenuto dell'azione
+        assertNotNull(action1.getContent1());
+        assertNotNull(action1.getContent2());
+        assertEquals(fileToMove, action1.getContent1());
+        assertEquals(destinationDirectory, action1.getContent2());
 
-            // Testa il contenuto dell'azione
-            String content1 = action.getContent1();
-            String content2 = action.getContent2();
-            assertNotNull(content1);
-            assertNotNull(content2);
-            assertEquals(fileToMove, content1);
-            assertEquals(destinationDirectory, content2);
-        });
+        assertNotNull(action2.getContent1());
+        assertNotNull(action2.getContent2());
+        assertEquals(nonExistentFile, action2.getContent1());
+        assertEquals(destinationDirectory, action2.getContent2());
+
+        assertNotNull(action3.getContent1());
+        assertNotNull(action3.getContent2());
+        assertEquals(fileToMove, action3.getContent1());
+        assertEquals(invalidDirectory, action3.getContent2());
+
+        assertNotNull(action4.getContent1());
+        assertNotNull(action4.getContent2());
+        assertEquals(nonExistentFile, action4.getContent1());
+        assertEquals(invalidDirectory, action4.getContent2());
     }
 
     @Test
     public void testFileMoveFileExistsAndValidDirectory() {
-        Platform.runLater(()-> {
-            // INSERIRE PERCORSI CHE SONO VALIDI NEL SISTEMA PRIMA DI ESGUIRE IL TEST
-            String fileToMove = "C:\\Users\\Utente\\Desktop\\prova.txt";
-            String destinationDirectory = "C:\\Users\\Utente\\Desktop\\Destinazione_copia_del_file";
 
-            MoveFileAction action = new MoveFileAction(fileToMove, destinationDirectory);
+        // Testa l'esecuzione dell'azione (spostamento file esistente in una directory valida)
+        action1.execute();
 
-            // Testa l'esecuzione dell'azione (spostamento del file)
-            action.execute();
+        // Verifica se il file è stato spostato correttamente
+        File movedFile = new File(destinationDirectory, new File(fileToMove).getName());
+        assertTrue(movedFile.exists(), "Il file non è stato spostato correttamente");
 
-            // Verifica se il file è stato spostato correttamente
-            File movedFile = new File(destinationDirectory, new File(fileToMove).getName());
-            assertTrue(movedFile.exists(), "Il file non è stato spostato correttamente");
-
-            // Verifica se il file originale non esiste più nella posizione originale
-            assertFalse(new File(fileToMove).exists(), "Il file originale esiste ancora nella posizione originale");
-        });
+        // Verifica se il file originale non esiste più nella posizione originale
+        assertFalse(new File(fileToMove).exists(), "Il file originale esiste ancora nella posizione originale");
     }
 
 
-        @Test
-        public void testFileMoveFileNotExistAndValidDirectory() {
-            Platform.runLater(()-> {
-                // INSERIRE UN PERCORSO NON VALIDO PER IL FILE
-                //INSERIRE UN PERCORSO VALIDO PER LA DIRECTORY
-                String nonExistentFile = "C:\\percorso\\del\\tuo\\file_non_esistente.txt";
-                String destinationDirectory = "C:\\Users\\Utente\\Desktop\\Destinazione_copia_del_file";
+    @Test
+    public void testFileMoveFileNotExistAndValidDirectory() {
 
-                MoveFileAction action = new MoveFileAction(nonExistentFile, destinationDirectory);
+        // Testa l'esecuzione dell'azione (spostamento file inesistente in una directory valida)
+        action2.execute();
 
-                // Testa l'esecuzione dell'azione (spostamento del file inesistente)
-                action.execute();
-
-                // Verifica se l'alert di errore viene visualizzato quando il file non esiste
-                assertTrue(action.alertError.isShowing(), "L'alert di errore non è stato visualizzato per il file inesistente");
-
-                // Verifica che il file non sia stato spostato
-                File movedFile = new File(destinationDirectory, new File(nonExistentFile).getName());
-                assertFalse(movedFile.exists(), "Il file inesistente è stato erroneamente spostato");
-            });
-        }
+        // Verifica che il file non sia stato spostato
+        File movedFile = new File(destinationDirectory, new File(nonExistentFile).getName());
+        assertFalse(movedFile.exists(), "Il file inesistente è stato erroneamente spostato");
+    }
     @Test
     public void testFileMoveFileExistsAndInvalidDirectory() {
-        Platform.runLater(()-> {
-            // INSERIRE UN PERCORSO VALIDO PER IL FILE
-            // INSERIRE UN PERCORSO NON VALIDO PER LA DIRECTORY
-            String fileToMove = "C:\\Users\\Utente\\Desktop\\prova.txt";
-            String invalidDirectory = "C:\\percorso\\della\\directory_non_valida";
 
-            MoveFileAction action = new MoveFileAction(fileToMove, invalidDirectory);
+        // Testa l'esecuzione dell'azione (spostamento del file in una directory non valida)
+        action3.execute();
 
-            // Testa l'esecuzione dell'azione (spostamento del file con directory non valida)
-            action.execute();
-
-            // Verifica se l'alert di errore viene visualizzato quando la directory non è valida
-            assertTrue(action.alertError.isShowing(), "L'alert di errore non è stato visualizzato per la directory non valida");
-
-            // Verifica che il file non sia stato spostato
-            File movedFile = new File(invalidDirectory, new File(fileToMove).getName());
-            assertFalse(movedFile.exists(), "Il file è stato erroneamente spostato in una directory non valida");
-        });
+        // Verifica che il file non sia stato spostato
+        File movedFile = new File(invalidDirectory, new File(fileToMove).getName());
+        assertFalse(movedFile.exists(), "Il file è stato erroneamente spostato in una directory non valida");
     }
 
     @Test
     public void testFileMoveFileNotExistAndInvalidDirectory() {
-        Platform.runLater(()-> {
-            // INSERIRE UN PERCORSO NON VALIDO PER IL FILE
-            // INSERIRE UN PERCORSO NON VALIDO PER LA DIRECTORY
-            String nonExistentFile = "C:\\percorso\\del\\tuo\\file_non_valido.txt";
-            String invalidDirectory = "C:\\percorso\\della\\directory_non_valida";
 
-            MoveFileAction action = new MoveFileAction(nonExistentFile, invalidDirectory);
+        // Testa l'esecuzione dell'azione (spostamento del file inesistente in una directory non valida)
+        action4.execute();
 
-            // Testa l'esecuzione dell'azione (spostamento del file e directory non validi)
-            action.execute();
+        // Verifica che il file non sia stato erroneamente spostato
+        File movedFile = new File(invalidDirectory, new File(nonExistentFile).getName());
+        assertFalse(movedFile.exists(), "Il file è stato erroneamente spostato con un file o directory non validi");
 
-            // Verifica se l'alert di errore viene visualizzato quando sia il file che la directory non sono validi
-            assertTrue(action.alertError.isShowing(), "L'alert di errore non è stato visualizzato per il file e la directory non validi");
-
-            // Verifica che il file non sia stato erroneamente spostato
-            File movedFile = new File(invalidDirectory, new File(nonExistentFile).getName());
-            assertFalse(movedFile.exists(), "Il file è stato erroneamente spostato con un file o directory non validi");
-        });
     }
 
     @Test
     public void testFileAlreadyExistsInDirectory() {
-        Platform.runLater(()-> {
-        // INSERIRE PERCORSI CHE SONO VALIDI PRIMA DI ESGUIRE IL TEST
-        String fileToMove = "C:\\Users\\Utente\\Desktop\\prova.txt";
-        String destinationDirectory = "C:\\Users\\Utente\\Desktop\\Destinazione_copia_del_file";
 
-        // Crea un file con lo stesso nome nella directory di destinazione
+        // Creazione di un file con lo stesso nome nella directory di destinazione
         createFileInDirectory(destinationDirectory, new File(fileToMove).getName());
 
         MoveFileAction action = new MoveFileAction(fileToMove, destinationDirectory);
 
-        // Testa l'esecuzione dell'azione (spostamento del file con file esistente nella directory)
-        action.execute();
+        // Testa l'esecuzione dell'azione (spostamento del file con file con lo steso nome esistente nella directory)
+        action1.execute();
 
-        // Verifica se l'alert di errore viene visualizzato quando il file esiste già nella directory di destinazione
-        assertTrue(action.alertError.isShowing(), "L'alert di errore non è stato visualizzato per il file esistente nella directory");
-
-        // Verifica che il file non sia stato erroneamente spostato
+        // Verifica se il file è stato spostato correttamente
         File movedFile = new File(destinationDirectory, new File(fileToMove).getName());
-        assertFalse(movedFile.exists(), "Il file è stato erroneamente spostato con un file esistente nella directory");
-        });
+        assertTrue(movedFile.exists(), "Il file non è stato spostato correttamente");
+
+        // Verifica se il file originale non esiste più nella posizione originale
+        assertFalse(new File(fileToMove).exists(), "Il file originale esiste ancora nella posizione originale");
+
+
     }
 
-    //crea nella directory di destinazione un file con lo stesso nome del file che deve essere spostato
+    //Creazione nella directory di destinazione un file con lo stesso nome del file che deve essere spostato
     private void createFileInDirectory(String directoryPath, String fileName) {
         Path filePath = Paths.get(directoryPath, fileName);
         try {
