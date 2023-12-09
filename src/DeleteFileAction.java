@@ -18,13 +18,14 @@ public class DeleteFileAction extends  FactoryAction implements Action{
     public DeleteFileAction (String file){
         this.file = file;
         this.fileToDelete = new File(file);
-        this.alertConfirm = new Alert(Alert.AlertType.INFORMATION);
-        this.alertConfirm = new Alert(Alert.AlertType.INFORMATION);
-        this.alertConfirm.setTitle("AZIONE ESEGUITA");
-        this.alertConfirm.setHeaderText(null);
-        this.alertConfirm.setContentText("Il file " + file + " è stato eliminato");
-        this.alertError = new Alert(Alert.AlertType.ERROR);
-        alertError.setContentText("Il file " + file + " non esiste o non è un file regolare (directory)");
+        //Platform.runLater(()-> {      //da utilizzare solo quando si eseguono i test
+            this.alertConfirm = new Alert(Alert.AlertType.INFORMATION);
+            this.alertConfirm.setTitle("AZIONE ESEGUITA");
+            this.alertConfirm.setHeaderText(null);
+            this.alertConfirm.setContentText("Il file " + file + " è stato eliminato");
+            this.alertError = new Alert(Alert.AlertType.ERROR);
+            alertError.setContentText("Il file " + file + " non esiste o non è un file regolare (directory)");
+        //});
     }
     @Override
     public String getName() {
@@ -42,23 +43,25 @@ public class DeleteFileAction extends  FactoryAction implements Action{
 
     @Override
     public void execute() {
-        // Verifica se il file esiste e se il file è un file regolare(non una directory)
-        if (fileToDelete.exists() && fileToDelete.isFile()) {
-            try {
-                // Creazione dell'oggetto Path per il file
-                Path fileSource = Paths.get(file);
-                // Eliminazione del file
-                Files.delete(fileSource);
-                alertConfirm.show();
-                alertConfirm.setOnCloseRequest(event -> onActionClose());
-            } catch (IOException e) {
-                System.out.println("Si è verificato un errore durante la cancellazione del file.");
-                e.printStackTrace();
+        //Platform.runLater(()-> {      //da utilizzare solo quando si eseguono i test
+            // Verifica se il file esiste e se il file è un file regolare(non una directory)
+            if (fileToDelete.exists() && fileToDelete.isFile()) {
+                try {
+                    // Creazione dell'oggetto Path per il file
+                    Path fileSource = Paths.get(file);
+                    // Eliminazione del file
+                    Files.delete(fileSource);
+                    alertConfirm.show();
+                    alertConfirm.setOnCloseRequest(event -> onActionClose());
+                } catch (IOException e) {
+                    System.out.println("Si è verificato un errore durante la cancellazione del file.");
+                    e.printStackTrace();
+                }
+            } else {
+                alertError.show();
+                alertError.setOnCloseRequest(event -> onActionClose());
             }
-        } else {
-            alertError.show();
-            alertError.setOnCloseRequest(event -> onActionClose());
-        }
+        //});
     }
     @Override
     public void onActionClose() {
