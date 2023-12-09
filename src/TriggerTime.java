@@ -4,7 +4,7 @@ import java.time.temporal.ChronoUnit;
 //Definizione della classe TriggerTime che estende FactoryTrigger e implementa Trigger
 public class TriggerTime extends FactoryTrigger implements Trigger {
     //Variabili d'istanza private per memorizzare l'orario del trigger e lo stato del trigger
-    private LocalTime triggerTime;
+    private final LocalTime triggerTime;
     private boolean isTriggered;
 
     //Costruttore della classe TriggerTime che accetta un orario come parametro

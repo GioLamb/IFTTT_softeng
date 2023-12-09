@@ -10,10 +10,10 @@ import java.nio.file.Paths;
 
 public class DeleteFileAction extends  FactoryAction implements Action{
 
-    private Alert alertConfirm;
+    private final Alert alertConfirm;
     Alert alertError;
-    private String file;
-    private File fileToDelete;
+    private final String file;
+    private final File fileToDelete;
 
     public DeleteFileAction (String file){
         this.file = file;

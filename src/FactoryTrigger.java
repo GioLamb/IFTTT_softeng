@@ -7,7 +7,7 @@ public class FactoryTrigger{
     //Variabili d'istanza private per memorizzare il nome del trigger e l'orario
 
     //Costruttore della classe FactoryTrigger che accetta il nome del trigger e l'orario come parametri
-    public FactoryTrigger(){};
+    public FactoryTrigger(){}
 
     //Metodo per creare un'istanza di una classe che implementa l'interfaccia Trigger
     //in base al nome del trigger fornito come parametro
@@ -31,14 +31,4 @@ public class FactoryTrigger{
             throw new IllegalArgumentException("Il nome del trigger non può essere nullo");
         }
     }
-
-    /*
-    public String getContentTrigger() {
-        if (time != null) {
-            return time.toString(); // Restituisce l'orario del trigger come stringa
-        } else {
-            return null; // Nessun trigger è stato creato, quindi restituisce null
-        }
-    }
-    */
 }

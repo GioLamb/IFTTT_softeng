@@ -7,7 +7,7 @@ import java.io.IOException;
 public class AlarmClock extends FactoryAction implements Action{
     private Stage dialogStage;
     private Clip clip;
-    private String audioFilePath;
+    private final String audioFilePath;
     public AlarmClock(String audioFilePath) {
         this.audioFilePath=audioFilePath;
         try {

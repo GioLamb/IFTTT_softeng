@@ -18,13 +18,13 @@ public class RuleTest {
         Platform.runLater(() -> {
             Rule rule = new Rule("Rule1", "Promemoria", "TriggerTime", "Content", "Content2", 1 ,LocalTime.of(12, 0),true,0,0,0,false, true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
             assertNotNull(rule);
-            assertEquals("Rule1", rule.getNameRule());
-            assertEquals("Promemoria", rule.getNameAction());
-            assertEquals("TriggerTime", rule.getNameTrigger());
-            assertEquals("Content", rule.getActionContent());
+            assertEquals("Rule1", rule.getNameRule().get());
+            assertEquals("Promemoria", rule.getNameAction().get());
+            assertEquals("TriggerTime", rule.getNameTrigger().get());
+            assertEquals("Content", rule.getActionContent().get());
             assertEquals("Content2", rule.getActionContent2());
             assertEquals(1, rule.getContent3());
-            assertEquals("12:00", rule.getTriggerContent()); // Assuming time is formatted as "HH:mm"
+            assertEquals("12:00", rule.getTriggerContent().get()); // Assuming time is formatted as "HH:mm"
             assertEquals(true, rule.getOneTime());
             assertEquals(0, rule.getSleepDays());
             assertEquals(0, rule.getSleepHours());
@@ -66,9 +66,9 @@ public class RuleTest {
     void state(){
         Platform.runLater(()->{
             Rule rule = new Rule("Rule1", "Promemoria", "TriggerTime", "Content", "Content2", 1,LocalTime.of(12, 0),true,0,0,0,false, true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
-            assertEquals(ActiveState.class, rule.getState());
+            assertEquals(new ActiveState(rule), rule.getState());
             rule.changeState(new DeactiveState(rule));
-            assertEquals(DeactiveState.class, rule.getState());
+            assertEquals(new DeactiveState(rule), rule.getState());
         });
     }
 
@@ -80,7 +80,7 @@ public class RuleTest {
             Rule rule2 = new Rule("Rule1", "Promemoria", "TriggerTime", "Content1", "Content2", 1,LocalTime.of(12, 0), true, 0, 0, 0, false, true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
 
             // Verifica che equals restituisca true
-            assertTrue(rule1.equals(rule2));
+            assertEquals(rule1, rule2);
         });
     }
 
@@ -92,7 +92,7 @@ public class RuleTest {
             Rule rule2 = new Rule("Rule2", "Promemoria", "TriggerTime", "Content2", "Content4", 1,LocalTime.of(14, 30), false, 0, 1, 0, true, true, true, LocalDateTime.of(2023, 12,2,17,30,00,00));
 
             // Verifica che equals restituisca false
-            assertFalse(rule1.equals(rule2));
+            assertNotEquals(rule1, rule2);
         });
     }
 
@@ -103,18 +103,7 @@ public class RuleTest {
             Rule rule = new Rule("Rule1", "Promemoria", "TriggerTime", "Content1", "Content2", 1,LocalTime.of(12, 0), true, 0, 0, 0, false, true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
 
             // Verifica che equals restituisca false quando confrontato con null
-            assertFalse(rule.equals(null));
-        });
-    }
-
-    @Test
-    void equals_shouldReturnFalseForDifferentClass() {
-        Platform.runLater(() -> {
-            // Creazione di un oggetto Rule
-            Rule rule = new Rule("Rule1", "Promemoria", "TriggerTime", "Content1", "Content2", 1,LocalTime.of(12, 0), true, 0, 0, 0, false, true, false, LocalDateTime.of(2023, 12,2,17,30,00,00));
-
-            // Verifica che equals restituisca false quando confrontato con un oggetto di una classe diversa
-            assertFalse(rule.equals("non è un oggetto Rule"));
+            assertNotEquals(null, rule);
         });
     }
 

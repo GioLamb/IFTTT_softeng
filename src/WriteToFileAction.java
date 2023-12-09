@@ -8,10 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class WriteToFileAction extends FactoryAction implements Action {
-    private String filePath;
-    private String content;
-    private Alert alertConfirm;
-    private File FileToWrite;
+    private final String filePath;
+    private final String content;
+    private final Alert alertConfirm;
+    private final File FileToWrite;
     Alert alertError;
 
     public WriteToFileAction(String filePath, String content) {

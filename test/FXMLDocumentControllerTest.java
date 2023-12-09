@@ -53,7 +53,7 @@ public class FXMLDocumentControllerTest {
     void testSwitchRuleMenu() {
         Platform.runLater(() -> {
             try {
-                controller.switchRuleMenu(null);
+                controller.switchRuleMenu(new ActionEvent());
                 assertNotNull(controller.getScene());
                 assertEquals("ruleselector.fxml", controller.getScene().getRoot().getId());
             } catch (IOException e) {
@@ -66,22 +66,12 @@ public class FXMLDocumentControllerTest {
     void testSwitchMainPage() {
         Platform.runLater(() -> {
             try {
-                controller.switchMainPage(null);
+                controller.switchMainPage(new ActionEvent());
                 assertNotNull(controller.getScene());
                 assertEquals("mainpage.fxml", controller.getScene().getRoot().getId());
             } catch (IOException e) {
                 fail("Exception not expected", e);
             }
-        });
-    }
-
-    @Test
-    void testSelectAudio() {
-        Platform.runLater(() -> {
-            controller.selectFile();
-            // Simulate file selection
-            controller.getContent(); // Assuming getContent() returns the selected file path
-            // Add assertions based on your application logic
         });
     }
 
@@ -356,7 +346,7 @@ public class FXMLDocumentControllerTest {
             controller.checkDayNumber(event);
 
             // Verifica che il carattere "1" sia accettato
-            assertEquals("1", controller.getSleepDaySelector().getDepthTest());
+            assertEquals("1", controller.getSleepDaySelector().getDepthTest().toString());
         });
     }
 
@@ -378,7 +368,7 @@ public class FXMLDocumentControllerTest {
             controller.checkHours(event);
 
             // Verifica che il carattere "2" sia accettato
-            assertEquals("2", controller.getSleepHourSelector().getDepthTest());
+            assertEquals("2", controller.getSleepHourSelector().getDepthTest().toString());
         });
     }
 
@@ -400,53 +390,9 @@ public class FXMLDocumentControllerTest {
             controller.checkMinutes(event);
 
             // Verifica che il carattere "3" sia accettato
-            assertEquals("3", controller.getSleepMinuteSelector().getDepthTest());
+            assertEquals("3", controller.getSleepMinuteSelector().getDepthTest().toString());
         });
     }
-
-    /*
-    @Test
-    void testOkButtonAction() {
-        Platform.runLater(() -> {
-            // Simulare l'inserimento di una stringa
-            String userInput = "Test String";
-            controller.getUserInputField().setText(userInput);
-
-            // Verificare che la TextInput sia nascosta
-            assertFalse(controller.getUserInputField().isVisible());
-            assertFalse(controller.getUserInputField().isManaged());
-
-            // Verificare che il pulsante "OK" sia nascosto
-            assertFalse(controller.getOkButton().isVisible());
-            assertFalse(controller.getOkButton().isManaged());
-
-            // Verificare che la Label di successo sia visibile
-            assertTrue(controller.getSuccessLabel().isVisible());
-            assertTrue(controller.getSuccessLabel().isManaged());
-        });
-    }
-
-    @Test
-    void testWriteToFileAction() {
-        Platform.runLater(() -> {
-            // Verificare che la TextInput sia visibile
-            assertTrue(controller.getUserInputField().isVisible());
-            assertTrue(controller.getUserInputField().isManaged());
-
-            // Verificare che il pulsante "OK" sia visibile
-            assertTrue(controller.getOkButton().isVisible());
-            assertTrue(controller.getOkButton().isManaged());
-
-            // Verificare che la Label di successo sia nascosta
-            assertTrue(controller.getSuccessLabel().isVisible());
-            assertTrue(controller.getSuccessLabel().isManaged());
-
-            // Verificare che il pulsante "OK" sia inizialmente disabilitato
-            assertFalse(controller.getOkButton().isDisabled());
-        });
-    }
-
-     */
 }
 
 

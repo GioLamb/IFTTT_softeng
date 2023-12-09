@@ -52,16 +52,18 @@ public class WriteToFileActionTest {
     @Test
     void testGetContent1() {
         Platform.runLater(()->{
+            WriteToFileAction writeToFileAction = new WriteToFileAction("filePath", "fileContent");
             // Ensure getContent1 returns the expected content
-            assertEquals(null, writeToFileAction.getContent1());
+            assertEquals("filePath", writeToFileAction.getContent1());
         });
     }
 
     @Test
     void testGetContent2() {
         Platform.runLater(()->{
+            WriteToFileAction writeToFileAction = new WriteToFileAction("filePath", "fileContent");
             // Ensure getContent2 returns null
-            assertEquals(null, writeToFileAction.getContent2());
+            assertEquals("fileContent", writeToFileAction.getContent2());
         });
     }
 
@@ -71,14 +73,5 @@ public class WriteToFileActionTest {
             // Ensure onActionClose does not throw any exceptions
             assertDoesNotThrow(() -> writeToFileAction.onActionClose());
         });
-    }
-
-    @AfterEach
-    void tearDown() {
-        // Clean up: delete the test file
-        File file = new File(TEST_FILE_PATH);
-        if (file.exists()) {
-            file.delete();
-        }
     }
 }

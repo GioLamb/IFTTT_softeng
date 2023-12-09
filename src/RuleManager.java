@@ -26,7 +26,7 @@ public class RuleManager{
         this.rules.add(new Rule(nameRule, nameAction, nameTrigger, content, content2, content3 ,time, oneTime, sleepDays, sleepHours, sleepMinutes, recurrent, state, repeat, nowPlusSleep));
     }
 
-    public void removeRule(Rule rule){ rules.remove(rule); }; //Metodo utilizzato per la rimozione di una regola (rule) dalla lista rules di regole.
+    public void removeRule(Rule rule){ rules.remove(rule); } //Metodo utilizzato per la rimozione di una regola (rule) dalla lista rules di regole.
 
     public ObservableList<Rule> getRules(){ return this.rules;}
 

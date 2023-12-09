@@ -29,7 +29,7 @@ public class FactoryActionTest {
             assertEquals("Promemoria", displayMessage.getName());
             // Verifica che il contenuto dell'azione sia corretto
             assertEquals("Test Message", displayMessage.getContent1());
-            assertEquals(null, displayMessage.getContent2());
+            assertNull(displayMessage.getContent2());
         });
 
         // Test per la creazione di un'azione di sveglia
@@ -44,7 +44,7 @@ public class FactoryActionTest {
             assertEquals("Sveglia", alarmClock.getName());
             // Verifica che il contenuto dell'azione sia corretto
             assertEquals("audioFilePath", alarmClock.getContent1());
-            assertEquals(null, alarmClock.getContent2());
+            assertNull(alarmClock.getContent2());
         });
 
         // Test per la creazione di un'azione di copia di un file
@@ -89,7 +89,7 @@ public class FactoryActionTest {
             assertEquals("Elimina un file", deleteFile.getName());
             // Verifica che il contenuto dell'azione sia corretto
             assertEquals("File", deleteFile.getContent1());
-            assertEquals(null, deleteFile.getContent2());
+            assertNull(deleteFile.getContent2());
         });
 
 

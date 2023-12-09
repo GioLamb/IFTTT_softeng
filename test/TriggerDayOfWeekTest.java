@@ -48,7 +48,7 @@ class TriggerDayOfWeekTest {
     @Test
     void testExecute_TriggerSuccess() throws InterruptedException {
         // Verifica che il metodo execute attivi correttamente il trigger
-        TriggerDayOfWeek trigger = new TriggerDayOfWeek(4); // Martedì
+        TriggerDayOfWeek trigger = new TriggerDayOfWeek(LocalDateTime.now().getDayOfWeek().getValue()); //
 
         // Esegui il trigger in un thread separato
         Thread triggerThread = new Thread(trigger::execute);

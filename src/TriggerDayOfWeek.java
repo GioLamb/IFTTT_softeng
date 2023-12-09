@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 public class TriggerDayOfWeek implements Trigger{
     // Variabili d'istanza per memorizzare il giorno target, l'orario di trigger e lo stato del trigger
     //private DayOfWeek targetDay;
-    private DayOfWeek dayOfWeek;
+    private final DayOfWeek dayOfWeek;
     //private LocalTime triggerTime;
     private boolean isTriggered;
 

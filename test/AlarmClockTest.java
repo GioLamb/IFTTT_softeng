@@ -19,16 +19,12 @@ public class AlarmClockTest {
 
     @BeforeEach
     public void setUp() {
-        Platform.runLater(()->{
-            alarmClock = new AlarmClock(TEST_AUDIO_FILE_PATH);
-        });
+        Platform.runLater(()-> alarmClock = new AlarmClock(TEST_AUDIO_FILE_PATH));
     }
 
     @AfterEach
     public void tearDown() {
-        Platform.runLater(()->{
-            alarmClock.onActionClose();
-        });
+        Platform.runLater(()-> alarmClock.onActionClose());
     }
 
     @Test
@@ -56,15 +52,11 @@ public class AlarmClockTest {
 
     @Test
     public void testGetName() {
-        Platform.runLater(()->{
-            assertEquals("Sveglia", alarmClock.getName());
-        });
+        Platform.runLater(()-> assertEquals("Sveglia", alarmClock.getName()));
     }
 
     @Test
     public void testGetContent() {
-        Platform.runLater(()->{
-            assertEquals(TEST_AUDIO_FILE_PATH, alarmClock.getContent1());
-        });
+        Platform.runLater(()-> assertEquals(TEST_AUDIO_FILE_PATH, alarmClock.getContent1()));
     }
 }

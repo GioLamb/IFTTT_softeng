@@ -18,7 +18,7 @@ class CheckTest {
         Platform.runLater(() -> {
             RuleManager rm = RuleManager.getInstance();
             Check check=rm.getCheck();
-            assertNotNull(check.isAlive());
+            assertTrue(check.isAlive());
         });
     }
 
