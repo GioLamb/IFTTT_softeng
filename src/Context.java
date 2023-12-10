@@ -1,6 +1,6 @@
 public abstract class Context implements State{
     protected Rule rule;
-    public Context( Rule rule){
+    public Context(Rule rule){
         this.rule = rule;
 
     }
