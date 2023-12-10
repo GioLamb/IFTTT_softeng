@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TriggerTimeTest {
 
-    //Test case: isTimeToTrigger restituisce true quando l'orario corrente è dopo l'orario di trigger
+    //Metodo che testa se isTimeToTrigger restituisce true quando l'orario corrente è dopo l'orario di trigger
     @Test
     void isTimeToTrigger_ShouldReturnTrue_WhenCurrentTimeIsAfterTriggerTime() {
         //Ottieni un orario di trigger che è passato di un'ora rispetto all'orario corrente
@@ -21,7 +21,7 @@ class TriggerTimeTest {
         assertTrue(result);
     }
 
-    //Test case: isTimeToTrigger restituisce false quando l'orario corrente è prima dell'orario di trigger
+    //Metodo che testa se isTimeToTrigger restituisce false quando l'orario corrente è prima dell'orario di trigger
     @Test
     void isTimeToTrigger_ShouldReturnFalse_WhenCurrentTimeIsBeforeTriggerTime() {
         //Ottieni un orario di trigger che è avanzato di un'ora rispetto all'orario corrente
@@ -36,7 +36,7 @@ class TriggerTimeTest {
         assertFalse(result);
     }
 
-    //Test case: execute imposta isTriggered a true dopo l'orario di trigger
+    //Metodo che testa se execute imposta isTriggered a true dopo l'orario di trigger
     @Test
     void execute_ShouldSetIsTriggeredToTrueAfterTriggerTime() throws InterruptedException {
         //Ottieni un orario di trigger che è avanzato di 2 secondi rispetto all'orario corrente
@@ -55,7 +55,7 @@ class TriggerTimeTest {
         assertTrue(trigger.getTime().isBefore(LocalTime.now()));
     }
 
-    //Test case: getTime restituisce l'orario di trigger
+    //Metodo che testa se getTime restituisce l'orario di trigger
     @Test
     void getTime_ShouldReturnTriggerTime() {
         //Ottieni un orario di trigger che è avanzato di un'ora rispetto all'orario corrente

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TriggerDayOfMonthTest {
 
 
+    //Metodo che testa execute quando il trigger è già stato attivato in passato
     @Test
     void testExecute_TriggerAlreadyActivated() throws InterruptedException {
         // Imposta un giorno passato rispetto all'istante corrente
@@ -24,6 +25,7 @@ class TriggerDayOfMonthTest {
         assertFalse(trigger.isTriggered());
     }
 
+    //Metodo che testa il metodo isTimeToTrigger con una data futura
     @Test
     void testIsTimeToTrigger_FutureDate() {
         // Imposta un giorno futuro rispetto all'istante corrente
@@ -37,6 +39,7 @@ class TriggerDayOfMonthTest {
         assertTrue(trigger.isTimeToTrigger(futureDateTime.plusHours(1)));
     }
 
+    //Metodo che testa il metodo isTimeToTrigger con una data passata
     @Test
     void testIsTimeToTrigger_PastDate() {
         // Imposta un giorno passato rispetto all'istante corrente

@@ -2,27 +2,24 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
 public class TriggerDayOfWeek implements Trigger{
-    // Variabili d'istanza per memorizzare il giorno target, l'orario di trigger e lo stato del trigger
-    //private DayOfWeek targetDay;
-    private final DayOfWeek dayOfWeek;
-    //private LocalTime triggerTime;
+    // Variabili d'istanza per memorizzare il giorno target, e lo stato del trigger
+    private DayOfWeek dayOfWeek;
     private boolean isTriggered;
 
-    // Costruttore della classe, inizializza le variabili d'istanza con i valori passati come parametri
     public TriggerDayOfWeek(int day) {
-        if(day < 1 || day > 7){
-            throw new IllegalArgumentException("Giorno non compreso nella settimana: " + day);
-        }
         this.dayOfWeek = DayOfWeek.of(day);
         this.isTriggered = false;
     }
 
+    //Il metodo isTimeToTrigger, confronta il giorno inserito dall'utente al momento della registrazione della regola
+    //con il giorno corrente. Restituisce true se sono uguali, false se invece non sono uguali.
     public boolean isTimeToTrigger(LocalDateTime currentDateTime) {
         // Confronta solo i giorni della settimana senza considerare l'orario
         return currentDateTime.getDayOfWeek().equals(dayOfWeek);
     }
 
-
+    //execute(), provvede ad effettuare un controllo riguardo alla possibilità che il trigger sia già attivo, altrimenti
+    //provvede ad attivarlo verificando prima che sia il giorno adatto (ossia quello richiesto).
     @Override
     public void execute() {
         // Ciclo while che continua finché il trigger non è attivato

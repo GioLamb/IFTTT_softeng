@@ -6,8 +6,7 @@ import java.time.LocalTime;
 public class FactoryTrigger{
     //Variabili d'istanza private per memorizzare il nome del trigger e l'orario
 
-    //Costruttore della classe FactoryTrigger che accetta il nome del trigger e l'orario come parametri
-    public FactoryTrigger(){}
+    public FactoryTrigger(){};
 
     //Metodo per creare un'istanza di una classe che implementa l'interfaccia Trigger
     //in base al nome del trigger fornito come parametro

@@ -7,48 +7,48 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TriggerDayOfWeekTest {
 
+    //Metodo che testa se il costruttore inizializza correttamente l'istanza con un giorno valido
     @Test
     void testConstructor_ValidDayOfWeek() {
-        // Verifica che il costruttore inizializzi correttamente l'istanza con un giorno valido
-        TriggerDayOfWeek trigger = new TriggerDayOfWeek(3); // Mercoledì
+        TriggerDayOfWeek trigger = new TriggerDayOfWeek(3); //3 -> Mercoledì
         assertEquals(DayOfWeek.WEDNESDAY, trigger.getDayOfWeek());
         assertFalse(trigger.isTriggered());
     }
 
+    //Metodo di test che permette di verificare che il costruttore lanci un'eccezione per un giorno valido
     @Test
     void testConstructor_InvalidDayOfWeek() {
-        // Verifica che il costruttore lanci un'eccezione per un giorno non valido
         assertThrows(IllegalArgumentException.class, () -> new TriggerDayOfWeek(8));
     }
 
+    //Metodo di test che verifica se isTimeToTrigger restituisce false prima del giorno di attivazione
     @Test
     void testIsTimeToTrigger_BeforeTriggerTime() {
-        // Verifica che isTimeToTrigger restituisca false prima dell'orario di attivazione
-        TriggerDayOfWeek trigger = new TriggerDayOfWeek(4); // Giovedì
+        TriggerDayOfWeek trigger = new TriggerDayOfWeek(4); //4 -> Giovedì
         LocalDateTime currentDateTime = LocalDateTime.of(2023, 1, 1, 8, 0); // Una data a caso
         assertFalse(trigger.isTimeToTrigger(currentDateTime));
     }
 
+    //Metodo di test che verifica se isTimeToTrigger restituisce true all'orario di attivazione
     @Test
     void testIsTimeToTrigger_AtTriggerTime() {
-        // Verifica che isTimeToTrigger restituisca true all'orario di attivazione
-        TriggerDayOfWeek trigger = new TriggerDayOfWeek(4); // Venerdì
+        TriggerDayOfWeek trigger = new TriggerDayOfWeek(4); //4 -> Giovedì
         LocalDateTime currentDateTime = LocalDateTime.of(2023, 12, 7, 11, 0); // Una data a caso
         assertTrue(trigger.isTimeToTrigger(currentDateTime));
     }
 
+    //Metodo di test che verifica se isTimeToTrigger restituisce false dopo il giorno l'attivazione
     @Test
     void testIsTimeToTrigger_AfterTriggerTime() {
-        // Verifica che isTimeToTrigger restituisca false dopo l'orario di attivazione
-        TriggerDayOfWeek trigger = new TriggerDayOfWeek(6); // Sabato
+        TriggerDayOfWeek trigger = new TriggerDayOfWeek(6); //6 -> Sabato
         LocalDateTime currentDateTime = LocalDateTime.of(2023, 1, 1, 18, 0); // Una data a caso
         assertFalse(trigger.isTimeToTrigger(currentDateTime));
     }
 
+    //Metodo di test che verifica se execute attiva correttamente il trigger
     @Test
     void testExecute_TriggerSuccess() throws InterruptedException {
-        // Verifica che il metodo execute attivi correttamente il trigger
-        TriggerDayOfWeek trigger = new TriggerDayOfWeek(LocalDateTime.now().getDayOfWeek().getValue()); //
+        TriggerDayOfWeek trigger = new TriggerDayOfWeek(4); //4 -> Giovedì
 
         // Esegui il trigger in un thread separato
         Thread triggerThread = new Thread(trigger::execute);
@@ -67,10 +67,10 @@ class TriggerDayOfWeekTest {
         assertTrue(trigger.isTriggered());
     }
 
+    //Metodo di test che verifica se execute gestisce correttamente l'interruzione del thread
     @Test
     void testExecute_TriggerInterrupted() throws InterruptedException {
-        // Verifica che il metodo execute gestisca correttamente l'interruzione del thread
-        TriggerDayOfWeek trigger = new TriggerDayOfWeek(3); // Mercoledì
+        TriggerDayOfWeek trigger = new TriggerDayOfWeek(3); //3 -> Mercoledì
 
         // Esegui il trigger in un thread separato
         Thread triggerThread = new Thread(trigger::execute);
