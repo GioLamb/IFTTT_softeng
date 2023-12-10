@@ -59,7 +59,9 @@ Sono stati aggiunti trigger "giorno specifico della settimana" e "giorno specifi
 Di seguito sono riportati i Review Report relativi alle Sprint affrontate:
 - Sprint Review Report n°1 [link](https://docs.google.com/document/d/1e2hGwDKgOX7JO1Rlm3ZEKGK7cWsuxvCM32PO1kuJlmo/edit)
 - Sprint Review Report n°2 [link](https://docs.google.com/document/d/1jHEMrdO-H66FsbnRX7I8BtaqS1tl5B9YxGc52ijoaec/edit)
+- Sprint Review Report n°3 [link](https://docs.google.com/document/d/1dhQZ_KsvubCTwXYaoahPExEClPt27RV-Ladv5V8vBl4/edit)
 ## Sprint Retrospective Report
 Di seguito sono riportati i Retrospective Report relativi alle Sprint affrontate:
 - Sprint Retrospective Report n°1 [link](https://docs.google.com/document/d/1gwzWAXhv67JEZRYBJ5QnICgw0IEn3qxjShBrbQy3-9U/edit)
 - Sprint Retrospective Report n°2 [link](https://docs.google.com/document/d/1SgCzHVUTd4o845wnDUUNIpj1chC9vruTMNV6mEneVVI/edit)
+- Sprint Retrospective Report n°3 [link](https://docs.google.com/document/d/1qP427VK7nOiPwhMD0DeVliy4xifpQs2-o1JZJ5njK9Q/edit)

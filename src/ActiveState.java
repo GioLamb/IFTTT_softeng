@@ -8,6 +8,6 @@ public class ActiveState extends Context{
     @Override
     public void deactivate(){
         rule.changeState(new DeactiveState(rule));
-    }
+    } // cambia l'oggetto State di Rule da ActiveState a DeactiveState
 
 }
