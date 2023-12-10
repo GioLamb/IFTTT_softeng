@@ -543,7 +543,7 @@ public class FXMLDocumentController extends Application {
         }
     }
 
-    // metodo per il controllo degli input nel campo delle ore
+    // metodo per il controllo degli input nel campo dei minuti
     public void checkMinutes(KeyEvent event) {
         try {
             if (!event.getCharacter().matches("[0-9]")) { // se l'input non fa match con un carattere compreso tra [0-9]
@@ -565,6 +565,7 @@ public class FXMLDocumentController extends Application {
         Platform.runLater(() -> tableView.refresh());
     }
 
+    //Metodo per scegliere che la regola deve essere esguita una sola volta
     public void oneTimeCheck() {
         if (oneTimeSelector.isSelected()) {
             if (recurrentSelector.isSelected()) {
@@ -579,6 +580,7 @@ public class FXMLDocumentController extends Application {
         }
     }
 
+    //Metodo per scegliere che la regola deve poter essere eseguita nuovamente dopo un periodo di sleep
     public void recurrentCheck() {
         if (recurrentSelector.isSelected()) {
             // Se la checkbox è selezionata, mostra i textfield
@@ -605,12 +607,41 @@ public class FXMLDocumentController extends Application {
         }
     }
 
+    // metodo per il controllo degli input nel campo giorni per quanto riguarda il period di sleep
     public void checkDayNumber(KeyEvent event) {
         try {
             if (!event.getCharacter().matches("[0-9]")) { // se l'input non fa match con un carattere compreso tra [0-9]
                 event.consume(); // marchiamo l'evento come consumato
                 sleepDaySelector.backward();
                 sleepDaySelector.deleteNextChar();
+            }
+        } catch (Exception e) {
+            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
+            a.show();
+        }
+    }
+
+    // metodo per il controllo degli input nel campo delle ore riguardante il periodo di sleep
+    public void checkSleepHours(KeyEvent event) {
+        try {
+            if (!event.getCharacter().matches("[0-9]")) { // se l'input non fa match con un carattere compreso tra [0-9]
+                event.consume(); // marchiamo l'evento come consumato
+                sleepHourSelector.backward(); // il cursore va indietro
+                sleepHourSelector.deleteNextChar(); // cancelliamo il carattere di input inserito precedentemente
+            }
+        } catch (Exception e) {
+            Alert a = new Alert(Alert.AlertType.ERROR, e.toString());
+            a.show();
+        }
+    }
+
+    // metodo per il controllo degli input nel campo dei minuti riguardante il periodo di sleep
+    public void checkSleepMinutes(KeyEvent event) {
+        try {
+            if (!event.getCharacter().matches("[0-9]")) { // se l'input non fa match con un carattere compreso tra [0-9]
+                event.consume(); // marchiamo l'evento come consumato
+                sleepMinuteSelector.backward(); // il cursore va indietro
+                sleepMinuteSelector.deleteNextChar(); // cancelliamo il carattere di input inserito precedentemente
             }
         } catch (Exception e) {
             Alert a = new Alert(Alert.AlertType.ERROR, e.toString());

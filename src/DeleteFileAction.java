@@ -10,19 +10,23 @@ import java.nio.file.Paths;
 
 public class DeleteFileAction extends  FactoryAction implements Action{
 
-    private final Alert alertConfirm;
-    Alert alertError;
+    private Alert alertConfirm;
+    private Alert alertError;
     private final String file;
     private final File fileToDelete;
 
     public DeleteFileAction (String file){
         this.file = file;
         this.fileToDelete = new File(file);
-        //Platform.runLater(()-> {      //da utilizzare solo quando si eseguono i test
+        //Platform.runLater(()-> {      //da utilizzare solo quando si esegue DeleteFileActionTest
+
+            //Alert per notificare l'utente dell'esecuzione dell'azione
             this.alertConfirm = new Alert(Alert.AlertType.INFORMATION);
             this.alertConfirm.setTitle("AZIONE ESEGUITA");
             this.alertConfirm.setHeaderText(null);
             this.alertConfirm.setContentText("Il file " + file + " è stato eliminato");
+
+            //Alert per notificare l'utente quando l'azione non viene eseguita correttamente
             this.alertError = new Alert(Alert.AlertType.ERROR);
             alertError.setContentText("Il file " + file + " non esiste o non è un file regolare (directory)");
         //});
@@ -43,7 +47,8 @@ public class DeleteFileAction extends  FactoryAction implements Action{
 
     @Override
     public void execute() {
-        //Platform.runLater(()-> {      //da utilizzare solo quando si eseguono i test
+        //Platform.runLater(()-> {      //da utilizzare solo quando si esegue DeleteFileActionTest
+
             // Verifica se il file esiste e se il file è un file regolare(non una directory)
             if (fileToDelete.exists() && fileToDelete.isFile()) {
                 try {

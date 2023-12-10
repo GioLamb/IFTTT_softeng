@@ -21,7 +21,7 @@ public class Check extends Thread {
                     Rule rule = iterator.next(); // lo preleviamo
                     if (rule.getState() instanceof ActiveState) {
                         if (rule.getTrigger() instanceof TriggerTime) { // preleviamo il trigger
-                            //caso in cui la regola che può essere eseguita una sola volta ed il trigger è verificato
+                            //caso in cui la regola può essere eseguita una sola volta ed il trigger è verificato
                             if ((((TriggerTime) rule.getTrigger()).isTimeToTrigger(LocalTime.now())) && (rule.getOneTime())) {
                                 // eseguiamo l'azione annessa
                                 rule.getAction().execute();
@@ -39,15 +39,15 @@ public class Check extends Thread {
                                 rule.setRepeat(false);
                             }
                             //Caso in cui la regola può essere rieseguita dopo un periodo di sleep.
-                            //Questo è il caso in cui bisogna anche verificare, oltre al trigger, se è passato il periodo di sleep
+                            //Questo è il caso in cui bisogna verificare, oltre al trigger, anche se è trascorso il periodo di sleep
                             //dall'ultima esecuzione della regola
                             else if (rule.getRecurrent() && !(rule.getRepeat())) {
                                 rule.setNow(LocalDateTime.now());
-                                //se è passato il periodo di sleep e il trigger è attivo, viene eseguita l'azione
+                                //se è trascorso il periodo di sleep e il trigger è attivo, viene eseguita l'azione
                                 if (rule.getNow().isAfter(rule.getNowPlusSleep()) && (((TriggerTime) rule.getTrigger()).isTimeToTrigger(LocalTime.now()))) {
                                     rule.getAction().execute();
                                     rule.setNowPlusSleep(LocalDateTime.now().plusDays(rule.getSleepDays()).plusHours(rule.getSleepHours()).plusMinutes(rule.getSleepMinutes()));
-                                    //se è passato il periodo di sleep ma il trigger non è attivo, allora impostiamo
+                                    //se è trascorso il periodo di sleep ma il trigger non è attivo, allora impostiamo
                                     //che la regola può essere eseguita nuovamente
                                 }else  if (rule.getNow().isAfter(rule.getNowPlusSleep())) {
                                     rule.setRepeat(true);
@@ -55,7 +55,7 @@ public class Check extends Thread {
                             }
                         }
                         if (rule.getTrigger() instanceof TriggerDayOfWeek) { // preleviamo il trigger
-                            //caso in cui la regola che può essere eseguita una sola volta ed il trigger è verificato
+                            //caso in cui la regola può essere eseguita una sola volta ed il trigger è verificato
                             if ((((TriggerDayOfWeek) rule.getTrigger()).isTimeToTrigger(LocalDateTime.now())) && (rule.getOneTime())) {
                                 // eseguiamo l'azione annessa
                                 rule.getAction().execute();
@@ -73,15 +73,15 @@ public class Check extends Thread {
                                 rule.setRepeat(false);
                             }
                             //Caso in cui la regola può essere rieseguita dopo un periodo di sleep.
-                            //Questo è il caso in cui bisogna anche verificare, oltre al trigger, se è passato il periodo di sleep
+                            //Questo è il caso in cui bisogna verificare, oltre al trigger, anche se è trascorso il periodo di sleep
                             //dall'ultima esecuzione della regola
                             else if (rule.getRecurrent() && !(rule.getRepeat())) {
                                 rule.setNow(LocalDateTime.now());
-                                //se è passato il periodo di sleep e il trigger è attivo, viene eseguita l'azione
+                                //se è trascorso il periodo di sleep e il trigger è attivo, viene eseguita l'azione
                                 if (rule.getNow().isAfter(rule.getNowPlusSleep()) && (((TriggerDayOfWeek) rule.getTrigger()).isTimeToTrigger(LocalDateTime.now()))) {
                                     rule.getAction().execute();
                                     rule.setNowPlusSleep(LocalDateTime.now().plusDays(rule.getSleepDays()).plusHours(rule.getSleepHours()).plusMinutes(rule.getSleepMinutes()));
-                                    //se è passato il periodo di sleep ma il trigger non è attivo, allora impostiamo
+                                    //se è trascorso il periodo di sleep ma il trigger non è attivo, allora impostiamo
                                     //che la regola può essere eseguita nuovamente
                                 }else  if (rule.getNow().isAfter(rule.getNowPlusSleep())) {
                                     rule.setRepeat(true);
@@ -89,7 +89,7 @@ public class Check extends Thread {
                             }
                         }
                         if (rule.getTrigger() instanceof TriggerDayOfMonth) { // preleviamo il trigger
-                            //caso in cui la regola che può essere eseguita una sola volta ed il trigger è verificato
+                            //caso in cui la regola può essere eseguita una sola volta ed il trigger è verificato
                             if ((((TriggerDayOfMonth) rule.getTrigger()).isTimeToTrigger(LocalDateTime.now())) && (rule.getOneTime())) {
                                 // eseguiamo l'azione annessa
                                 rule.getAction().execute();
@@ -107,15 +107,15 @@ public class Check extends Thread {
                                 rule.setRepeat(false);
                             }
                             //Caso in cui la regola può essere rieseguita dopo un periodo di sleep.
-                            //Questo è il caso in cui bisogna anche verificare, oltre al trigger, se è passato il periodo di sleep
+                            //Questo è il caso in cui bisogna verificare, oltre al trigger, anche se è trascorso il periodo di sleep
                             //dall'ultima esecuzione della regola
                             else if (rule.getRecurrent() && !(rule.getRepeat())) {
                                 rule.setNow(LocalDateTime.now());
-                                //se è passato il periodo di sleep e il trigger è attivo, viene eseguita l'azione
+                                //se è trascorso il periodo di sleep e il trigger è attivo, viene eseguita l'azione
                                 if (rule.getNow().isAfter(rule.getNowPlusSleep()) && (((TriggerDayOfMonth) rule.getTrigger()).isTimeToTrigger(LocalDateTime.now()))) {
                                     rule.getAction().execute();
                                     rule.setNowPlusSleep(LocalDateTime.now().plusDays(rule.getSleepDays()).plusHours(rule.getSleepHours()).plusMinutes(rule.getSleepMinutes()));
-                                    //se è passato il periodo di sleep ma il trigger non è attivo, allora impostiamo
+                                    //se è trascorso il periodo di sleep ma il trigger non è attivo, allora impostiamo
                                     //che la regola può essere eseguita nuovamente
                                 }else  if (rule.getNow().isAfter(rule.getNowPlusSleep())) {
                                     rule.setRepeat(true);

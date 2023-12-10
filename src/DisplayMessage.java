@@ -4,26 +4,26 @@ import javafx.scene.control.ButtonType;
 
 public class DisplayMessage extends FactoryAction implements Action {
 
-    Alert alert;
+    private Alert alert;
     private final String message;
 
     public DisplayMessage(String message) {
         this.message=message;
-        Platform.runLater(() -> {
+        // Platform.runLater(() -> {    //da utilizzare solo quando si esegue DisplayMessageTest
             this.alert = new Alert(Alert.AlertType.INFORMATION);
             this.alert.setTitle("Promemoria");
             this.alert.setHeaderText(null);
             this.alert.setContentText(message);
-        });
+        //});
     }
 
     @Override
     public void execute() {
-        Platform.runLater(() -> {
+        // Platform.runLater(() -> {    //da utilizzare solo quando si esegue DisplayMessageTest
             //mostra l'alert fin quando l'utente non interagisce con esso
             alert.show();
             alert.setOnCloseRequest(event -> onActionClose());
-        });
+        //});
     }
 
     @Override

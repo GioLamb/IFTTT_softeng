@@ -8,25 +8,24 @@ public class AlarmClock extends FactoryAction implements Action{
     private Stage dialogStage;
     private Clip clip;
     private final String audioFilePath;
+    AudioInputStream audioInputStream;
     public AlarmClock(String audioFilePath) {
         this.audioFilePath=audioFilePath;
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(audioFilePath));
-            //clip per riprodurre audioInputStream
-            clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            dialogStage = new Stage();
-            dialogStage.setTitle("Riproduzione Audio");
-
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-        }
-
+        dialogStage = new Stage();
+        dialogStage.setTitle("Riproduzione Audio");
     }
 
     @Override
     public void execute() {
         dialogStage.show();
+        try {
+            this.audioInputStream = AudioSystem.getAudioInputStream(new File(audioFilePath));
+            //clip per permettere la riproduzione di audioInputStream
+            clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+        } catch (UnsupportedAudioFileException | IOException | NullPointerException | LineUnavailableException | SecurityException | IllegalArgumentException | IllegalStateException e) {
+            e.printStackTrace();
+        }
         //Avvia la riproduzione continua dell'audio
         clip.loop(Clip.LOOP_CONTINUOUSLY);
 
@@ -57,9 +56,5 @@ public class AlarmClock extends FactoryAction implements Action{
     @Override
     public String getContent2() {
         return null;
-    }
-
-    public Stage getDialogStage(){
-        return dialogStage;
     }
 }
